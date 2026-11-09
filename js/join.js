@@ -1,7 +1,7 @@
-import { el } from "./dom.js?v=56";
-import { createButton, createModal, showToast } from "./components.js?v=56";
-import { copyText } from "./effects.js?v=56";
-import { siteConfig } from "./siteConfig.js?v=56";
+import { el } from "./dom.js?v=57";
+import { createButton, createModal, showToast } from "./components.js?v=57";
+import { copyText } from "./effects.js?v=57";
+import { siteConfig } from "./siteConfig.js?v=57";
 
 export function createCopyField({ label, value }) {
   const button = createButton({
