@@ -1,8 +1,8 @@
-import { el } from "./dom.js?v=89";
-import { createBrand, createButton, createSocialLinks } from "./components.js?v=89";
-import { openJoinModal } from "./join.js?v=89";
-import { initReveal, initSpotlight, initTilt } from "./effects.js?v=89";
-import { initRouter } from "./router.js?v=89";
+import { el } from "./dom.js?v=90";
+import { createBrand, createButton, createSocialLinks } from "./components.js?v=90";
+import { openJoinModal } from "./join.js?v=90";
+import { initReveal, initSpotlight, initTilt } from "./effects.js?v=90";
+import { initRouter } from "./router.js?v=90";
 
 const navItems = [
   { id: "home", label: "Home", href: "index.html" },
