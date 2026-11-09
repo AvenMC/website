@@ -1,5 +1,5 @@
-import { el, replaceContent } from "../dom.js?v=30";
-import { renderLayout } from "../layout.js?v=30";
+import { el, replaceContent } from "../dom.js?v=33";
+import { renderLayout } from "../layout.js?v=33";
 import {
   createAvatar,
   createBadge,
@@ -8,13 +8,13 @@ import {
   createSectionHeading,
   createSkeleton,
   createSocialLinks,
-} from "../components.js?v=30";
-import { createCopyField, openJoinModal } from "../join.js?v=30";
-import { gamemodes, regions, getTopPlayersPreview } from "../mockData.js?v=30";
-import { formatNumber } from "../format.js?v=30";
-import { modeIcons, modeThemes } from "../modeTheme.js?v=30";
-import { rankTiers, unrealCap } from "../ranks.js?v=30";
-import { siteConfig } from "../siteConfig.js?v=30";
+} from "../components.js?v=33";
+import { createCopyField, openJoinModal } from "../join.js?v=33";
+import { gamemodes, regions, getTopPlayersPreview } from "../mockData.js?v=33";
+import { formatNumber } from "../format.js?v=33";
+import { modeIcons, modeThemes } from "../modeTheme.js?v=33";
+import { rankTiers, unrealCap } from "../ranks.js?v=33";
+import { siteConfig } from "../siteConfig.js?v=33";
 
 const app = renderLayout("home");
 const reveal = (delay = 0) => ({ "data-reveal": "", style: `--revealDelay:${delay}ms` });
@@ -127,13 +127,13 @@ const stepsSection = el(
       "div",
       { className: "grid cols3" },
       [
-        ["01", "Open Bedrock", "Launch Minecraft Bedrock Edition."],
-        ["02", "Add server", `${siteConfig.serverIp} · port ${siteConfig.serverPort}`],
-        ["03", "Start dueling", "Queue up and climb the divisions."],
-      ].map(([number, title, text], index) =>
+        ["01", "Open Bedrock", "Launch Minecraft Bedrock Edition.", "var(--colorNodebuff)", "var(--colorNodebuffPanel)", "var(--colorNodebuffEdge)"],
+        ["02", "Add server", `${siteConfig.serverIp} · port ${siteConfig.serverPort}`, "var(--colorPrimary)", "var(--colorSurface)", "var(--colorBorder)"],
+        ["03", "Start dueling", "Queue up and climb the divisions.", "var(--colorMace)", "var(--colorMacePanel)", "var(--colorMaceEdge)"],
+      ].map(([number, title, text, accent, panel, edge], index) =>
         el(
           "div",
-          { className: "card stepCard", ...reveal(index * 90) },
+          { className: "card stepCard", ...reveal(index * 90), style: `--revealDelay:${index * 90}ms;--accent:${accent};--panel:${panel};--edge:${edge}` },
           el("span", { className: "stepNumber" }, number),
           el("h3", {}, title),
           el("p", { className: "cardText" }, text),
@@ -267,3 +267,21 @@ getTopPlayersPreview().then((entries) => {
     ),
   );
 });
+
+// Each home section gets its own accent so the page isn't one blue tone.
+const sectionAccents = {
+  gamemodes: "var(--colorNodebuff)",
+  features: "var(--colorMace)",
+  steps: "var(--colorNodebuff)",
+  ranking: "var(--colorCrystal)",
+  regions: "var(--colorSuccess)",
+  community: "var(--colorCrystal)",
+};
+[
+  [gamemodesSection, sectionAccents.gamemodes],
+  [featuresSection, sectionAccents.features],
+  [stepsSection, sectionAccents.steps],
+  [rankingSection, sectionAccents.ranking],
+  [regionsSection, sectionAccents.regions],
+  [communitySection, sectionAccents.community],
+].forEach(([section, accent]) => section.style.setProperty("--sectionAccent", accent));

@@ -1,6 +1,6 @@
-import { countries } from "./countries.js?v=30";
-import { el } from "./dom.js?v=30";
-import { siteConfig } from "./siteConfig.js?v=30";
+import { countries } from "./countries.js?v=33";
+import { el } from "./dom.js?v=33";
+import { siteConfig } from "./siteConfig.js?v=33";
 
 export function createBrand({ showSubtitle = true } = {}) {
   return el(
@@ -316,6 +316,7 @@ export function createSocialLinks({ compact = false } = {}) {
         target: "_blank",
         rel: "noopener noreferrer",
         "aria-label": `${social.label} ${social.handle}`,
+        "data-social": social.id,
       },
       createSocialIcon(social.id),
       !compact && el("span", { className: "socialText" }, el("strong", {}, social.label), el("span", {}, social.handle)),

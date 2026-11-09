@@ -831,3 +831,26 @@
   font-weight: 600;
   text-transform: uppercase;
 }
+
+/* Color variety */
+.stepCard {
+  border-color: var(--edge, var(--colorBorder));
+  background: linear-gradient(160deg, var(--panel, var(--colorCard)), var(--colorCard));
+}
+
+.stepCard .stepNumber { color: var(--accent, var(--colorPrimary)); }
+
+.tickerItem:nth-child(3n + 1) { color: var(--colorNodebuff); }
+.tickerItem:nth-child(3n + 2) { color: var(--colorPrimary); }
+.tickerItem:nth-child(3n) { color: var(--colorMace); }
+.tickerItem:nth-child(3n + 1)::after { color: var(--colorPrimary); }
+.tickerItem:nth-child(3n + 2)::after { color: var(--colorMace); }
+.tickerItem:nth-child(3n)::after { color: var(--colorNodebuff); }
+
+.rowTop2 .positionBadge { border-color: var(--colorCrystal); color: var(--colorCrystal); }
+.rowTop3 .positionBadge { border-color: var(--colorMace); color: var(--colorMace); }
+.rowTop2 td:first-child { box-shadow: inset 3px 0 0 var(--colorCrystal); }
+.rowTop3 td:first-child { box-shadow: inset 3px 0 0 var(--colorMace); }
+
+.podium:not([style*="--accent"]) .podiumCard.place2 { --accent: var(--colorCrystal); --edge: var(--colorCrystalEdge); --panel: var(--colorCrystalPanel); }
+.podium:not([style*="--accent"]) .podiumCard.place3 { --accent: var(--colorMace); --edge: var(--colorMaceEdge); --panel: var(--colorMacePanel); }
