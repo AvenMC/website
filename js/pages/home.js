@@ -41,6 +41,7 @@ const hero = el(
         createButton({ label: "How to join", onClick: openJoinModal }),
         createButton({ label: "Join Discord", variant: "secondary", href: siteConfig.discordUrl }),
       ),
+      el("div", { className: "heroSocials" }, createSocialLinks({ compact: true })),
     ),
     el(
       "div",

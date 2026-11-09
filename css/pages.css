@@ -35,9 +35,10 @@
 
 .heroGrid {
   display: grid;
-  grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
-  gap: var(--space7);
-  align-items: center;
+  grid-template-columns: 1fr;
+  gap: var(--space5);
+  justify-items: center;
+  text-align: center;
 }
 
 .heroContent h1 {
@@ -49,26 +50,27 @@
   grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
   gap: var(--space3);
   width: 100%;
-  max-width: 520px;
+  max-width: 560px;
 }
 
 .heroVisual {
   position: relative;
   display: grid;
   place-items: center;
-  min-height: 360px;
+  min-height: 220px;
+  order: -1;
 }
 
 .heroLogo {
   position: relative;
-  width: min(100%, 340px);
+  width: min(100%, 200px);
   height: auto;
   animation: logoIn 900ms ease-out both;
 }
 
 .heroGlow {
   position: absolute;
-  width: min(90%, 420px);
+  width: min(100%, 360px);
   aspect-ratio: 1;
   border-radius: 50%;
   background: radial-gradient(circle, color-mix(in srgb, var(--colorPrimary) 24%, transparent), transparent 68%);
@@ -159,8 +161,12 @@
 .heroContent {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: center;
   gap: var(--space5);
+}
+
+.heroContent .buttonRow {
+  justify-content: center;
 }
 
 .heroContent h1 .accent {
@@ -168,7 +174,7 @@
 }
 
 .heroDescription {
-  max-width: 480px;
+  max-width: 520px;
   color: var(--colorTextSecondary);
   font-size: 18px;
 }
@@ -392,12 +398,11 @@
   }
 
   .heroVisual {
-    min-height: 240px;
-    order: -1;
+    min-height: 160px;
   }
 
   .heroLogo {
-    width: 200px;
+    width: 140px;
   }
 
   .heroGlow {
@@ -439,4 +444,11 @@
   .toolbar .dropdownTrigger {
     width: 100%;
   }
+}
+
+.heroSocials {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--space3);
 }
