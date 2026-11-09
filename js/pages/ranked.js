@@ -1,8 +1,8 @@
-import { el, replaceContent } from "../dom.js?v=37";
-import { renderLayout } from "../layout.js?v=37";
-import { createButton, createSectionHeading } from "../components.js?v=37";
-import { createRankStatsSection } from "./rankStats.js?v=37";
-import { rankTiers, unrealCap } from "../ranks.js?v=37";
+import { el, replaceContent } from "../dom.js?v=38";
+import { renderLayout } from "../layout.js?v=38";
+import { createButton, createSectionHeading } from "../components.js?v=38";
+import { createRankStatsSection } from "./rankStats.js?v=38";
+import { rankTiers, unrealCap } from "../ranks.js?v=38";
 
 const app = renderLayout("ranked");
 const reveal = (delay = 0) => ({ "data-reveal": "", style: `--revealDelay:${delay}ms` });
@@ -46,6 +46,7 @@ const ladderSection = el(
         ),
       ),
     ),
+    el("p", { className: "rankNote" }, "New season: you only fall back a few divisions. Your rank is never fully reset."),
     el("p", { className: "rankNote" }, "Ranked is played in duels. The three FFA modes get duels too, and probably three more. Divisions are separate per gamemode. Thresholds are placeholders until launch."),
   ),
 );

@@ -1,5 +1,5 @@
-import { el, replaceContent } from "../dom.js?v=37";
-import { renderLayout } from "../layout.js?v=37";
+import { el, replaceContent } from "../dom.js?v=38";
+import { renderLayout } from "../layout.js?v=38";
 import {
   createAvatar,
   createBadge,
@@ -8,13 +8,13 @@ import {
   createSectionHeading,
   createSkeletonRows,
   createSocialLinks,
-} from "../components.js?v=37";
-import { createCopyField, openJoinModal } from "../join.js?v=37";
-import { gamemodes, regions, getTopPlayersPreview } from "../mockData.js?v=37";
-import { formatNumber } from "../format.js?v=37";
-import { modeIcons, modeThemes } from "../modeTheme.js?v=37";
-import { rankTiers, unrealCap } from "../ranks.js?v=37";
-import { siteConfig } from "../siteConfig.js?v=37";
+} from "../components.js?v=38";
+import { createCopyField, openJoinModal } from "../join.js?v=38";
+import { gamemodes, regions, getTopPlayersPreview } from "../mockData.js?v=38";
+import { formatNumber } from "../format.js?v=38";
+import { modeIcons, modeThemes } from "../modeTheme.js?v=38";
+import { rankTiers, unrealCap } from "../ranks.js?v=38";
+import { siteConfig } from "../siteConfig.js?v=38";
 
 const app = renderLayout("home");
 const reveal = (delay = 0) => ({ "data-reveal": "", style: `--revealDelay:${delay}ms` });
@@ -104,7 +104,7 @@ const rankedTeaser = el(
         { className: "rankedTeaserText" },
         createBadge({ label: "Ranked", variant: "primary" }),
         el("h2", {}, `Only ${unrealCap} reach Unreal`),
-        el("p", { className: "cardText" }, "Climb the divisions from Bronze to Unreal. Divisions reset every season."),
+        el("p", { className: "cardText" }, "Climb the divisions from Bronze to Unreal. A new season only drops you a few divisions, no full reset."),
         createButton({ label: "Explore Ranked", href: "ranked.html" }),
       ),
       el(
