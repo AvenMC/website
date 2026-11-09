@@ -1,7 +1,7 @@
-import { el, replaceContent } from "../dom.js?v=29";
-import { renderLayout } from "../layout.js?v=29";
-import { createButton, createSectionHeading } from "../components.js?v=29";
-import { rankTiers, unrealCap } from "../ranks.js?v=29";
+import { el, replaceContent } from "../dom.js?v=30";
+import { renderLayout } from "../layout.js?v=30";
+import { createButton, createSectionHeading } from "../components.js?v=30";
+import { rankTiers, unrealCap } from "../ranks.js?v=30";
 
 const app = renderLayout("ranked");
 const reveal = (delay = 0) => ({ "data-reveal": "", style: `--revealDelay:${delay}ms` });

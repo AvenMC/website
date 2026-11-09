@@ -1,5 +1,5 @@
-import { el, replaceContent } from "../dom.js?v=29";
-import { renderLayout } from "../layout.js?v=29";
+import { el, replaceContent } from "../dom.js?v=30";
+import { renderLayout } from "../layout.js?v=30";
 import {
   createAvatar,
   createBadge,
@@ -8,13 +8,13 @@ import {
   createSectionHeading,
   createSkeleton,
   createSocialLinks,
-} from "../components.js?v=29";
-import { createCopyField, openJoinModal } from "../join.js?v=29";
-import { gamemodes, regions, getTopPlayersPreview } from "../mockData.js?v=29";
-import { formatNumber } from "../format.js?v=29";
-import { modeIcons, modeThemes } from "../modeTheme.js?v=29";
-import { rankTiers, unrealCap } from "../ranks.js?v=29";
-import { siteConfig } from "../siteConfig.js?v=29";
+} from "../components.js?v=30";
+import { createCopyField, openJoinModal } from "../join.js?v=30";
+import { gamemodes, regions, getTopPlayersPreview } from "../mockData.js?v=30";
+import { formatNumber } from "../format.js?v=30";
+import { modeIcons, modeThemes } from "../modeTheme.js?v=30";
+import { rankTiers, unrealCap } from "../ranks.js?v=30";
+import { siteConfig } from "../siteConfig.js?v=30";
 
 const app = renderLayout("home");
 const reveal = (delay = 0) => ({ "data-reveal": "", style: `--revealDelay:${delay}ms` });
@@ -54,9 +54,9 @@ const hero = el(
   ),
 );
 
-const tickerItems = ["EU & NA Servers", "Unique Ranked Gamemode", "Unreal Top 50", "One Account, Every Region", "Shared Leaderboards", "Seasonal Divisions"];
+const tickerItems = ["Seasonal Divisions", "EU & NA Servers", "Unique Ranked Gamemode"];
 const tickerGroup = () =>
-  el("div", { className: "tickerGroup" }, tickerItems.map((item) => el("span", { className: "tickerItem" }, item)));
+  el("div", { className: "tickerGroup" }, Array.from({ length: 3 }, () => tickerItems).flat().map((item) => el("span", { className: "tickerItem" }, item)));
 const ticker = el(
   "div",
   { className: "ticker", "aria-hidden": "true" },

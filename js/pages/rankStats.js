@@ -1,8 +1,8 @@
-import { el, replaceContent } from "../dom.js?v=29";
-import { createBadge, createSectionHeading, createSkeleton, createTabs } from "../components.js?v=29";
-import { currentSeason, gamemodes, getRankDistribution } from "../mockData.js?v=29";
-import { rankTiers } from "../ranks.js?v=29";
-import { formatNumber } from "../format.js?v=29";
+import { el, replaceContent } from "../dom.js?v=30";
+import { createBadge, createSectionHeading, createSkeleton, createTabs } from "../components.js?v=30";
+import { currentSeason, gamemodes, getRankDistribution } from "../mockData.js?v=30";
+import { rankTiers } from "../ranks.js?v=30";
+import { formatNumber } from "../format.js?v=30";
 
 const donutRadius = 70;
 const circumference = 2 * Math.PI * donutRadius;
