@@ -1,5 +1,5 @@
-import { el, replaceContent } from "../dom.js?v=24";
-import { renderLayout } from "../layout.js?v=24";
+import { el, replaceContent } from "../dom.js?v=25";
+import { renderLayout } from "../layout.js?v=25";
 import {
   createAvatar,
   createBadge,
@@ -12,12 +12,12 @@ import {
   createSkeleton,
   createTable,
   createTabs,
-} from "../components.js?v=24";
-import { gamemodes, getLeaderboard, leaderboardCategories } from "../mockData.js?v=24";
-import { modeIconStyle, modeThemes } from "../modeTheme.js?v=24";
-import { createRankDistributionCard } from "./rankStats.js?v=24";
-import { getRankedTier, rankTiers, unrealCap } from "../ranks.js?v=24";
-import { formatNumber } from "../format.js?v=24";
+} from "../components.js?v=25";
+import { gamemodes, getLeaderboard, leaderboardCategories } from "../mockData.js?v=25";
+import { modeIconStyle, modeThemes } from "../modeTheme.js?v=25";
+import { createRankDistributionCard } from "./rankStats.js?v=25";
+import { getRankedTier, rankTiers, unrealCap } from "../ranks.js?v=25";
+import { formatNumber } from "../format.js?v=25";
 
 const app = renderLayout("leaderboards");
 
@@ -108,11 +108,9 @@ function renderPodium(entries) {
   );
 }
 
-function renderTable(entries) {
+function renderTable(entries, pageEntries) {
   const category = getCategory(state.category);
-  const tableEntries = entries.slice(3);
-  const pageCount = Math.ceil(tableEntries.length / pageSize);
-  state.page = Math.min(state.page, pageCount);
+  const pageCount = Math.ceil(entries.length / pageSize);
   const table = createTable({
     caption: `${category.label} leaderboard`,
     columns: [
@@ -130,7 +128,7 @@ function renderTable(entries) {
       { label: isRanked() ? "Tier" : "Rank", hideOnMobile: true, render: renderTierCell },
       { label: category.metricLabel, align: "right", render: (row) => el("span", { className: "metricValue" }, formatNumber(row.metric)) },
     ],
-    rows: tableEntries.slice((state.page - 1) * pageSize, state.page * pageSize),
+    rows: pageEntries,
   });
   if (pageCount <= 1) return table;
   return el(
@@ -140,9 +138,8 @@ function renderTable(entries) {
     createPagination({
       page: state.page,
       pageCount,
-      total: tableEntries.length,
+      total: entries.length,
       pageSize,
-      offset: 3,
       onChange: (page) => {
         state.page = page;
         renderBoard();
@@ -164,6 +161,10 @@ function renderBoardHeader(entries) {
 
 function renderBoard() {
   const entries = state.entries;
+  state.page = Math.min(state.page, Math.max(1, Math.ceil(entries.length / pageSize)));
+  const pageStart = (state.page - 1) * pageSize;
+  // Page one shows the top three on the podium, the table continues from there.
+  const pageEntries = entries.slice(pageStart + (state.page === 1 ? 3 : 0), pageStart + pageSize);
   replaceContent(
     results,
     entries.length === 0
@@ -172,8 +173,8 @@ function renderBoard() {
           "div",
           { className: "boardStack" },
           renderBoardHeader(entries),
-          renderPodium(entries),
-          entries.length > 3 ? renderTable(entries) : null,
+          state.page === 1 ? renderPodium(entries) : null,
+          pageEntries.length > 0 ? renderTable(entries, pageEntries) : null,
           isRanked() ? el("div", {}, createRankDistributionCard(state.category)) : null,
         ),
   );

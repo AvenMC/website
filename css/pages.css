@@ -804,3 +804,30 @@
   .podiumCard.place1 { order: -1; padding-block: var(--space5); }
   .podiumCard { flex-direction: row; flex-wrap: wrap; justify-content: space-between; text-align: left; }
 }
+
+.rankedTeaser {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space5);
+  padding: var(--space6, 32px);
+  background: linear-gradient(120deg, var(--colorCard), color-mix(in srgb, var(--colorUnreal, #c56bff) 10%, var(--colorBackground)));
+}
+
+.rankedTeaserText { display: flex; flex-direction: column; align-items: flex-start; gap: var(--space3); }
+
+.rankedTeaserText h2 { margin: 0; }
+
+.rankedTeaserTiers { display: flex; flex-wrap: wrap; gap: var(--space2); max-width: 420px; }
+
+.rankedTeaserTier {
+  padding: 4px var(--space3);
+  border: 1px solid color-mix(in srgb, var(--tierColor) 55%, transparent);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--tierColor) 14%, transparent);
+  color: var(--tierColor);
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+}

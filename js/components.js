@@ -1,6 +1,6 @@
-import { countries } from "./countries.js?v=24";
-import { el } from "./dom.js?v=24";
-import { siteConfig } from "./siteConfig.js?v=24";
+import { countries } from "./countries.js?v=25";
+import { el } from "./dom.js?v=25";
+import { siteConfig } from "./siteConfig.js?v=25";
 
 export function createBrand({ showSubtitle = true } = {}) {
   return el(
@@ -51,10 +51,17 @@ export function createBadge({ label, variant = "default" }) {
 
 export function createAvatar({ username, skinUrl = null, size = "default" }) {
   const className = `avatar${size === "large" ? " avatarLarge" : ""}`;
-  const content = skinUrl
-    ? el("img", { src: skinUrl, alt: "", loading: "lazy" })
-    : username.charAt(0).toUpperCase();
-  return el("span", { className, "aria-hidden": "true" }, content);
+  const wrapper = el("span", { className, "aria-hidden": "true" });
+  const showLetter = () => wrapper.replaceChildren(username.charAt(0).toUpperCase());
+  const image = el("img", {
+    src: skinUrl ?? siteConfig.playerHeadUrl(username, size === "large" ? 128 : 64),
+    alt: "",
+    loading: "lazy",
+    referrerpolicy: "no-referrer",
+  });
+  image.addEventListener("error", showLetter);
+  wrapper.append(image);
+  return wrapper;
 }
 
 export function createFlag(code, { size = "medium" } = {}) {

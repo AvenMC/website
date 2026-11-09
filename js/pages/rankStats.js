@@ -1,8 +1,8 @@
-import { el, replaceContent } from "../dom.js?v=24";
-import { createBadge, createSectionHeading, createSkeleton, createTabs } from "../components.js?v=24";
-import { currentSeason, gamemodes, getRankDistribution } from "../mockData.js?v=24";
-import { rankTiers } from "../ranks.js?v=24";
-import { formatNumber } from "../format.js?v=24";
+import { el, replaceContent } from "../dom.js?v=25";
+import { createBadge, createSectionHeading, createSkeleton, createTabs } from "../components.js?v=25";
+import { currentSeason, gamemodes, getRankDistribution } from "../mockData.js?v=25";
+import { rankTiers } from "../ranks.js?v=25";
+import { formatNumber } from "../format.js?v=25";
 
 const donutRadius = 70;
 const circumference = 2 * Math.PI * donutRadius;
@@ -109,7 +109,7 @@ export function createRankStatsSection() {
     el(
       "div",
       { className: "container" },
-      el("div", { "data-reveal": "" }, createSectionHeading({ eyebrow: "Season 1", title: "Rank distribution" })),
+      el("div", { "data-reveal": "" }, createSectionHeading({ eyebrow: "Season 1", title: "Rank distribution", level: "h2" })),
       el(
         "div",
         { className: "card rankStatsCard", "data-reveal": "" },

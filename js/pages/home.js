@@ -1,5 +1,5 @@
-import { el, replaceContent } from "../dom.js?v=24";
-import { renderLayout } from "../layout.js?v=24";
+import { el, replaceContent } from "../dom.js?v=25";
+import { renderLayout } from "../layout.js?v=25";
 import {
   createAvatar,
   createBadge,
@@ -8,14 +8,13 @@ import {
   createSectionHeading,
   createSkeleton,
   createSocialLinks,
-} from "../components.js?v=24";
-import { createCopyField, openJoinModal } from "../join.js?v=24";
-import { gamemodes, regions, getTopPlayersPreview } from "../mockData.js?v=24";
-import { formatNumber } from "../format.js?v=24";
-import { createRankStatsSection } from "./rankStats.js?v=24";
-import { modeIcons, modeThemes } from "../modeTheme.js?v=24";
-import { rankTiers, unrealCap } from "../ranks.js?v=24";
-import { siteConfig } from "../siteConfig.js?v=24";
+} from "../components.js?v=25";
+import { createCopyField, openJoinModal } from "../join.js?v=25";
+import { gamemodes, regions, getTopPlayersPreview } from "../mockData.js?v=25";
+import { formatNumber } from "../format.js?v=25";
+import { modeIcons, modeThemes } from "../modeTheme.js?v=25";
+import { rankTiers, unrealCap } from "../ranks.js?v=25";
+import { siteConfig } from "../siteConfig.js?v=25";
 
 const app = renderLayout("home");
 const reveal = (delay = 0) => ({ "data-reveal": "", style: `--revealDelay:${delay}ms` });
@@ -91,46 +90,29 @@ const gamemodesSection = el(
   ),
 );
 
-const rankSteps = [
-  ["Play ranked duels", "Win in Nodebuff, CrystalPvP or SpearMace to gain rating. Losses cost rating."],
-  ["Climb the ladder", "Bronze to Diamond have three divisions each. Then Elite and Champion."],
-  ["Reach Unreal", `The top rank is capped at ${unrealCap} players per gamemode. Hold your spot.`],
-];
-
-const ranksSection = el(
+const rankedTeaser = el(
   "section",
   { className: "section compact" },
   el(
     "div",
     { className: "container" },
-    el("div", reveal(), createSectionHeading({ eyebrow: "Ranked", title: "How ranks work" })),
     el(
       "div",
-      { className: "rankLadderGraphic", ...reveal(60) },
-      rankTiers.map((tier, index) =>
-        el(
-          "div",
-          { className: `rankStep${tier.key === "unreal" ? " isUnreal" : ""}`, style: `--tierColor:${tier.color};--stepIndex:${index}` },
-          el("span", { className: "rankStepBar" }, tier.divisions > 1 ? el("span", { className: "rankStepDivisions" }, "I · II · III") : null),
-          el("span", { className: "rankStepName" }, tier.label),
-          tier.key === "unreal" ? el("span", { className: "rankStepNote" }, `Top ${unrealCap}`) : null,
-        ),
+      { className: "card rankedTeaser", ...reveal() },
+      el(
+        "div",
+        { className: "rankedTeaserText" },
+        createBadge({ label: "Ranked", variant: "primary" }),
+        el("h2", {}, `Only ${unrealCap} reach Unreal`),
+        el("p", { className: "cardText" }, "Climb from Bronze to Unreal. Ranks reset every season."),
+        createButton({ label: "Explore ranks", href: "ranked.html" }),
+      ),
+      el(
+        "div",
+        { className: "rankedTeaserTiers", "aria-hidden": "true" },
+        rankTiers.map((tier) => el("span", { className: "rankedTeaserTier", style: `--tierColor:${tier.color}` }, tier.label)),
       ),
     ),
-    el(
-      "div",
-      { className: "grid cols3" },
-      rankSteps.map(([title, text], index) =>
-        el(
-          "div",
-          { className: "card stepCard", ...reveal(index * 90) },
-          el("span", { className: "stepNumber" }, `0${index + 1}`),
-          el("h3", {}, title),
-          el("p", { className: "cardText" }, text),
-        ),
-      ),
-    ),
-    el("p", { className: "rankNote" }, "Ranks are separate per gamemode. Thresholds are placeholders until launch."),
   ),
 );
 
@@ -268,7 +250,7 @@ const finalCta = el(
   ),
 );
 
-replaceContent(app, hero, ticker, gamemodesSection, featuresSection, ranksSection, createRankStatsSection(), stepsSection, rankingSection, regionsSection, communitySection, finalCta);
+replaceContent(app, hero, ticker, gamemodesSection, featuresSection, rankedTeaser, stepsSection, rankingSection, regionsSection, communitySection, finalCta);
 
 getTopPlayersPreview().then((entries) => {
   replaceContent(

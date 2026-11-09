@@ -1,11 +1,12 @@
-import { el } from "./dom.js?v=24";
-import { createBrand, createButton, createSocialLinks } from "./components.js?v=24";
-import { openJoinModal } from "./join.js?v=24";
-import { initReveal, initSpotlight, initTilt } from "./effects.js?v=24";
+import { el } from "./dom.js?v=25";
+import { createBrand, createButton, createSocialLinks } from "./components.js?v=25";
+import { openJoinModal } from "./join.js?v=25";
+import { initReveal, initSpotlight, initTilt } from "./effects.js?v=25";
 
 const navItems = [
   { id: "home", label: "Home", href: "index.html" },
   { id: "profile", label: "Player Stats", href: "profile.html" },
+  { id: "ranked", label: "Ranked", href: "ranked.html" },
   { id: "leaderboards", label: "Leaderboards", href: "leaderboards.html" },
 ];
 
