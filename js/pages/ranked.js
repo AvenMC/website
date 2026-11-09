@@ -1,9 +1,9 @@
-import { el, replaceContent } from "../dom.js?v=26";
-import { renderLayout } from "../layout.js?v=26";
-import { createButton, createSectionHeading } from "../components.js?v=26";
-import { rankTiers, unrealCap } from "../ranks.js?v=26";
+import { el, replaceContent } from "../dom.js?v=27";
+import { renderLayout } from "../layout.js?v=27";
+import { createButton, createSectionHeading } from "../components.js?v=27";
+import { rankTiers, unrealCap } from "../ranks.js?v=27";
 
-const app = renderLayout("divisions");
+const app = renderLayout("ranked");
 const reveal = (delay = 0) => ({ "data-reveal": "", style: `--revealDelay:${delay}ms` });
 
 const rankSteps = [
@@ -18,7 +18,7 @@ const ladderSection = el(
   el(
     "div",
     { className: "container" },
-    el("div", reveal(), createSectionHeading({ eyebrow: "Ranked", title: "How divisions work", level: "h1" })),
+    el("div", reveal(), createSectionHeading({ eyebrow: "Ranked", title: "How Ranked works", level: "h1" })),
     el(
       "div",
       { className: "rankLadderGraphic", ...reveal(60) },
