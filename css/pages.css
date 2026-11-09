@@ -525,81 +525,51 @@
 
 .rankStatsCard { display: flex; flex-direction: column; gap: var(--space5); }
 
-.rankStats {
-  display: grid;
-  grid-template-columns: 240px 1fr;
-  align-items: center;
-  gap: var(--space6, 32px);
+.rankStats { display: flex; flex-direction: column; gap: var(--space4); }
+
+.rankStatsTotal { display: flex; align-items: baseline; gap: var(--space2); margin: 0; color: var(--colorTextSecondary); }
+
+.rankStatsTotal strong { color: var(--colorText); font-family: var(--fontHeading); font-size: 32px; line-height: 1.1; }
+
+.rankBar { display: flex; gap: 3px; height: 28px; }
+
+.rankSegment {
+  flex: 0 0 0;
+  min-width: 0;
+  border-radius: 6px;
+  background: var(--tierColor);
+  cursor: pointer;
+  transition: flex-basis 1s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.2s ease;
 }
 
-.rankDonutWrap { position: relative; width: 240px; max-width: 100%; margin-inline: auto; }
+.rankBar.isFilled .rankSegment { flex-basis: calc(var(--share) * 1%); }
 
-.rankDonut { display: block; width: 100%; transform: rotate(-90deg); }
+.rankSegment[data-tier="mythic"] { box-shadow: 0 0 14px var(--tierColor); }
 
-.rankDonutTrack, .rankDonutArc { fill: none; stroke-width: 16; }
+.rankSegment.isDimmed, .rankLegendItem.isDimmed { opacity: 0.3; }
 
-.rankDonutTrack { stroke: var(--colorBorder); }
+.rankLegend { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--space3); margin: 0; padding: 0; list-style: none; }
 
-.rankDonutArc { transition: stroke-dasharray 1s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.2s ease; cursor: pointer; }
-
-.rankDonutArc.isDimmed { opacity: 0.25; }
-
-.rankDonutCenter {
-  position: absolute;
-  inset: 0;
+.rankLegendItem {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  pointer-events: none;
-}
-
-.rankDonutCenter strong { font-family: var(--fontHeading); font-size: 32px; line-height: 1.1; }
-
-.rankDonutCenter span { color: var(--colorTextSecondary); font-size: 12px; }
-
-.rankRows { display: flex; flex-direction: column; gap: var(--space2); }
-
-.rankRow {
-  display: grid;
-  grid-template-columns: 130px 1fr 64px 60px;
-  align-items: center;
-  gap: var(--space3);
-  padding: 6px var(--space3);
+  gap: 2px;
+  padding: var(--space3);
+  border: 1px solid color-mix(in srgb, var(--tierColor) 30%, var(--colorBorder));
   border-radius: var(--radiusSmall);
-  transition: opacity 0.2s ease, background 0.2s ease;
+  transition: opacity 0.2s ease;
 }
 
-.rankRow:hover { background: color-mix(in srgb, var(--tierColor) 10%, transparent); }
+.rankLegendName { display: flex; align-items: center; gap: var(--space2); color: var(--tierColor); font-family: var(--fontHeading); font-size: 14px; font-weight: 600; }
 
-.rankRow.isDimmed { opacity: 0.35; }
+.rankLegendDot { width: 8px; height: 8px; border-radius: 50%; background: var(--tierColor); }
 
-.rankRowName { color: var(--tierColor); font-family: var(--fontHeading); font-size: 14px; font-weight: 600; }
+.rankLegendItem strong { font-family: var(--fontHeading); font-size: 20px; font-variant-numeric: tabular-nums; }
 
-.rankRowBar { height: 10px; overflow: hidden; border-radius: 999px; background: var(--colorBorder); }
-
-.rankRowFill {
-  display: block;
-  width: var(--fill);
-  height: 100%;
-  border-radius: inherit;
-  background: var(--tierColor);
-  transform-origin: left;
-  animation: rankFill 1s cubic-bezier(0.22, 1, 0.36, 1) both;
-}
-
-.rankRow.isMythic .rankRowFill { box-shadow: 0 0 12px var(--tierColor); }
-
-.rankRowCount { text-align: right; font-weight: 600; font-variant-numeric: tabular-nums; }
-
-.rankRowShare { text-align: right; color: var(--colorTextMuted); font-size: 12px; font-variant-numeric: tabular-nums; }
-
-@keyframes rankFill { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+.rankLegendShare { color: var(--colorTextMuted); font-size: 12px; font-variant-numeric: tabular-nums; }
 
 @media (max-width: 720px) {
-  .rankStats { grid-template-columns: 1fr; }
-  .rankRow { grid-template-columns: 1fr 56px 44px; }
-  .rankRowBar { grid-column: 1 / -1; grid-row: 2; }
+  .rankLegend { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -611,7 +581,7 @@
     transition: none;
   }
 
-  .rankRowFill, .rankDonutArc { animation: none; transition: none; }
+  .rankSegment { transition: none; }
 }
 
 .boardNav { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--space3); margin-bottom: var(--space3); }

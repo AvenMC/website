@@ -1,18 +1,8 @@
-import { el, replaceContent } from "../dom.js?v=81";
-import { createBadge, createSectionHeading, createSkeleton, createTabs } from "../components.js?v=81";
-import { currentSeason, gamemodes, getRankDistribution } from "../mockData.js?v=81";
-import { rankTiers } from "../ranks.js?v=81";
-import { formatNumber } from "../format.js?v=81";
-
-const donutRadius = 70;
-const circumference = 2 * Math.PI * donutRadius;
-const svgNs = "http://www.w3.org/2000/svg";
-
-function svg(tag, attributes = {}) {
-  const node = document.createElementNS(svgNs, tag);
-  Object.entries(attributes).forEach(([key, value]) => node.setAttribute(key, value));
-  return node;
-}
+import { el, replaceContent } from "../dom.js?v=82";
+import { createBadge, createSectionHeading, createSkeleton, createTabs } from "../components.js?v=82";
+import { currentSeason, gamemodes, getRankDistribution } from "../mockData.js?v=82";
+import { rankTiers } from "../ranks.js?v=82";
+import { formatNumber } from "../format.js?v=82";
 
 function animateNumber(node, target, duration = 900) {
   const start = performance.now();
@@ -24,68 +14,49 @@ function animateNumber(node, target, duration = 900) {
   requestAnimationFrame(tick);
 }
 
-function createDonut(data, onHover) {
-  const chart = svg("svg", { viewBox: "0 0 180 180", class: "rankDonut", role: "img", "aria-label": "Division distribution" });
-  chart.append(svg("circle", { cx: 90, cy: 90, r: donutRadius, class: "rankDonutTrack" }));
-
-  let offset = 0;
-  rankTiers.forEach((tier) => {
-    const share = data.counts[tier.key] / data.total;
-    // Tiny tiers still need a visible arc.
-    const length = Math.max(share * circumference, 3);
-    const arc = svg("circle", {
-      cx: 90,
-      cy: 90,
-      r: donutRadius,
-      class: "rankDonutArc",
-      "data-tier": tier.key,
-      stroke: tier.color,
-      "stroke-dasharray": `0 ${circumference}`,
-      "stroke-dashoffset": -offset,
-    });
-    arc.addEventListener("mouseenter", () => onHover(tier.key));
-    arc.addEventListener("mouseleave", () => onHover(null));
-    chart.append(arc);
-    requestAnimationFrame(() => requestAnimationFrame(() => arc.setAttribute("stroke-dasharray", `${length - 2} ${circumference - length + 2}`)));
-    offset += share * circumference;
-  });
-  return chart;
-}
-
 function renderDistribution(data) {
-  const maxCount = Math.max(...Object.values(data.counts));
   const totalNode = el("strong", {}, "0");
-  const rows = rankTiers
-    .slice()
-    .reverse()
-    .map((tier) =>
-      el(
-        "div",
-        { className: `rankRow${tier.key === "mythic" ? " isMythic" : ""}`, "data-tier": tier.key, style: `--tierColor:${tier.color}` },
-        el("span", { className: "rankRowName" }, tier.key === "mythic" ? "Mythic" : tier.label),
-        el("span", { className: "rankRowBar" }, el("span", { className: "rankRowFill", style: `--fill:${(data.counts[tier.key] / maxCount) * 100}%` })),
-        el("span", { className: "rankRowCount" }, tier.key === "mythic" ? formatNumber(data.counts[tier.key]) : `${((data.counts[tier.key] / data.total) * 100).toFixed(1)}%`),
-        el("span", { className: "rankRowShare" }, tier.key === "mythic" ? "players" : `${formatNumber(data.counts[tier.key])}`),
-      ),
-    );
+  const tiers = rankTiers.slice().reverse();
+  const percent = (tier) => ((data.counts[tier.key] / data.total) * 100).toFixed(1);
+
+  // Tiny divisions still get a visible sliver.
+  const segments = tiers.map((tier) =>
+    el("span", {
+      className: "rankSegment",
+      "data-tier": tier.key,
+      style: `--tierColor:${tier.color};--share:${Math.max((data.counts[tier.key] / data.total) * 100, 1.2)}`,
+      "aria-label": `${tier.label}: ${formatNumber(data.counts[tier.key])} players`,
+    }),
+  );
+  const legend = tiers.map((tier) =>
+    el(
+      "li",
+      { className: "rankLegendItem", "data-tier": tier.key, style: `--tierColor:${tier.color}` },
+      el("span", { className: "rankLegendName" }, el("span", { className: "rankLegendDot", "aria-hidden": "true" }), tier.label),
+      el("strong", {}, formatNumber(data.counts[tier.key])),
+      el("span", { className: "rankLegendShare" }, `${percent(tier)}%`),
+    ),
+  );
 
   const highlight = (key) => {
-    rows.forEach((row) => row.classList.toggle("isDimmed", key !== null && row.dataset.tier !== key));
-    donut.querySelectorAll(".rankDonutArc").forEach((arc) => arc.classList.toggle("isDimmed", key !== null && arc.dataset.tier !== key));
+    [...segments, ...legend].forEach((node) => node.classList.toggle("isDimmed", key !== null && node.dataset.tier !== key));
   };
-  rows.forEach((row) => {
-    row.addEventListener("mouseenter", () => highlight(row.dataset.tier));
-    row.addEventListener("mouseleave", () => highlight(null));
+  [...segments, ...legend].forEach((node) => {
+    node.addEventListener("mouseenter", () => highlight(node.dataset.tier));
+    node.addEventListener("mouseleave", () => highlight(null));
   });
 
-  const donut = createDonut(data, highlight);
   animateNumber(totalNode, data.total);
+  // Segments grow in after the first paint.
+  const bar = el("div", { className: "rankBar", role: "img", "aria-label": "Division distribution" }, segments);
+  requestAnimationFrame(() => requestAnimationFrame(() => bar.classList.add("isFilled")));
 
   return el(
     "div",
     { className: "rankStats" },
-    el("div", { className: "rankDonutWrap" }, donut, el("div", { className: "rankDonutCenter" }, totalNode, el("span", {}, "Ranked players"))),
-    el("div", { className: "rankRows" }, rows),
+    el("p", { className: "rankStatsTotal" }, totalNode, el("span", {}, "ranked players")),
+    bar,
+    el("ul", { className: "rankLegend" }, legend),
   );
 }
 
