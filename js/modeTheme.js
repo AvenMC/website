@@ -1,7 +1,7 @@
 const modeIconUrls = {
-  nodebuff: "https://img.icons8.com/material-rounded/96/flask.png",
+  nodebuff: "../assets/modes/flask.svg",
   crystalpvp: "https://img.icons8.com/fluency-systems-regular/96/diamond.png",
-  spearmace: "https://img.icons8.com/material-rounded/96/hammer.png",
+  spearmace: "../assets/modes/hammer-outline.svg",
 };
 
 export const modeThemes = {
