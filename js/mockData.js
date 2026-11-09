@@ -4,8 +4,8 @@
  * the pages only depend on the shapes returned here.
  */
 
-import { countries } from "./countries.js?v=28";
-import { getRankedTier, unrealCap, unrealMinRating } from "./ranks.js?v=28";
+import { countries } from "./countries.js?v=29";
+import { getRankedTier, unrealCap, unrealMinRating } from "./ranks.js?v=29";
 
 export const gamemodes = [
   { id: "nodebuff", name: "Nodebuff", short: "NB", description: "Classic potion PvP." },
@@ -15,8 +15,8 @@ export const gamemodes = [
 
 // Accounts, stats and leaderboards are shared across all regions.
 export const regions = [
-  { id: "eu", code: "EU", location: "Frankfurt", status: "Planned" },
-  { id: "na", code: "NA", location: "New York", status: "Planned" },
+  { id: "eu", code: "EU", location: "Frankfurt", status: "At release" },
+  { id: "na", code: "NA", location: "New York", status: "At release" },
   { id: "as", code: "AS", location: "To be announced", status: "Potential" },
 ];
 

@@ -1,5 +1,5 @@
-import { el, replaceContent } from "../dom.js?v=28";
-import { renderLayout } from "../layout.js?v=28";
+import { el, replaceContent } from "../dom.js?v=29";
+import { renderLayout } from "../layout.js?v=29";
 import {
   createAvatar,
   createBadge,
@@ -8,13 +8,13 @@ import {
   createSectionHeading,
   createSkeleton,
   createSocialLinks,
-} from "../components.js?v=28";
-import { createCopyField, openJoinModal } from "../join.js?v=28";
-import { gamemodes, regions, getTopPlayersPreview } from "../mockData.js?v=28";
-import { formatNumber } from "../format.js?v=28";
-import { modeIcons, modeThemes } from "../modeTheme.js?v=28";
-import { rankTiers, unrealCap } from "../ranks.js?v=28";
-import { siteConfig } from "../siteConfig.js?v=28";
+} from "../components.js?v=29";
+import { createCopyField, openJoinModal } from "../join.js?v=29";
+import { gamemodes, regions, getTopPlayersPreview } from "../mockData.js?v=29";
+import { formatNumber } from "../format.js?v=29";
+import { modeIcons, modeThemes } from "../modeTheme.js?v=29";
+import { rankTiers, unrealCap } from "../ranks.js?v=29";
+import { siteConfig } from "../siteConfig.js?v=29";
 
 const app = renderLayout("home");
 const reveal = (delay = 0) => ({ "data-reveal": "", style: `--revealDelay:${delay}ms` });
@@ -83,7 +83,7 @@ const gamemodesSection = el(
           el("span", { className: "modeIcon", style: `--iconUrl:url(../assets/modes/${modeIcons[mode.id]}.png)`, "aria-hidden": "true" }),
           el("h3", {}, mode.name),
           el("p", { className: "cardText" }, mode.description),
-          createBadge({ label: "Planned" }),
+          createBadge({ label: "At release" }),
         ),
       ),
     ),
