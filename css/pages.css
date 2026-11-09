@@ -881,3 +881,50 @@
     animation: none;
   }
 }
+
+/* Highlight strip: hard edges, no fade */
+.marquee {
+  overflow: hidden;
+  border-block: 1px solid var(--colorPrimaryLine);
+  background: var(--colorSurface);
+}
+
+.marqueeTrack {
+  display: flex;
+  width: max-content;
+  animation: marqueeScroll 40s linear infinite;
+}
+
+.marqueeItem {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space5);
+  padding: var(--space4) var(--space5);
+  color: var(--colorTextSecondary);
+  font-family: var(--fontHeading);
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.marqueeItem::after {
+  content: "";
+  width: 8px;
+  height: 8px;
+  background: var(--colorPrimary);
+  transform: rotate(45deg);
+}
+
+@keyframes marqueeScroll {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marqueeTrack {
+    animation: none;
+  }
+}

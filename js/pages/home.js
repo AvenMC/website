@@ -1,5 +1,5 @@
-import { el, replaceContent } from "../dom.js?v=73";
-import { renderLayout } from "../layout.js?v=73";
+import { el, replaceContent } from "../dom.js?v=74";
+import { renderLayout } from "../layout.js?v=74";
 import {
   createAvatar,
   createBadge,
@@ -9,14 +9,14 @@ import {
   createSectionHeading,
   createSkeletonRows,
   createSocialLinks,
-} from "../components.js?v=73";
-import { createCopyField, openJoinModal } from "../join.js?v=73";
-import { gamemodes, regions, getTopPlayersPreview } from "../mockData.js?v=73";
-import { initSectionTone } from "../effects.js?v=73";
-import { formatNumber } from "../format.js?v=73";
-import { modeIconStyle, modeThemes } from "../modeTheme.js?v=73";
-import { allRankTiers, rankedBoardSize } from "../ranks.js?v=73";
-import { siteConfig } from "../siteConfig.js?v=73";
+} from "../components.js?v=74";
+import { createCopyField, openJoinModal } from "../join.js?v=74";
+import { gamemodes, regions, getTopPlayersPreview } from "../mockData.js?v=74";
+import { initSectionTone } from "../effects.js?v=74";
+import { formatNumber } from "../format.js?v=74";
+import { modeIconStyle, modeThemes } from "../modeTheme.js?v=74";
+import { allRankTiers, rankedBoardSize } from "../ranks.js?v=74";
+import { siteConfig } from "../siteConfig.js?v=74";
 
 const app = renderLayout("home");
 const reveal = (delay = 0) => ({ "data-reveal": "", style: `--revealDelay:${delay}ms` });
@@ -69,6 +69,19 @@ const hero = el(
       el("img", { className: "heroLogo", src: "assets/logoMark.png", alt: "", width: "384", height: "384" }),
     ),
   ),
+);
+
+const marqueeItems = ["Bedrock Edition", "Mobile, Console and PC", "Ranked seasons", "Top 50 leaderboard", "EU and NA regions", "One account everywhere", "Shared stats"];
+// The list is rendered twice so the loop restarts seamlessly.
+const marquee = el(
+  "section",
+  { className: "marquee", "aria-label": "Highlights" },
+  el(
+    "div",
+    { className: "marqueeTrack", "aria-hidden": "true" },
+    [0, 1].flatMap(() => marqueeItems.map((text) => el("span", { className: "marqueeItem" }, text))),
+  ),
+  el("ul", { className: "srOnly" }, marqueeItems.map((text) => el("li", {}, text))),
 );
 
 const regionIcons = { eu: "europe", na: "northAmerica", as: "asia" };
@@ -215,7 +228,7 @@ const featuresSection = el(
   ),
 );
 
-replaceContent(app, hero, gamemodesSection, featuresSection, rankedTeaser, rankingSection, regionsSection, communitySection);
+replaceContent(app, hero, marquee, gamemodesSection, featuresSection, rankedTeaser, rankingSection, regionsSection, communitySection);
 
 getTopPlayersPreview().then((entries) => {
   replaceContent(
