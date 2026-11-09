@@ -1071,9 +1071,7 @@ a.card:hover,
 
 .profileEloValue { color: var(--tierColor); font-family: var(--fontHeading); font-size: clamp(40px, 6vw, 56px); line-height: 1; }
 
-.eloUp { color: var(--colorSuccess); font-weight: 700; }
 
-.eloDown { color: var(--colorDanger); font-weight: 700; }
 
 @media (max-width: 640px) {
   .profileElo { align-items: flex-start; width: 100%; padding: var(--space4) 0 0; border-top: 1px solid var(--colorBorder); border-left: 0; text-align: left; }

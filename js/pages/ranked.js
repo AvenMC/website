@@ -1,11 +1,11 @@
-import { el, replaceContent } from "../dom.js?v=80";
-import { initReveal } from "../effects.js?v=80";
-import { renderLayout } from "../layout.js?v=80";
-import { createButton, createRankedBadge, createSectionHeading } from "../components.js?v=80";
-import { createRankStatsSection } from "./rankStats.js?v=80";
-import { allRankTiers, mythicMinRating, rankedBoardSize, tierStep } from "../ranks.js?v=80";
-import { gamemodes } from "../mockData.js?v=80";
-import { modeThemes } from "../modeTheme.js?v=80";
+import { el, replaceContent } from "../dom.js?v=81";
+import { initReveal } from "../effects.js?v=81";
+import { renderLayout } from "../layout.js?v=81";
+import { createButton, createRankedBadge, createSectionHeading } from "../components.js?v=81";
+import { createRankStatsSection } from "./rankStats.js?v=81";
+import { allRankTiers, rankedBoardSize } from "../ranks.js?v=81";
+import { gamemodes } from "../mockData.js?v=81";
+import { modeThemes } from "../modeTheme.js?v=81";
 
 const app = renderLayout("ranked");
 const reveal = (delay = 0) => ({ "data-reveal": "", style: `--revealDelay:${delay}ms` });
@@ -13,22 +13,16 @@ const format = (value) => value.toLocaleString("en-US");
 
 const flowSteps = ["Win duels", "Fill your percent bar", "Rank up", "Reach Mythic"];
 
-// Rating range of one tier, derived from the same step the scoring uses.
-function tierRange(index, tier) {
-  if (tier.key === "mythic") return `${format(mythicMinRating)}+`;
-  return `${format(Math.round(index * tierStep))} – ${format(Math.round((index + 1) * tierStep) - 1)}`;
-}
-
 function createLadderRow(tier, index) {
   const isMythic = tier.key === "mythic";
   return el(
     "li",
     { className: `ladderRow${isMythic ? " isMythic" : ""}`, style: `--tierColor:${tier.color};--step:${index};--revealDelay:${(allRankTiers.length - index) * 50}ms`, "data-reveal": "" },
     el("span", { className: "ladderBadge" }, createRankedBadge(tier)),
-    el("span", { className: "ladderElo" }, el("strong", {}, tierRange(index, tier)), el("small", {}, isMythic ? "Points" : "Elo")),
+    el("span", { className: "ladderElo" }, el("strong", {}, isMythic ? "Points" : "0–100%"), el("small", {}, isMythic ? "No cap" : "Per tier")),
     isMythic
       ? el("span", { className: "ladderProgress isOpen" }, el("span", { className: "ladderOpenText" }, `No limit · top ${rankedBoardSize} on the leaderboard`))
-      : el("span", { className: "ladderProgress" }, el("span", { className: "ladderTrack" }, el("span", { className: "ladderFill" })), el("span", { className: "ladderPercent" }, "0% → 100%")),
+      : el("span", { className: "ladderProgress" }, el("span", { className: "ladderTrack" }, el("span", { className: "ladderFill" }))),
   );
 }
 
@@ -49,7 +43,6 @@ const ladderSection = el(
       flowSteps.map((step, index) => el("li", {}, el("span", { className: "flowNumber" }, index + 1), step)),
     ),
     el("ol", { className: "rankLadder" }, allRankTiers.map((tier, index) => createLadderRow(tier, index)).reverse()),
-    el("p", { className: "placeholderNote", ...reveal() }, "Elo ranges are placeholders until launch."),
   ),
 );
 
