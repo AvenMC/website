@@ -928,12 +928,3 @@
     animation: none;
   }
 }
-
-.heroEyebrow {
-  margin: calc(var(--space3) * -1) 0 0;
-  color: var(--colorTextSecondary);
-  font-size: 13px;
-  font-weight: 600;
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-}
