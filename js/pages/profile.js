@@ -1,5 +1,5 @@
-import { el, replaceContent } from "../dom.js?v=44";
-import { renderLayout } from "../layout.js?v=44";
+import { el, replaceContent } from "../dom.js?v=45";
+import { renderLayout } from "../layout.js?v=45";
 import {
   createAvatar,
   createBadge,
@@ -15,10 +15,11 @@ import {
   createRankedBadge,
   createTabs,
   withTooltip,
-} from "../components.js?v=44";
-import { countries } from "../countries.js?v=44";
-import { gamemodes, getPlayer, getPlayerTier, setCountry } from "../mockData.js?v=44";
-import { formatDateTime, formatNumber, formatPercent, formatPlaytime, formatRatio } from "../format.js?v=44";
+} from "../components.js?v=45";
+import { countries } from "../countries.js?v=45";
+import { getTierScore } from "../ranks.js?v=45";
+import { gamemodes, getPlayer, getPlayerTier, setCountry } from "../mockData.js?v=45";
+import { formatDateTime, formatNumber, formatPercent, formatPlaytime, formatRatio } from "../format.js?v=45";
 
 const app = renderLayout("profile");
 const modeName = (id) => gamemodes.find((mode) => mode.id === id).name;
@@ -153,9 +154,9 @@ function renderRatingsTable(player) {
     columns: [
       { label: "Gamemode", render: (row) => row.name },
       {
-        label: "Rating",
+        label: "Points / Progress",
         align: "right",
-        render: (row) => withTooltip(el("span", { className: "metricValue" }, formatNumber(row.rating)), "Placeholder rating"),
+        render: (row) => withTooltip(el("span", { className: "metricValue" }, getTierScore(row.rating, row.tier).text), "Placeholder data"),
       },
       { label: "Division", align: "right", render: (row) => createRankedBadge(row.tier) },
     ],
@@ -197,15 +198,17 @@ function renderGamemodes(player) {
     { className: "grid cols3" },
     gamemodes.map((mode) => {
       const stats = player.perMode[mode.id];
+      const tier = getPlayerTier(player, mode.id);
+      const score = getTierScore(player.ratings[mode.id], tier);
       return el(
         "div",
         { className: "card stack" },
         el("h3", {}, mode.name),
-        createRankedBadge(getPlayerTier(player, mode.id)),
+        createRankedBadge(tier),
         el(
           "div",
           { className: "grid cols2 statGrid" },
-          createStatCard({ label: "Rating", value: formatNumber(player.ratings[mode.id]), accent: true }),
+          createStatCard({ label: score.label, value: score.text, accent: true }),
           createStatCard({ label: "K/D", value: formatRatio(stats.kills, stats.deaths) }),
           createStatCard({ label: "Wins", value: formatNumber(stats.wins) }),
           createStatCard({ label: "Losses", value: formatNumber(stats.losses) }),

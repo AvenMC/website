@@ -1,8 +1,8 @@
-import { el, replaceContent } from "../dom.js?v=44";
-import { createBadge, createSectionHeading, createSkeleton, createTabs } from "../components.js?v=44";
-import { currentSeason, gamemodes, getRankDistribution } from "../mockData.js?v=44";
-import { rankTiers } from "../ranks.js?v=44";
-import { formatNumber } from "../format.js?v=44";
+import { el, replaceContent } from "../dom.js?v=45";
+import { createBadge, createSectionHeading, createSkeleton, createTabs } from "../components.js?v=45";
+import { currentSeason, gamemodes, getRankDistribution } from "../mockData.js?v=45";
+import { rankTiers } from "../ranks.js?v=45";
+import { formatNumber } from "../format.js?v=45";
 
 const donutRadius = 70;
 const circumference = 2 * Math.PI * donutRadius;
@@ -64,8 +64,8 @@ function renderDistribution(data) {
         { className: `rankRow${tier.key === "mythic" ? " isMythic" : ""}`, "data-tier": tier.key, style: `--tierColor:${tier.color}` },
         el("span", { className: "rankRowName" }, tier.key === "mythic" ? `Mythic · ${data.counts.mythic}/${data.mythicCap}` : tier.label),
         el("span", { className: "rankRowBar" }, el("span", { className: "rankRowFill", style: `--fill:${(data.counts[tier.key] / maxCount) * 100}%` })),
-        el("span", { className: "rankRowCount" }, formatNumber(data.counts[tier.key])),
-        el("span", { className: "rankRowShare" }, `${((data.counts[tier.key] / data.total) * 100).toFixed(1)}%`),
+        el("span", { className: "rankRowCount" }, tier.key === "mythic" ? formatNumber(data.counts[tier.key]) : `${((data.counts[tier.key] / data.total) * 100).toFixed(1)}%`),
+        el("span", { className: "rankRowShare" }, tier.key === "mythic" ? "players" : `${formatNumber(data.counts[tier.key])}`),
       ),
     );
 

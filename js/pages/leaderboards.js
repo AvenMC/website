@@ -1,5 +1,5 @@
-import { el, replaceContent } from "../dom.js?v=44";
-import { renderLayout } from "../layout.js?v=44";
+import { el, replaceContent } from "../dom.js?v=45";
+import { renderLayout } from "../layout.js?v=45";
 import {
   createAvatar,
   createBadge,
@@ -12,12 +12,12 @@ import {
   createSkeletonRows,
   createTable,
   createTabs,
-} from "../components.js?v=44";
-import { gamemodes, getLeaderboard, leaderboardCategories } from "../mockData.js?v=44";
-import { modeIconStyle, modeThemes } from "../modeTheme.js?v=44";
-import { createRankDistributionCard } from "./rankStats.js?v=44";
-import { getRankedTier, getTierProgress, rankTiers, rankedBoardSize } from "../ranks.js?v=44";
-import { formatNumber } from "../format.js?v=44";
+} from "../components.js?v=45";
+import { gamemodes, getLeaderboard, leaderboardCategories } from "../mockData.js?v=45";
+import { modeIconStyle, modeThemes } from "../modeTheme.js?v=45";
+import { createRankDistributionCard } from "./rankStats.js?v=45";
+import { getRankedTier, getTierProgress, rankTiers, rankedBoardSize } from "../ranks.js?v=45";
+import { formatNumber } from "../format.js?v=45";
 
 const app = renderLayout("leaderboards");
 

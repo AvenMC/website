@@ -20,6 +20,13 @@ export function getTierProgress(rating) {
   return Math.floor(((rating % tierStep) / tierStep) * 100);
 }
 
+// Mythic shows open-ended rating points, every other division shows tier progress in percent.
+export function getTierScore(rating, tier) {
+  return tier.key === "mythic"
+    ? { label: "Points", text: rating.toLocaleString("en-US") }
+    : { label: "Progress", text: `${getTierProgress(rating)}%` };
+}
+
 export function getRankedTier(rating, { isMythic = false } = {}) {
   if (isMythic && rating >= mythicMinRating) return { ...rankTiers[3], tier: null, name: "Mythic" };
   const step = Math.min(8, Math.floor(Math.max(0, rating) / tierStep));

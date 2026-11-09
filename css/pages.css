@@ -713,7 +713,7 @@
 
 .rankRow {
   display: grid;
-  grid-template-columns: 130px 1fr 64px 52px;
+  grid-template-columns: 130px 1fr 64px 60px;
   align-items: center;
   gap: var(--space3);
   padding: 6px var(--space3);
