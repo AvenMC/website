@@ -840,12 +840,6 @@
 
 .stepCard .stepNumber { color: var(--accent, var(--colorPrimary)); }
 
-.tickerItem:nth-child(3n + 1) { color: var(--colorNodebuff); }
-.tickerItem:nth-child(3n + 2) { color: var(--colorPrimary); }
-.tickerItem:nth-child(3n) { color: var(--colorMace); }
-.tickerItem:nth-child(3n + 1)::after { color: var(--colorPrimary); }
-.tickerItem:nth-child(3n + 2)::after { color: var(--colorMace); }
-.tickerItem:nth-child(3n)::after { color: var(--colorNodebuff); }
 
 .rowTop2 .positionBadge { border-color: var(--colorCrystal); color: var(--colorCrystal); }
 .rowTop3 .positionBadge { border-color: var(--colorMace); color: var(--colorMace); }

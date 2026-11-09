@@ -921,20 +921,3 @@ a.card:hover,
 .pageButton:disabled { opacity: 0.4; cursor: default; }
 
 .paginationGap { color: var(--colorTextMuted); }
-
-/* Brand colors for social links */
-.socialLink[data-social="discord"] { --socialColor: #7c8cff; }
-.socialLink[data-social="tiktok"] { --socialColor: #ff5c8a; }
-.socialLink[data-social="youtube"] { --socialColor: #ff6b6b; }
-.socialLink[data-social="instagram"] { --socialColor: #ff9a4d; }
-
-.socialLink[data-social] {
-  color: var(--socialColor);
-  border-color: color-mix(in srgb, var(--socialColor) 35%, var(--colorBorder));
-  background: linear-gradient(135deg, color-mix(in srgb, var(--socialColor) 14%, var(--colorCard)), var(--colorCard));
-}
-
-.socialLink[data-social]:hover {
-  border-color: var(--socialColor);
-  box-shadow: 0 0 18px color-mix(in srgb, var(--socialColor) 28%, transparent);
-}
