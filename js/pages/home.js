@@ -35,12 +35,6 @@ const hero = el(
     el(
       "div",
       { className: "heroContent" },
-      el(
-        "p",
-        { className: "onlineStatus" },
-        el("span", { className: "onlineDot", "aria-hidden": "true" }),
-        `${formatNumber(onlinePlayers)} players across ${regions.filter((region) => region.status === "At release").length} regions`,
-      ),
       el("h1", {}, "Duel. ", el("span", { className: "accent" }, "Rank."), " Rise."),
       el("p", { className: "heroDescription" }, "Reach Mythic and climb the top 50. One account, one ranking, every region."),
       el(
@@ -61,6 +55,12 @@ const hero = el(
         { className: "buttonRow" },
         createButton({ label: "How to join", onClick: openJoinModal }),
         createButton({ label: "Join Discord", variant: "secondary", href: siteConfig.discordUrl }),
+      ),
+      el(
+        "p",
+        { className: "onlineStatus" },
+        el("span", { className: "onlineDot", "aria-hidden": "true" }),
+        `${formatNumber(onlinePlayers)} players across ${regions.filter((region) => region.status === "At release").length} regions`,
       ),
     ),
     el(
