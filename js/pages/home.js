@@ -12,6 +12,7 @@ import {
 import { createCopyField, openJoinModal } from "../join.js";
 import { gamemodes, regions, getTopPlayersPreview } from "../mockData.js";
 import { formatNumber } from "../format.js";
+import { rankTiers, unrealCap } from "../ranks.js";
 import { siteConfig } from "../siteConfig.js";
 
 const app = renderLayout("home");
@@ -91,6 +92,49 @@ const gamemodesSection = el(
         ),
       ),
     ),
+  ),
+);
+
+const rankSteps = [
+  ["Play ranked duels", "Win in Nodebuff, CrystalPvP or SpearMace to gain rating. Losses cost rating."],
+  ["Climb the ladder", "Bronze to Diamond have three divisions each. Then Elite and Champion."],
+  ["Reach Unreal", `The top rank is capped at ${unrealCap} players per gamemode. Hold your spot.`],
+];
+
+const ranksSection = el(
+  "section",
+  { className: "section compact" },
+  el(
+    "div",
+    { className: "container" },
+    el("div", reveal(), createSectionHeading({ eyebrow: "Ranked", title: "How ranks work" })),
+    el(
+      "div",
+      { className: "rankLadderGraphic", ...reveal(60) },
+      rankTiers.map((tier, index) =>
+        el(
+          "div",
+          { className: `rankStep${tier.key === "unreal" ? " isUnreal" : ""}`, style: `--tierColor:${tier.color};--stepIndex:${index}` },
+          el("span", { className: "rankStepBar" }, tier.divisions > 1 ? el("span", { className: "rankStepDivisions" }, "I · II · III") : null),
+          el("span", { className: "rankStepName" }, tier.label),
+          tier.key === "unreal" ? el("span", { className: "rankStepNote" }, `Top ${unrealCap}`) : null,
+        ),
+      ),
+    ),
+    el(
+      "div",
+      { className: "grid cols3" },
+      rankSteps.map(([title, text], index) =>
+        el(
+          "div",
+          { className: "card stepCard", ...reveal(index * 90) },
+          el("span", { className: "stepNumber" }, `0${index + 1}`),
+          el("h3", {}, title),
+          el("p", { className: "cardText" }, text),
+        ),
+      ),
+    ),
+    el("p", { className: "rankNote" }, "Ranks are separate per gamemode. Thresholds are placeholders until launch."),
   ),
 );
 
@@ -228,7 +272,7 @@ const finalCta = el(
   ),
 );
 
-replaceContent(app, hero, ticker, gamemodesSection, featuresSection, stepsSection, rankingSection, regionsSection, communitySection, finalCta);
+replaceContent(app, hero, ticker, gamemodesSection, featuresSection, ranksSection, stepsSection, rankingSection, regionsSection, communitySection, finalCta);
 
 getTopPlayersPreview().then((entries) => {
   replaceContent(

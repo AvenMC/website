@@ -608,3 +608,68 @@
 .regionCard {
   background: linear-gradient(160deg, color-mix(in srgb, var(--accent) 14%, var(--colorCard)), color-mix(in srgb, var(--accent) 4%, var(--colorBackground)) 80%);
 }
+
+.rankLadderGraphic {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  align-items: end;
+  gap: var(--space3);
+  margin-bottom: var(--space5);
+  padding: var(--space5) var(--space4) var(--space4);
+  border: 1px solid var(--colorBorder);
+  border-radius: var(--radiusLarge);
+  background: linear-gradient(180deg, var(--colorCard), var(--colorBackground));
+}
+
+.rankStep {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space2);
+  text-align: center;
+}
+
+.rankStepBar {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  width: 100%;
+  height: calc(56px + var(--stepIndex) * 26px);
+  padding-bottom: var(--space2);
+  border: 1px solid color-mix(in srgb, var(--tierColor) 55%, transparent);
+  border-radius: var(--radiusMedium) var(--radiusMedium) 4px 4px;
+  background: linear-gradient(180deg, color-mix(in srgb, var(--tierColor) 38%, transparent), color-mix(in srgb, var(--tierColor) 8%, transparent));
+  transition: transform 0.2s ease;
+}
+
+.rankStep:hover .rankStepBar { transform: translateY(-4px); }
+
+.rankStep.isUnreal .rankStepBar { box-shadow: 0 0 24px color-mix(in srgb, var(--tierColor) 40%, transparent); }
+
+.rankStepDivisions {
+  color: var(--tierColor);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+
+.rankStepName {
+  color: var(--tierColor);
+  font-family: var(--fontHeading);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.rankStepNote {
+  color: var(--colorTextSecondary);
+  font-size: 12px;
+}
+
+@media (max-width: 720px) {
+  .rankLadderGraphic { grid-template-columns: 1fr; gap: var(--space2); padding: var(--space4); }
+  .rankStep { flex-direction: row-reverse; justify-content: space-between; }
+  .rankStepBar { width: calc(30% + var(--stepIndex) * 10%); height: 28px; padding: 0 var(--space3); align-items: center; justify-content: flex-end; border-radius: 4px var(--radiusMedium) var(--radiusMedium) 4px; }
+  .rankStepName { min-width: 90px; text-align: left; }
+}
+
+.rankNote { margin-top: var(--space4); color: var(--colorTextMuted); font-size: 13px; }
