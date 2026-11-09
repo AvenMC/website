@@ -1,11 +1,11 @@
-import { el, replaceContent } from "../dom.js?v=86";
-import { initReveal } from "../effects.js?v=86";
-import { renderLayout } from "../layout.js?v=86";
-import { createButton, createRankedBadge, createSectionHeading } from "../components.js?v=86";
-import { createRankStatsSection } from "./rankStats.js?v=86";
-import { allRankTiers, rankTiers, rankedBoardSize } from "../ranks.js?v=86";
-import { gamemodes } from "../mockData.js?v=86";
-import { modeThemes } from "../modeTheme.js?v=86";
+import { el, replaceContent } from "../dom.js?v=88";
+import { initReveal } from "../effects.js?v=88";
+import { renderLayout } from "../layout.js?v=88";
+import { createButton, createRankedBadge, createSectionHeading } from "../components.js?v=88";
+import { createRankStatsSection } from "./rankStats.js?v=88";
+import { allRankTiers, rankTiers, rankedBoardSize } from "../ranks.js?v=88";
+import { gamemodes } from "../mockData.js?v=88";
+import { modeThemes } from "../modeTheme.js?v=88";
 
 const app = renderLayout("ranked");
 const reveal = (delay = 0) => ({ "data-reveal": "", style: `--revealDelay:${delay}ms` });
@@ -19,7 +19,7 @@ function createDivisionCard(division) {
     { className: `divisionCard${isMythic ? " isMythic" : ""}`, "data-reveal": "", style: `--tierColor:${division.color}` },
     el("h3", {}, division.label),
     el("div", { className: "divisionBadges" }, badges.map((tier) => createRankedBadge(tier))),
-    el("p", {}, isMythic ? `Points, no cap. Top ${rankedBoardSize} on the leaderboard.` : "0–100% per tier"),
+    el("p", {}, isMythic ? `Points instead of a bar, no cap. Top ${rankedBoardSize} on the leaderboard.` : null),
   );
 }
 
@@ -32,43 +32,9 @@ const introSection = el(
     el(
       "div",
       reveal(),
-      createSectionHeading({ eyebrow: "Ranked", title: "Ten ranks. One goal.", description: "Win duels, fill your bar and climb from Bronze I to Mythic.", level: "h1" }),
+      createSectionHeading({ eyebrow: "Ranked", title: "Ten ranks. One goal.", description: "Win duels to fill your bar from 0 to 100% and reach the next tier.", level: "h1" }),
     ),
     el("div", { className: "divisionPanel", ...reveal(40) }, el("ol", { className: "divisionGrid" }, rankTiers.map((division) => createDivisionCard(division)))),
-  ),
-);
-
-const silver = allRankTiers[4];
-const mythic = allRankTiers[9];
-
-const scoreSection = el(
-  "section",
-  { className: "section compact" },
-  el(
-    "div",
-    { className: "container" },
-    el("div", reveal(), createSectionHeading({ eyebrow: "Scoring", title: "Percent first, then points" })),
-    el(
-      "div",
-      { className: "scoreSplit", ...reveal(60) },
-      el(
-        "div",
-        { className: "scoreSide", style: `--tierColor:${silver.color}` },
-        el("span", { className: "scoreSideLabel" }, "Bronze · Silver · Gold"),
-        el("div", { className: "scoreDemo" }, createRankedBadge(silver), el("strong", {}, "64%")),
-        el("div", { className: "ladderTrack isWide" }, el("span", { className: "ladderFill", style: "width:64%" })),
-        el("p", { className: "cardText" }, "Reach 100% to move up a tier."),
-      ),
-      el("span", { className: "scoreArrow", "aria-hidden": "true" }, "→"),
-      el(
-        "div",
-        { className: "scoreSide", style: `--tierColor:${mythic.color}` },
-        el("span", { className: "scoreSideLabel" }, "Mythic"),
-        el("div", { className: "scoreDemo" }, createRankedBadge(mythic), el("strong", {}, "2,431 pts")),
-        el("div", { className: "scoreRankChip" }, "#17 on the leaderboard"),
-        el("p", { className: "cardText" }, `Points have no cap. Top ${rankedBoardSize} are listed.`),
-      ),
-    ),
   ),
 );
 
@@ -120,5 +86,5 @@ const leaderboardLink = el(
   ),
 );
 
-replaceContent(app, introSection, scoreSection, createRankStatsSection(), gainSection, leaderboardLink);
+replaceContent(app, introSection, createRankStatsSection(), gainSection, leaderboardLink);
 initReveal();
