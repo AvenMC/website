@@ -1,19 +1,8 @@
 /* Central design tokens. Every color, font and spacing value is defined here once. */
+/* Monocraft (SIL OFL 1.1) stands in for the proprietary Mojang fonts. Swap the file here to change all three roles. */
 @font-face {
-  font-family: "Minecraft Ten";
-  src: local("Minecraft Ten"), url("../assets/fonts/MinecraftTen.woff2") format("woff2");
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "Minecraft Seven";
-  src: local("Minecraft Seven"), url("../assets/fonts/MinecraftSeven.woff2") format("woff2");
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "Minecraft Five";
-  src: local("Minecraft Five"), url("../assets/fonts/MinecraftFive.woff2") format("woff2");
+  font-family: "Monocraft";
+  src: url("../assets/fonts/Monocraft.woff2") format("woff2");
   font-display: swap;
 }
 
@@ -38,9 +27,9 @@
   --colorOverlay: color-mix(in srgb, var(--colorBackground) 80%, transparent);
   --glowPrimary: 0 0 22px color-mix(in srgb, var(--colorPrimary) 35%, transparent);
 
-  --fontTen: "Minecraft Ten", "Segoe UI", system-ui, sans-serif;
-  --fontSeven: "Minecraft Seven", "Segoe UI", system-ui, sans-serif;
-  --fontFive: "Minecraft Five", "Segoe UI", system-ui, sans-serif;
+  --fontTen: "Monocraft", "Segoe UI", system-ui, sans-serif;
+  --fontSeven: "Monocraft", "Segoe UI", system-ui, sans-serif;
+  --fontFive: "Monocraft", "Segoe UI", system-ui, sans-serif;
   --fontBody: "Inter", "Segoe UI", system-ui, -apple-system, sans-serif;
 
   --space1: 4px;
