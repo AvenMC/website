@@ -3,7 +3,8 @@
 export const mythicMinRating = 2200;
 export const rankedBoardSize = 50;
 
-const tierStep = 240;
+// Nine tiers fill exactly up to mythicMinRating, so 100% in Gold III means Mythic.
+const tierStep = mythicMinRating / 9;
 const romanNumerals = ["I", "II", "III"];
 
 export const rankTiers = [
@@ -16,7 +17,6 @@ export const rankTiers = [
 // Progress through the current tier in percent (0-99). Mythic has no tiers, it shows rating points instead.
 export function getTierProgress(rating) {
   const step = Math.floor(Math.max(0, rating) / tierStep);
-  if (step > 8) return 99;
   return Math.floor(((rating % tierStep) / tierStep) * 100);
 }
 

@@ -1,10 +1,10 @@
-import { el, replaceContent } from "../dom.js?v=49";
-import { renderLayout } from "../layout.js?v=49";
-import { createButton, createSectionHeading } from "../components.js?v=49";
-import { createRankStatsSection } from "./rankStats.js?v=49";
-import { rankTiers, rankedBoardSize } from "../ranks.js?v=49";
-import { gamemodes } from "../mockData.js?v=49";
-import { modeThemes } from "../modeTheme.js?v=49";
+import { el, replaceContent } from "../dom.js?v=50";
+import { renderLayout } from "../layout.js?v=50";
+import { createButton, createSectionHeading } from "../components.js?v=50";
+import { createRankStatsSection } from "./rankStats.js?v=50";
+import { rankTiers, rankedBoardSize } from "../ranks.js?v=50";
+import { gamemodes } from "../mockData.js?v=50";
+import { modeThemes } from "../modeTheme.js?v=50";
 
 const app = renderLayout("ranked");
 const reveal = (delay = 0) => ({ "data-reveal": "", style: `--revealDelay:${delay}ms` });
@@ -54,8 +54,8 @@ const ladderSection = el(
 );
 
 const scoreCards = [
-  ["Bronze, Silver, Gold", "Progress in %", "Your progress through the current tier, from 0% to 99%. Reach 100% to move up. These divisions have no leaderboard spot.", "var(--colorPrimary)"],
-  ["Mythic", "Points", "Mythic has no tiers, no percent and no player limit. You get an open-ended point total that keeps going up with every win.", rankTiers[3].color],
+  ["Bronze, Silver, Gold", "Progress in %", "Your progress through the current tier. Reach 100% to move up, and 100% in Gold III takes you into Mythic. These divisions have no leaderboard spot.", "var(--colorPrimary)"],
+  ["Mythic", "Points", "Once you enter Mythic, percent is replaced by an open-ended point total that goes up with every win. No tiers, no player limit.", rankTiers[3].color],
   ["Leaderboards", `Top ${rankedBoardSize}`, `Only Mythic players are ranked. The top ${rankedBoardSize} by points per gamemode appear on the leaderboard.`, "var(--colorSuccess)"],
 ];
 
