@@ -1,11 +1,11 @@
-import { el, replaceContent } from "../dom.js?v=100";
-import { initReveal } from "../effects.js?v=100";
-import { renderLayout } from "../layout.js?v=100";
-import { createButton, createRankedBadge, createSectionHeading } from "../components.js?v=100";
-import { createRankStatsSection } from "./rankStats.js?v=100";
-import { allRankTiers, rankTiers } from "../ranks.js?v=100";
-import { gamemodes } from "../mockData.js?v=100";
-import { modeThemes } from "../modeTheme.js?v=100";
+import { el, replaceContent } from "../dom.js?v=101";
+import { initReveal } from "../effects.js?v=101";
+import { renderLayout } from "../layout.js?v=101";
+import { createButton, createRankedBadge, createSectionHeading } from "../components.js?v=101";
+import { createRankStatsSection } from "./rankStats.js?v=101";
+import { allRankTiers, rankTiers } from "../ranks.js?v=101";
+import { gamemodes } from "../mockData.js?v=101";
+import { modeThemes } from "../modeTheme.js?v=101";
 
 const app = renderLayout("ranked");
 const reveal = (delay = 0) => ({ "data-reveal": "", style: `--revealDelay:${delay}ms` });
@@ -17,7 +17,7 @@ const createHeartDisplay = () =>
     Array.from({ length: 10 }, (_, index) =>
       el("span", {
         className: `gainHeart${index < 7 ? " isFilled" : ""}`,
-        style: `--heartIcon:url(https://img.icons8.com/material-${index < 7 ? "rounded" : "outlined"}/96/heart.png)`,
+        style: `--heartIcon:url(https://img.icons8.com/?size=96&id=${index < 7 ? "85138" : "p7MI4JnqXYvv"}&format=png&color=000000)`,
         "aria-hidden": "true",
       }),
     ),
