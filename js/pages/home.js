@@ -1,5 +1,5 @@
-import { el, replaceContent } from "../dom.js?v=77";
-import { renderLayout } from "../layout.js?v=77";
+import { el, replaceContent } from "../dom.js?v=78";
+import { renderLayout } from "../layout.js?v=78";
 import {
   createAvatar,
   createBadge,
@@ -9,14 +9,14 @@ import {
   createSectionHeading,
   createSkeletonRows,
   createSocialLinks,
-} from "../components.js?v=77";
-import { createCopyField, openJoinModal } from "../join.js?v=77";
-import { gamemodes, regions, getTopPlayersPreview } from "../mockData.js?v=77";
-import { initSectionTone } from "../effects.js?v=77";
-import { formatNumber } from "../format.js?v=77";
-import { modeIconStyle, modeThemes } from "../modeTheme.js?v=77";
-import { allRankTiers, rankedBoardSize } from "../ranks.js?v=77";
-import { siteConfig } from "../siteConfig.js?v=77";
+} from "../components.js?v=78";
+import { createCopyField, openJoinModal } from "../join.js?v=78";
+import { gamemodes, regions, getTopPlayersPreview } from "../mockData.js?v=78";
+import { initSectionTone } from "../effects.js?v=78";
+import { formatNumber } from "../format.js?v=78";
+import { modeIconStyle, modeThemes } from "../modeTheme.js?v=78";
+import { allRankTiers, rankedBoardSize } from "../ranks.js?v=78";
+import { siteConfig } from "../siteConfig.js?v=78";
 
 const app = renderLayout("home");
 const reveal = (delay = 0) => ({ "data-reveal": "", style: `--revealDelay:${delay}ms` });
@@ -35,15 +35,8 @@ const hero = el(
     el(
       "div",
       { className: "heroContent" },
-      el("h1", {}, "Duel. ", el("span", { className: "accent" }, "Rank."), " Rise."),
-      el("p", { className: "heroEyebrow" }, "Minecraft Bedrock PvP Practice Network"),
-      el(
-        "div",
-        { className: "heroStats" },
-        [
-          ["#1", "Bedrock PvP network"],
-        ].map(([value, label]) => el("div", { className: "heroStat" }, el("span", { className: "heroStatValue" }, value), el("span", { className: "heroStatLabel" }, label))),
-      ),
+      el("h1", {}, "The ", el("span", { className: "accent" }, "#1"), " Bedrock PvP Network"),
+      el("p", { className: "heroEyebrow" }, "Minecraft Bedrock practice server"),
       el(
         "ul",
         { className: "platformRow", "aria-label": "Play on mobile, console and PC" },

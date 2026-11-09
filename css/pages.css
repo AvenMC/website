@@ -937,32 +937,3 @@
   letter-spacing: 0.22em;
   text-transform: uppercase;
 }
-
-.heroStats {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: var(--space4) var(--space8);
-}
-
-.heroStat {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 2px;
-}
-
-.heroStatValue {
-  color: var(--colorText);
-  font-family: var(--fontHeading);
-  font-size: clamp(40px, 7vw, 60px);
-  font-weight: 700;
-  line-height: 1;
-}
-
-.heroStatLabel {
-  color: var(--colorTextMuted);
-  font-size: 12px;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-}
