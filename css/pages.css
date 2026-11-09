@@ -147,10 +147,10 @@
 .tickerItem {
   padding: var(--space3) var(--space6);
   color: var(--colorTextSecondary);
-  font-family: var(--fontSeven);
+  font-family: var(--fontBody);
   font-size: 14px;
-  text-transform: uppercase;
   white-space: nowrap;
+  font-weight: 600;
 }
 
 .tickerItem::after {
@@ -174,7 +174,7 @@
 
 .stepNumber {
   color: var(--colorPrimary);
-  font-family: var(--fontTen);
+  font-family: var(--fontHeading);
   font-size: 36px;
   line-height: 1;
 }
@@ -250,7 +250,8 @@
 .previewRow .previewValue {
   margin-left: auto;
   color: var(--colorPrimary);
-  font-family: var(--fontSeven);
+  font-family: var(--fontHeading);
+  font-weight: 700;
 }
 
 /* Gamemode and region cards */
@@ -270,7 +271,7 @@
   border-radius: var(--radiusMedium);
   background: var(--colorPrimarySoft);
   color: var(--colorPrimary);
-  font-family: var(--fontTen);
+  font-family: var(--fontHeading);
   font-size: 18px;
 }
 
@@ -283,7 +284,7 @@
 
 .regionCode {
   color: var(--colorPrimary);
-  font-family: var(--fontTen);
+  font-family: var(--fontHeading);
   font-size: 24px;
 }
 
@@ -361,7 +362,7 @@
 }
 
 .levelLabel {
-  font-family: var(--fontSeven);
+  font-family: var(--fontBody);
   font-size: 14px;
   white-space: nowrap;
 }
@@ -384,7 +385,7 @@
   border-radius: var(--radiusSmall);
   background: var(--colorSurface);
   color: var(--colorTextSecondary);
-  font-family: var(--fontSeven);
+  font-family: var(--fontBody);
   font-size: 14px;
 }
 
@@ -419,7 +420,7 @@
 
 .metricValue {
   color: var(--colorPrimary);
-  font-family: var(--fontSeven);
+  font-family: var(--fontBody);
 }
 
 .placeholderNote {

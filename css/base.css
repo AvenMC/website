@@ -43,11 +43,10 @@ p {
 h1,
 h2,
 h3 {
-  font-family: var(--fontTen);
-  font-variant-ligatures: none;
-  font-weight: 400;
+  font-family: var(--fontHeading);
+  font-weight: 700;
   line-height: 1.15;
-  letter-spacing: 0.01em;
+  letter-spacing: -0.02em;
 }
 
 h1 {

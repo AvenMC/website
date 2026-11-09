@@ -1,5 +1,19 @@
 /* Central design tokens. Every color, font and spacing value is defined here once. */
-/* Monocraft (SIL OFL 1.1) stands in for the proprietary Mojang fonts. Swap the file here to change all three roles. */
+/* Inter (UI and body) and Space Grotesk (headings): SIL OFL 1.1. Monocraft is reserved for player names. */
+@font-face {
+  font-family: "Inter";
+  src: url("../assets/fonts/Inter.woff2") format("woff2");
+  font-weight: 100 900;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Space Grotesk";
+  src: url("../assets/fonts/SpaceGrotesk.woff2") format("woff2");
+  font-weight: 300 700;
+  font-display: swap;
+}
+
 @font-face {
   font-family: "Monocraft";
   src: url("../assets/fonts/Monocraft.woff2") format("woff2");
@@ -27,10 +41,9 @@
   --colorOverlay: color-mix(in srgb, var(--colorBackground) 80%, transparent);
   --glowPrimary: 0 0 22px color-mix(in srgb, var(--colorPrimary) 35%, transparent);
 
-  --fontTen: "Monocraft", "Segoe UI", system-ui, sans-serif;
-  --fontSeven: "Monocraft", "Segoe UI", system-ui, sans-serif;
-  --fontFive: "Monocraft", "Segoe UI", system-ui, sans-serif;
+  --fontHeading: "Space Grotesk", "Inter", system-ui, sans-serif;
   --fontBody: "Inter", "Segoe UI", system-ui, -apple-system, sans-serif;
+  --fontMinecraft: "Monocraft", "Inter", monospace;
 
   --space1: 4px;
   --space2: 8px;

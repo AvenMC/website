@@ -29,10 +29,10 @@
   padding-inline: var(--space4);
   border-radius: var(--radiusSmall);
   color: var(--colorTextSecondary);
-  font-family: var(--fontSeven);
+  font-family: var(--fontBody);
   font-size: 14px;
-  text-transform: uppercase;
   transition: color var(--transitionFast), background var(--transitionFast);
+  font-weight: 600;
 }
 
 .navLink:hover {
@@ -74,9 +74,10 @@
 }
 
 .brandName {
-  font-family: var(--fontTen);
+  font-family: var(--fontHeading);
   font-size: 22px;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.02em;
+  font-weight: 700;
 }
 
 .brandName .brandAccent {
@@ -86,7 +87,7 @@
 .brandSubtitle {
   margin-top: 4px;
   color: var(--colorTextMuted);
-  font-family: var(--fontFive);
+  font-family: var(--fontBody);
   font-size: 9px;
   letter-spacing: 0.18em;
 }
@@ -102,12 +103,12 @@
   border: 1px solid transparent;
   border-radius: var(--radiusSmall);
   cursor: pointer;
-  font-family: var(--fontSeven);
+  font-family: var(--fontBody);
   font-size: 14px;
-  text-transform: uppercase;
   white-space: nowrap;
   transition: background var(--transitionFast), border-color var(--transitionFast),
     box-shadow var(--transitionFast), transform var(--transitionFast);
+  font-weight: 600;
 }
 
 .button:active {
@@ -214,10 +215,11 @@ a.card:hover,
 
 .sectionEyebrow {
   color: var(--colorPrimary);
-  font-family: var(--fontSeven);
+  font-family: var(--fontBody);
   font-size: 13px;
   letter-spacing: 0.14em;
   text-transform: uppercase;
+  font-weight: 600;
 }
 
 .sectionDescription {
@@ -236,10 +238,11 @@ a.card:hover,
   border-radius: 999px;
   background: var(--colorSurface);
   color: var(--colorTextSecondary);
-  font-family: var(--fontSeven);
+  font-family: var(--fontBody);
   font-size: 12px;
   text-transform: uppercase;
   white-space: nowrap;
+  font-weight: 600;
 }
 
 .badgePrimary {
@@ -269,7 +272,7 @@ a.card:hover,
   border-radius: var(--radiusSmall);
   background: var(--colorElevated);
   color: var(--colorPrimary);
-  font-family: var(--fontTen);
+  font-family: var(--fontHeading);
   font-size: calc(var(--avatarSize, 40px) * 0.42);
   image-rendering: pixelated;
   overflow: hidden;
@@ -299,16 +302,18 @@ a.card:hover,
 
 .statLabel {
   color: var(--colorTextMuted);
-  font-family: var(--fontSeven);
+  font-family: var(--fontBody);
   font-size: 12px;
   letter-spacing: 0.08em;
   text-transform: uppercase;
+  font-weight: 600;
 }
 
 .statValue {
-  font-family: var(--fontTen);
+  font-family: var(--fontHeading);
   font-size: clamp(24px, 3vw, 30px);
   line-height: 1.1;
+  font-weight: 700;
 }
 
 .statValue.isAccent {
@@ -339,7 +344,7 @@ a.card:hover,
   border-bottom: 1px solid var(--colorBorder);
   background: var(--colorSurface);
   color: var(--colorTextMuted);
-  font-family: var(--fontSeven);
+  font-family: var(--fontBody);
   font-size: 12px;
   font-weight: 400;
   letter-spacing: 0.08em;
@@ -372,6 +377,13 @@ a.card:hover,
 
 .table .alignCenter {
   text-align: center;
+}
+
+.playerName {
+  font-family: var(--fontMinecraft);
+  font-weight: 400;
+  letter-spacing: 0;
+  overflow-wrap: anywhere;
 }
 
 .cellPlayer {
@@ -413,11 +425,11 @@ a.card:hover,
   background: transparent;
   color: var(--colorTextSecondary);
   cursor: pointer;
-  font-family: var(--fontSeven);
+  font-family: var(--fontBody);
   font-size: 14px;
-  text-transform: uppercase;
   white-space: nowrap;
   transition: color var(--transitionFast), background var(--transitionFast);
+  font-weight: 600;
 }
 
 .tab:hover {
@@ -703,7 +715,7 @@ a.card:hover,
 }
 
 .copyFieldText strong {
-  font-family: var(--fontSeven);
+  font-family: var(--fontBody);
   font-size: 18px;
   font-weight: 400;
 }
@@ -778,7 +790,7 @@ a.card:hover,
 
 .socialText strong {
   color: var(--colorText);
-  font-family: var(--fontSeven);
+  font-family: var(--fontBody);
   font-weight: 400;
 }
 

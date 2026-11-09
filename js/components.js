@@ -56,6 +56,10 @@ export function createAvatar({ username, skinUrl = null, size = "default" }) {
   return el("span", { className, "aria-hidden": "true" }, content);
 }
 
+export function createPlayerName(username, { tag = "span" } = {}) {
+  return el(tag, { className: "playerName" }, username);
+}
+
 export function createRankBadge(rank) {
   return createBadge({ label: rank, variant: rank === "Member" ? "default" : "primary" });
 }
