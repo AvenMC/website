@@ -1,5 +1,5 @@
-import { el, replaceContent } from "../dom.js?v=70";
-import { renderLayout } from "../layout.js?v=70";
+import { el, replaceContent } from "../dom.js?v=71";
+import { renderLayout } from "../layout.js?v=71";
 import {
   createAvatar,
   createBadge,
@@ -9,13 +9,13 @@ import {
   createSectionHeading,
   createSkeletonRows,
   createSocialLinks,
-} from "../components.js?v=70";
-import { createCopyField, openJoinModal } from "../join.js?v=70";
-import { gamemodes, regions, getTopPlayersPreview } from "../mockData.js?v=70";
-import { formatNumber } from "../format.js?v=70";
-import { modeIconStyle, modeThemes } from "../modeTheme.js?v=70";
-import { allRankTiers, rankedBoardSize } from "../ranks.js?v=70";
-import { siteConfig } from "../siteConfig.js?v=70";
+} from "../components.js?v=71";
+import { createCopyField, openJoinModal } from "../join.js?v=71";
+import { gamemodes, regions, getTopPlayersPreview } from "../mockData.js?v=71";
+import { formatNumber } from "../format.js?v=71";
+import { modeIconStyle, modeThemes } from "../modeTheme.js?v=71";
+import { allRankTiers, rankedBoardSize } from "../ranks.js?v=71";
+import { siteConfig } from "../siteConfig.js?v=71";
 
 const app = renderLayout("home");
 const reveal = (delay = 0) => ({ "data-reveal": "", style: `--revealDelay:${delay}ms` });
@@ -241,12 +241,13 @@ const sectionAccents = {
   community: "var(--colorCrystal)",
 };
 [
-  [gamemodesSection, sectionAccents.gamemodes],
-  [featuresSection, sectionAccents.features],
-  [rankingSection, sectionAccents.ranking],
-  [regionsSection, sectionAccents.regions],
-  [communitySection, sectionAccents.community],
-].forEach(([section, accent]) => {
+  [gamemodesSection, sectionAccents.gamemodes, "glow"],
+  [featuresSection, sectionAccents.features, "grid"],
+  [rankingSection, sectionAccents.ranking, "beams"],
+  [regionsSection, sectionAccents.regions, "dots"],
+  [communitySection, sectionAccents.community, "aurora"],
+].forEach(([section, accent, bg]) => {
   section.classList.add("tintedSection");
+  section.dataset.bg = bg;
   section.style.setProperty("--sectionAccent", accent);
 });

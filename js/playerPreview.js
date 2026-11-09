@@ -1,9 +1,9 @@
-import { el } from "./dom.js?v=70";
-import { createAvatar, createFlag, createRankedBadge } from "./components.js?v=70";
-import { getPlayerPreview } from "./mockData.js?v=70";
-import { modeIconStyle, modeThemes } from "./modeTheme.js?v=70";
-import { getTierScore, memberRankColors } from "./ranks.js?v=70";
-import { formatNumber, formatPlaytime } from "./format.js?v=70";
+import { el } from "./dom.js?v=71";
+import { createAvatar, createFlag, createRankedBadge } from "./components.js?v=71";
+import { getPlayerPreview } from "./mockData.js?v=71";
+import { modeIconStyle, modeThemes } from "./modeTheme.js?v=71";
+import { getTierScore, memberRankColors } from "./ranks.js?v=71";
+import { formatNumber, formatPlaytime } from "./format.js?v=71";
 
 const showDelayMs = 220;
 const hideDelayMs = 80;

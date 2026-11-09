@@ -1,7 +1,6 @@
 /* Hero */
 .hero {
   position: relative;
-  overflow: hidden;
   padding-block: var(--space8) var(--space7);
   isolation: isolate;
 }
@@ -47,29 +46,66 @@
   }
 }
 
-/* Each home section gets its own background tint from its accent */
+/* Home sections: each has its own pattern, all fade out vertically so they blend into each other */
 .tintedSection {
   position: relative;
   isolation: isolate;
-  background: linear-gradient(180deg, transparent, color-mix(in srgb, var(--sectionAccent) 9%, var(--colorBackground)) 50%, transparent);
 }
 
-.tintedSection:nth-of-type(even)::before {
+.tintedSection::before {
   content: "";
   position: absolute;
-  inset: 0;
+  inset: -80px 0;
   z-index: -1;
-  background: radial-gradient(60% 70% at 85% 50%, color-mix(in srgb, var(--sectionAccent) 12%, transparent), transparent);
   pointer-events: none;
+  -webkit-mask-image: linear-gradient(transparent, #000 30%, #000 70%, transparent);
+  mask-image: linear-gradient(transparent, #000 30%, #000 70%, transparent);
 }
 
-.tintedSection:nth-of-type(odd)::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  background: radial-gradient(60% 70% at 15% 50%, color-mix(in srgb, var(--sectionAccent) 12%, transparent), transparent);
-  pointer-events: none;
+.tintedSection[data-bg="glow"]::before {
+  background:
+    radial-gradient(50% 55% at 20% 50%, color-mix(in srgb, var(--sectionAccent) 22%, transparent), transparent),
+    radial-gradient(40% 45% at 85% 70%, color-mix(in srgb, var(--colorPrimary) 12%, transparent), transparent);
+}
+
+.tintedSection[data-bg="grid"]::before {
+  background:
+    linear-gradient(color-mix(in srgb, var(--sectionAccent) 14%, transparent) 1px, transparent 1px) 0 0 / 48px 48px,
+    linear-gradient(90deg, color-mix(in srgb, var(--sectionAccent) 14%, transparent) 1px, transparent 1px) 0 0 / 48px 48px,
+    radial-gradient(60% 60% at 50% 50%, color-mix(in srgb, var(--sectionAccent) 14%, transparent), transparent);
+  -webkit-mask-image: linear-gradient(transparent, #000 30%, #000 70%, transparent), radial-gradient(80% 70% at 50% 50%, #000, transparent);
+  -webkit-mask-composite: source-in;
+  mask-image: linear-gradient(transparent, #000 30%, #000 70%, transparent), radial-gradient(80% 70% at 50% 50%, #000, transparent);
+  mask-composite: intersect;
+}
+
+.tintedSection[data-bg="beams"]::before {
+  background:
+    repeating-linear-gradient(115deg, transparent 0 90px, color-mix(in srgb, var(--sectionAccent) 10%, transparent) 90px 92px, transparent 92px 180px),
+    radial-gradient(70% 60% at 90% 40%, color-mix(in srgb, var(--sectionAccent) 20%, transparent), transparent);
+}
+
+.tintedSection[data-bg="dots"]::before {
+  background:
+    radial-gradient(color-mix(in srgb, var(--sectionAccent) 35%, transparent) 1.5px, transparent 2px) 0 0 / 28px 28px,
+    radial-gradient(55% 60% at 10% 55%, color-mix(in srgb, var(--sectionAccent) 16%, transparent), transparent);
+}
+
+.tintedSection[data-bg="aurora"]::before {
+  background:
+    radial-gradient(45% 55% at 25% 60%, color-mix(in srgb, var(--colorCrystal) 22%, transparent), transparent),
+    radial-gradient(45% 55% at 75% 40%, color-mix(in srgb, var(--colorPrimary) 20%, transparent), transparent);
+  animation: auroraShift 14s ease-in-out infinite alternate;
+}
+
+@keyframes auroraShift {
+  to {
+    transform: translateX(6%) scale(1.08);
+  }
+}
+
+#app {
+  overflow-x: clip;
 }
 
 .heroGrid {
@@ -651,7 +687,8 @@
 
 @media (prefers-reduced-motion: reduce) {
   .hero::before,
-  .hero::after {
+  .hero::after,
+  .tintedSection::before {
     animation: none;
   }
 
