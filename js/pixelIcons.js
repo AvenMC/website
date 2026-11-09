@@ -2,15 +2,10 @@ import { el } from "./dom.js";
 
 const svgNs = "http://www.w3.org/2000/svg";
 
-const palette = {
-  a: "#ffffff",
-  b: "#28b9f5",
-  c: "#2479c9",
-  d: "#0f3a66",
-  e: "#91a9c9",
-  f: "#637b9c",
-  g: "#39d69a",
-  h: "#c8e9fb",
+const palettes = {
+  potion: { a: "#ffffff", b: "#f0556a", c: "#b82e48", d: "#6e1830", e: "#c9d6e8", f: "#8a6a4a", h: "#ffc4cf" },
+  crystal: { a: "#ffffff", b: "#c46bff", c: "#8a3fd1", d: "#4a1f80", e: "#91a9c9", f: "#637b9c", h: "#e6c4ff" },
+  mace: { a: "#ffffff", b: "#ffb347", c: "#c9751f", d: "#6b3a0e", e: "#91a9c9", f: "#637b9c", h: "#ffe0a8" },
 };
 
 // 16x16 pixel sprites, one character per pixel, "." is transparent.
@@ -52,21 +47,21 @@ const sprites = {
     "................",
   ],
   mace: [
-    ".............ff.",
-    "............feef",
-    "..........hhaeef",
-    "........hhbbaef.",
-    ".......hbbbbhf..",
-    "......hbbbbbf...",
-    ".....hbbbbcd....",
-    "....hbbbbcd.....",
-    "...ecbbcd.......",
-    "..ecfccd........",
-    ".ecf.dd.........",
-    "ecf.............",
+    "................",
+    "..........d.....",
+    "....d..dhhhhd...",
+    "...dhdhhbbbbbd..",
+    "....dhbbbbbbbcd.",
+    "...dhbbabbbbbcd.",
+    "....hbbbbbbbccd.",
+    "...dbbbbbbbccd..",
+    "....dcbbbbccd...",
+    ".....dccccdd....",
+    "....ef.dd.d.....",
+    "...ef...........",
+    "..ef............",
+    ".ef.............",
     "ff..............",
-    "................",
-    "................",
     "................",
   ],
 };
@@ -87,7 +82,7 @@ export function createPixelIcon(name, size = 64) {
       rect.setAttribute("y", y);
       rect.setAttribute("width", 1);
       rect.setAttribute("height", 1);
-      rect.setAttribute("fill", palette[char]);
+      rect.setAttribute("fill", palettes[name][char]);
       svg.append(rect);
     });
   });

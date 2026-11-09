@@ -35,6 +35,10 @@
   --colorBorder: #1b2b45;
   --colorSuccess: #39d69a;
   --colorDanger: #f07878;
+  --colorNodebuff: #f0556a;
+  --colorCrystal: #c46bff;
+  --colorMace: #ffb347;
+  --colorAsia: #8b7cff;
 
   --colorPrimarySoft: color-mix(in srgb, var(--colorPrimary) 14%, transparent);
   --colorPrimaryLine: color-mix(in srgb, var(--colorPrimary) 45%, var(--colorBorder));

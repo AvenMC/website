@@ -18,25 +18,9 @@ import { siteConfig } from "../siteConfig.js";
 const app = renderLayout("home");
 const reveal = (delay = 0) => ({ "data-reveal": "", style: `--revealDelay:${delay}ms` });
 
-const bubbles = el(
-  "div",
-  { className: "heroBubbles", "aria-hidden": "true" },
-  Array.from({ length: 14 }, (_, index) =>
-    el("span", { style: `--bubbleX:${(index * 73) % 100}%;--bubbleSize:${6 + ((index * 5) % 12)}px;--bubbleDelay:${-((index * 2.3) % 14)}s;--bubbleDuration:${11 + ((index * 3) % 9)}s` }),
-  ),
-);
-
 const hero = el(
   "section",
   { className: "hero" },
-  bubbles,
-  el(
-    "div",
-    { className: "heroWaves", "aria-hidden": "true" },
-    el("span", { className: "heroWave waveBack" }),
-    el("span", { className: "heroWave waveMid" }),
-    el("span", { className: "heroWave waveFront" }),
-  ),
   el(
     "div",
     { className: "container heroGrid" },
@@ -79,6 +63,9 @@ const ticker = el(
 );
 
 const modeIcons = { nodebuff: "potion", crystalpvp: "crystal", spearmace: "mace" };
+const modeAccents = { nodebuff: "var(--colorNodebuff)", crystalpvp: "var(--colorCrystal)", spearmace: "var(--colorMace)" };
+const regionIcons = { eu: "europe", na: "northAmerica", as: "asia" };
+const regionAccents = { eu: "var(--colorPrimary)", na: "var(--colorSuccess)", as: "var(--colorAsia)" };
 
 const gamemodesSection = el(
   "section",
@@ -93,7 +80,7 @@ const gamemodesSection = el(
       gamemodes.map((mode, index) =>
         el(
           "div",
-          { className: "card hasSpotlight hasTilt gamemodeCard", ...reveal(index * 90) },
+          { className: "card hasSpotlight hasTilt gamemodeCard", ...reveal(index * 90), style: `--accent:${modeAccents[mode.id]};--revealDelay:${index * 90}ms` },
           createPixelIcon(modeIcons[mode.id], 72),
           el("h3", {}, mode.name),
           el("p", { className: "cardText" }, mode.description),
@@ -168,8 +155,9 @@ const regionsSection = el(
       regions.map((region, index) =>
         el(
           "div",
-          { className: `card regionCard${region.id === "as" ? " isMuted" : ""}`, ...reveal(index * 90) },
-          el("div", {}, el("div", { className: "regionCode" }, region.code), el("div", { className: "regionLocation" }, region.location)),
+          { className: `card regionCard${region.id === "as" ? " isMuted" : ""}`, ...reveal(index * 90), style: `--accent:${regionAccents[region.id]};--revealDelay:${index * 90}ms` },
+          el("img", { className: "regionIcon", src: `assets/regions/${regionIcons[region.id]}.svg`, alt: "", width: "56", height: "56", loading: "lazy" }),
+          el("div", { className: "regionText" }, el("div", { className: "regionCode" }, region.code), el("div", { className: "regionLocation" }, region.location)),
           createBadge({ label: region.status }),
         ),
       ),
@@ -198,10 +186,10 @@ const communitySection = el(
 );
 
 const features = [
-  ["Ranked duels", "Rating per gamemode and a competitive tier to climb."],
-  ["Free for all", "Drop in, fight, and build your kill streak."],
-  ["Detailed stats", "K/D, win rate, streaks and recent matches at a glance."],
-  ["Bedrock native", "Join from mobile, console or PC."],
+  ["Ranked duels", "Rating per gamemode and a competitive tier to climb.", "var(--colorPrimary)"],
+  ["Free for all", "Drop in, fight, and build your kill streak.", "var(--colorDanger)"],
+  ["Detailed stats", "K/D, win rate, streaks and recent matches at a glance.", "var(--colorSuccess)"],
+  ["Bedrock native", "Join from mobile, console or PC.", "var(--colorMace)"],
 ];
 
 const featuresSection = el(
@@ -214,8 +202,8 @@ const featuresSection = el(
     el(
       "div",
       { className: "grid cols4 featureGrid" },
-      features.map(([title, text], index) =>
-        el("div", { className: "featureItem", ...reveal(index * 80) }, el("h3", {}, title), el("p", { className: "cardText" }, text)),
+      features.map(([title, text, accent], index) =>
+        el("div", { className: "featureItem", ...reveal(index * 80), style: `--accent:${accent};--revealDelay:${index * 80}ms` }, el("h3", {}, title), el("p", { className: "cardText" }, text)),
       ),
     ),
   ),
