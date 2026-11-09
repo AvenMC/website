@@ -1,15 +1,27 @@
-import { el, replaceContent } from "../dom.js?v=99";
-import { initReveal } from "../effects.js?v=99";
-import { renderLayout } from "../layout.js?v=99";
-import { createButton, createRankedBadge, createSectionHeading } from "../components.js?v=99";
-import { createRankStatsSection } from "./rankStats.js?v=99";
-import { allRankTiers, rankTiers } from "../ranks.js?v=99";
-import { gamemodes } from "../mockData.js?v=99";
-import { modeThemes } from "../modeTheme.js?v=99";
+import { el, replaceContent } from "../dom.js?v=100";
+import { initReveal } from "../effects.js?v=100";
+import { renderLayout } from "../layout.js?v=100";
+import { createButton, createRankedBadge, createSectionHeading } from "../components.js?v=100";
+import { createRankStatsSection } from "./rankStats.js?v=100";
+import { allRankTiers, rankTiers } from "../ranks.js?v=100";
+import { gamemodes } from "../mockData.js?v=100";
+import { modeThemes } from "../modeTheme.js?v=100";
 
 const app = renderLayout("ranked");
 const reveal = (delay = 0) => ({ "data-reveal": "", style: `--revealDelay:${delay}ms` });
 const format = (value) => value.toLocaleString("en-US");
+const createHeartDisplay = () =>
+  el(
+    "span",
+    { className: "gainHearts", role: "img", "aria-label": "7 of 10 hearts remaining" },
+    Array.from({ length: 10 }, (_, index) =>
+      el("span", {
+        className: `gainHeart${index < 7 ? " isFilled" : ""}`,
+        style: `--heartIcon:url(https://img.icons8.com/material-${index < 7 ? "rounded" : "outlined"}/96/heart.png)`,
+        "aria-hidden": "true",
+      }),
+    ),
+  );
 
 function createDivisionCard(division) {
   const isMythic = division.key === "mythic";
@@ -43,7 +55,7 @@ const introSection = el(
 
 const gainRows = [
   ["Speed", "Faster wins earn more", "var(--colorNodebuff)", el("span", { className: "gainMeter" }, el("span", { style: "width:85%" }))],
-  ["HP lost", "More health left, more reward", "var(--colorDanger)", el("span", { className: "gainHearts" }, "♥♥♥♥♥♥♥♡♡♡")],
+  ["HP lost", "More health left, more reward", "var(--colorDanger)", createHeartDisplay()],
   [
     "Opponent",
     "Beat a higher division for more, a lower one for less",

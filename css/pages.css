@@ -826,7 +826,9 @@
 
 .gainMeter span { display: block; height: 100%; border-radius: inherit; background: var(--accent); }
 
-.gainHearts { color: var(--accent); letter-spacing: 2px; font-size: 18px; }
+.gainHearts { display: flex; align-items: center; gap: 4px; }
+
+.gainHeart { display: block; width: 18px; height: 18px; flex: none; background: var(--accent); mask: var(--heartIcon) center / contain no-repeat; -webkit-mask: var(--heartIcon) center / contain no-repeat; }
 
 .gainVersus { display: flex; align-items: center; gap: var(--space3); }
 
