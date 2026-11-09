@@ -1,5 +1,5 @@
-import { el, replaceContent } from "../dom.js?v=25";
-import { renderLayout } from "../layout.js?v=25";
+import { el, replaceContent } from "../dom.js?v=26";
+import { renderLayout } from "../layout.js?v=26";
 import {
   createAvatar,
   createBadge,
@@ -8,13 +8,13 @@ import {
   createSectionHeading,
   createSkeleton,
   createSocialLinks,
-} from "../components.js?v=25";
-import { createCopyField, openJoinModal } from "../join.js?v=25";
-import { gamemodes, regions, getTopPlayersPreview } from "../mockData.js?v=25";
-import { formatNumber } from "../format.js?v=25";
-import { modeIcons, modeThemes } from "../modeTheme.js?v=25";
-import { rankTiers, unrealCap } from "../ranks.js?v=25";
-import { siteConfig } from "../siteConfig.js?v=25";
+} from "../components.js?v=26";
+import { createCopyField, openJoinModal } from "../join.js?v=26";
+import { gamemodes, regions, getTopPlayersPreview } from "../mockData.js?v=26";
+import { formatNumber } from "../format.js?v=26";
+import { modeIcons, modeThemes } from "../modeTheme.js?v=26";
+import { rankTiers, unrealCap } from "../ranks.js?v=26";
+import { siteConfig } from "../siteConfig.js?v=26";
 
 const app = renderLayout("home");
 const reveal = (delay = 0) => ({ "data-reveal": "", style: `--revealDelay:${delay}ms` });
@@ -54,7 +54,7 @@ const hero = el(
   ),
 );
 
-const tickerItems = ["Only 50 reach Unreal", "One account · every region", "Shared global leaderboards", "Season-based ranked ladder", "Your flag next to your name", "Built for Bedrock"];
+const tickerItems = ["Only 50 reach Unreal", "One account · every region", "Shared global leaderboards", "Season-based divisions", "Your flag next to your name", "Built for Bedrock"];
 const tickerGroup = () =>
   el("div", { className: "tickerGroup" }, tickerItems.map((item) => el("span", { className: "tickerItem" }, item)));
 const ticker = el(
@@ -102,10 +102,10 @@ const rankedTeaser = el(
       el(
         "div",
         { className: "rankedTeaserText" },
-        createBadge({ label: "Ranked", variant: "primary" }),
+        createBadge({ label: "Divisions", variant: "primary" }),
         el("h2", {}, `Only ${unrealCap} reach Unreal`),
-        el("p", { className: "cardText" }, "Climb from Bronze to Unreal. Ranks reset every season."),
-        createButton({ label: "Explore ranks", href: "ranked.html" }),
+        el("p", { className: "cardText" }, "Climb from Bronze to Unreal. Divisions reset every season."),
+        createButton({ label: "Explore divisions", href: "divisions.html" }),
       ),
       el(
         "div",
@@ -129,7 +129,7 @@ const stepsSection = el(
       [
         ["01", "Open Bedrock", "Launch Minecraft Bedrock Edition."],
         ["02", "Add server", `${siteConfig.serverIp} · port ${siteConfig.serverPort}`],
-        ["03", "Start dueling", "Queue up and climb the ranks."],
+        ["03", "Start dueling", "Queue up and climb the divisions."],
       ].map(([number, title, text], index) =>
         el(
           "div",
@@ -211,7 +211,7 @@ const communitySection = el(
 );
 
 const features = [
-  ["Ranked duels", "Rating per gamemode and a competitive tier to climb.", "var(--colorPrimary)"],
+  ["Ranked duels", "Rating per gamemode and a division to climb.", "var(--colorPrimary)"],
   ["Free for all", "Drop in, fight, and build your kill streak.", "var(--colorDanger)"],
   ["Detailed stats", "K/D, win rate, streaks and recent matches at a glance.", "var(--colorSuccess)"],
   ["Bedrock native", "Join from mobile, console or PC.", "var(--colorMace)"],

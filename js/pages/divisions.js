@@ -1,16 +1,15 @@
-import { el, replaceContent } from "../dom.js?v=25";
-import { renderLayout } from "../layout.js?v=25";
-import { createButton, createSectionHeading } from "../components.js?v=25";
-import { createRankStatsSection } from "./rankStats.js?v=25";
-import { rankTiers, unrealCap } from "../ranks.js?v=25";
+import { el, replaceContent } from "../dom.js?v=26";
+import { renderLayout } from "../layout.js?v=26";
+import { createButton, createSectionHeading } from "../components.js?v=26";
+import { rankTiers, unrealCap } from "../ranks.js?v=26";
 
-const app = renderLayout("ranked");
+const app = renderLayout("divisions");
 const reveal = (delay = 0) => ({ "data-reveal": "", style: `--revealDelay:${delay}ms` });
 
 const rankSteps = [
   ["Play ranked duels", "Win in Nodebuff, CrystalPvP or SpearMace to gain rating. Losses cost rating."],
-  ["Climb the ladder", "Bronze to Diamond have three divisions each. Then Elite and Champion."],
-  ["Reach Unreal", `The top rank is capped at ${unrealCap} players per gamemode. Hold your spot.`],
+  ["Climb the divisions", "Bronze to Diamond have three tiers each (I–III). Then Elite and Champion."],
+  ["Reach Unreal", `The top division is capped at ${unrealCap} players per gamemode. Hold your spot.`],
 ];
 
 const ladderSection = el(
@@ -19,7 +18,7 @@ const ladderSection = el(
   el(
     "div",
     { className: "container" },
-    el("div", reveal(), createSectionHeading({ eyebrow: "Ranked", title: "How ranks work", level: "h1" })),
+    el("div", reveal(), createSectionHeading({ eyebrow: "Ranked", title: "How divisions work", level: "h1" })),
     el(
       "div",
       { className: "rankLadderGraphic", ...reveal(60) },
@@ -46,7 +45,7 @@ const ladderSection = el(
         ),
       ),
     ),
-    el("p", { className: "rankNote" }, "Ranks are separate per gamemode. Thresholds are placeholders until launch."),
+    el("p", { className: "rankNote" }, "Divisions are separate per gamemode. Thresholds are placeholders until launch."),
   ),
 );
 
@@ -54,7 +53,12 @@ const ladderSection = el(
 const leaderboardLink = el(
   "section",
   { className: "section compact" },
-  el("div", { className: "container" }, createButton({ label: "View Unreal leaderboards", href: "leaderboards.html" })),
+  el(
+    "div",
+    { className: "container buttonRow" },
+    createButton({ label: "Season statistics", href: "season.html" }),
+    createButton({ label: "Unreal leaderboards", variant: "secondary", href: "leaderboards.html" }),
+  ),
 );
 
-replaceContent(app, ladderSection, createRankStatsSection(), leaderboardLink);
+replaceContent(app, ladderSection, leaderboardLink);

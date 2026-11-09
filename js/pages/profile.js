@@ -1,5 +1,5 @@
-import { el, replaceContent } from "../dom.js?v=25";
-import { renderLayout } from "../layout.js?v=25";
+import { el, replaceContent } from "../dom.js?v=26";
+import { renderLayout } from "../layout.js?v=26";
 import {
   createAvatar,
   createBadge,
@@ -15,10 +15,10 @@ import {
   createRankedBadge,
   createTabs,
   withTooltip,
-} from "../components.js?v=25";
-import { countries } from "../countries.js?v=25";
-import { gamemodes, getPlayer, getPlayerTier, setCountry } from "../mockData.js?v=25";
-import { formatDateTime, formatNumber, formatPercent, formatPlaytime, formatRatio } from "../format.js?v=25";
+} from "../components.js?v=26";
+import { countries } from "../countries.js?v=26";
+import { gamemodes, getPlayer, getPlayerTier, setCountry } from "../mockData.js?v=26";
+import { formatDateTime, formatNumber, formatPercent, formatPlaytime, formatRatio } from "../format.js?v=26";
 
 const app = renderLayout("profile");
 const modeName = (id) => gamemodes.find((mode) => mode.id === id).name;
@@ -157,7 +157,7 @@ function renderRatingsTable(player) {
         align: "right",
         render: (row) => withTooltip(el("span", { className: "metricValue" }, formatNumber(row.rating)), "Placeholder rating"),
       },
-      { label: "Tier", align: "right", render: (row) => createRankedBadge(row.tier) },
+      { label: "Division", align: "right", render: (row) => createRankedBadge(row.tier) },
     ],
     rows: gamemodes.map((mode) => ({
       name: mode.name,

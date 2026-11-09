@@ -1,5 +1,5 @@
-import { el, replaceContent } from "../dom.js?v=25";
-import { renderLayout } from "../layout.js?v=25";
+import { el, replaceContent } from "../dom.js?v=26";
+import { renderLayout } from "../layout.js?v=26";
 import {
   createAvatar,
   createBadge,
@@ -12,12 +12,12 @@ import {
   createSkeleton,
   createTable,
   createTabs,
-} from "../components.js?v=25";
-import { gamemodes, getLeaderboard, leaderboardCategories } from "../mockData.js?v=25";
-import { modeIconStyle, modeThemes } from "../modeTheme.js?v=25";
-import { createRankDistributionCard } from "./rankStats.js?v=25";
-import { getRankedTier, rankTiers, unrealCap } from "../ranks.js?v=25";
-import { formatNumber } from "../format.js?v=25";
+} from "../components.js?v=26";
+import { gamemodes, getLeaderboard, leaderboardCategories } from "../mockData.js?v=26";
+import { modeIconStyle, modeThemes } from "../modeTheme.js?v=26";
+import { createRankDistributionCard } from "./rankStats.js?v=26";
+import { getRankedTier, rankTiers, unrealCap } from "../ranks.js?v=26";
+import { formatNumber } from "../format.js?v=26";
 
 const app = renderLayout("leaderboards");
 
@@ -125,7 +125,7 @@ function renderTable(entries, pageEntries) {
             createPlayerName(row.username, { country: row.country }),
           ),
       },
-      { label: isRanked() ? "Tier" : "Rank", hideOnMobile: true, render: renderTierCell },
+      { label: isRanked() ? "Division" : "Rank", hideOnMobile: true, render: renderTierCell },
       { label: category.metricLabel, align: "right", render: (row) => el("span", { className: "metricValue" }, formatNumber(row.metric)) },
     ],
     rows: pageEntries,
@@ -155,7 +155,7 @@ function renderBoardHeader(entries) {
     "div",
     { className: "boardHeader", style: theme ? `--accent:${theme.accent}` : "" },
     theme ? el("span", { className: "modeIcon small", style: modeIconStyle(state.category), "aria-hidden": "true" }) : null,
-    el("div", {}, el("h2", {}, category.label), el("p", {}, isRanked() ? `Unreal ladder · top ${unrealCap} only` : `Ranked by ${category.metricLabel.toLowerCase()}`)),
+    el("div", {}, el("h2", {}, category.label), el("p", {}, isRanked() ? `Unreal division · top ${unrealCap} only` : `Ranked by ${category.metricLabel.toLowerCase()}`)),
   );
 }
 

@@ -1,8 +1,8 @@
-import { el, replaceContent } from "../dom.js?v=25";
-import { createBadge, createSectionHeading, createSkeleton, createTabs } from "../components.js?v=25";
-import { currentSeason, gamemodes, getRankDistribution } from "../mockData.js?v=25";
-import { rankTiers } from "../ranks.js?v=25";
-import { formatNumber } from "../format.js?v=25";
+import { el, replaceContent } from "../dom.js?v=26";
+import { createBadge, createSectionHeading, createSkeleton, createTabs } from "../components.js?v=26";
+import { currentSeason, gamemodes, getRankDistribution } from "../mockData.js?v=26";
+import { rankTiers } from "../ranks.js?v=26";
+import { formatNumber } from "../format.js?v=26";
 
 const donutRadius = 70;
 const circumference = 2 * Math.PI * donutRadius;
@@ -25,7 +25,7 @@ function animateNumber(node, target, duration = 900) {
 }
 
 function createDonut(data, onHover) {
-  const chart = svg("svg", { viewBox: "0 0 180 180", class: "rankDonut", role: "img", "aria-label": "Rank distribution" });
+  const chart = svg("svg", { viewBox: "0 0 180 180", class: "rankDonut", role: "img", "aria-label": "Division distribution" });
   chart.append(svg("circle", { cx: 90, cy: 90, r: donutRadius, class: "rankDonutTrack" }));
 
   let offset = 0;
@@ -89,7 +89,7 @@ function renderDistribution(data) {
   );
 }
 
-export function createRankStatsSection() {
+export function createRankStatsSection({ pageHeading = false } = {}) {
   const body = el("div", {}, createSkeleton({ height: 220 }));
   const load = (modeId) => {
     replaceContent(body, createSkeleton({ height: 220 }));
@@ -109,7 +109,7 @@ export function createRankStatsSection() {
     el(
       "div",
       { className: "container" },
-      el("div", { "data-reveal": "" }, createSectionHeading({ eyebrow: "Season 1", title: "Rank distribution", level: "h2" })),
+      el("div", { "data-reveal": "" }, createSectionHeading({ eyebrow: currentSeason.name, title: "Division distribution", level: pageHeading ? "h1" : "h2" })),
       el(
         "div",
         { className: "card rankStatsCard", "data-reveal": "" },
@@ -126,7 +126,7 @@ export function createRankDistributionCard(modeId) {
   return el(
     "div",
     { className: "card rankStatsCard" },
-    el("div", { className: "toolbar" }, el("h3", {}, `${currentSeason.name} rank distribution`), el("span", { className: "spacer" }), createBadge({ label: "Placeholder data", variant: "primary" })),
+    el("div", { className: "toolbar" }, el("h3", {}, `${currentSeason.name} division distribution`), el("span", { className: "spacer" }), createBadge({ label: "Placeholder data", variant: "primary" })),
     body,
   );
 }
