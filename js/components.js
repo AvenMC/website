@@ -327,3 +327,35 @@ function cellClass({ align, hideOnMobile }) {
   if (hideOnMobile) classes.push("hideMobile");
   return classes.join(" ") || null;
 }
+
+export function createPagination({ page, pageCount, total, pageSize, offset = 0, onChange }) {
+  const from = (page - 1) * pageSize + 1;
+  const to = Math.min(total, page * pageSize);
+  const pages = Array.from({ length: pageCount }, (_, index) => index + 1).filter(
+    (number) => number === 1 || number === pageCount || Math.abs(number - page) <= 1,
+  );
+  const items = [];
+  pages.forEach((number, index) => {
+    if (index > 0 && number - pages[index - 1] > 1) items.push(el("span", { className: "paginationGap" }, "…"));
+    items.push(
+      el(
+        "button",
+        { className: "pageButton", type: "button", "aria-current": number === page ? "page" : "false", "aria-label": `Page ${number}`, onClick: () => onChange(number) },
+        String(number),
+      ),
+    );
+  });
+
+  return el(
+    "nav",
+    { className: "pagination", "aria-label": "Pagination" },
+    el("span", { className: "paginationInfo" }, `${from + offset}–${to + offset} of ${total + offset}`),
+    el(
+      "div",
+      { className: "paginationControls" },
+      el("button", { className: "pageButton", type: "button", disabled: page === 1, "aria-label": "Previous page", onClick: () => onChange(page - 1) }, "‹"),
+      items,
+      el("button", { className: "pageButton", type: "button", disabled: page === pageCount, "aria-label": "Next page", onClick: () => onChange(page + 1) }, "›"),
+    ),
+  );
+}

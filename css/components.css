@@ -893,3 +893,31 @@ a.card:hover,
   gap: var(--space2);
   margin-bottom: var(--space4);
 }
+
+.pagination { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--space3); }
+
+.paginationInfo { color: var(--colorTextSecondary); font-size: 13px; }
+
+.paginationControls { display: flex; align-items: center; gap: var(--space2); }
+
+.pageButton {
+  min-width: 36px;
+  height: 36px;
+  padding: 0 var(--space3);
+  border: 1px solid var(--colorBorder);
+  border-radius: var(--radiusSmall);
+  background: var(--colorCard);
+  color: var(--colorText);
+  font: inherit;
+  font-size: 14px;
+  cursor: pointer;
+  transition: border-color 150ms ease, background 150ms ease;
+}
+
+.pageButton:hover:not(:disabled) { border-color: var(--colorPrimary); }
+
+.pageButton[aria-current="page"] { border-color: var(--colorPrimary); background: var(--colorPrimarySoft); color: var(--colorPrimary); }
+
+.pageButton:disabled { opacity: 0.4; cursor: default; }
+
+.paginationGap { color: var(--colorTextMuted); }

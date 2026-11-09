@@ -4,6 +4,7 @@ import {
   createAvatar,
   createBadge,
   createEmptyState,
+  createPagination,
   createPlayerName,
   createRankedBadge,
   createRankBadge,
@@ -27,7 +28,8 @@ const groups = [
 ];
 const subLabels = { overall: "Avg. Rating", duels: "Duel Wins" };
 
-const state = { group: "overall", category: "overall", requestId: 0 };
+const pageSize = 15;
+const state = { group: "overall", category: "overall", requestId: 0, page: 1, entries: [] };
 const results = el("div", { "aria-live": "polite" });
 const subNav = el("div", { className: "boardSubNav" });
 
@@ -108,7 +110,10 @@ function renderPodium(entries) {
 
 function renderTable(entries) {
   const category = getCategory(state.category);
-  return createTable({
+  const tableEntries = entries.slice(3);
+  const pageCount = Math.ceil(tableEntries.length / pageSize);
+  state.page = Math.min(state.page, pageCount);
+  const table = createTable({
     caption: `${category.label} leaderboard`,
     columns: [
       { label: "#", render: (row) => el("span", { className: "positionBadge" }, row.position) },
@@ -125,8 +130,25 @@ function renderTable(entries) {
       { label: isRanked() ? "Tier" : "Rank", hideOnMobile: true, render: renderTierCell },
       { label: category.metricLabel, align: "right", render: (row) => el("span", { className: "metricValue" }, formatNumber(row.metric)) },
     ],
-    rows: entries,
+    rows: tableEntries.slice((state.page - 1) * pageSize, state.page * pageSize),
   });
+  if (pageCount <= 1) return table;
+  return el(
+    "div",
+    { className: "stack" },
+    table,
+    createPagination({
+      page: state.page,
+      pageCount,
+      total: tableEntries.length,
+      pageSize,
+      offset: 3,
+      onChange: (page) => {
+        state.page = page;
+        renderBoard();
+      },
+    }),
+  );
 }
 
 function renderBoardHeader(entries) {
@@ -140,14 +162,8 @@ function renderBoardHeader(entries) {
   );
 }
 
-async function loadLeaderboard() {
-  const requestId = ++state.requestId;
-  replaceContent(results, el("div", { className: "stack" }, Array.from({ length: 6 }, () => createSkeleton({ height: 52 }))));
-
-  const allEntries = await getLeaderboard(state.category);
-  const entries = isRanked() ? allEntries : allEntries.slice(0, 25);
-  if (requestId !== state.requestId) return;
-
+function renderBoard() {
+  const entries = state.entries;
   replaceContent(
     results,
     entries.length === 0
@@ -157,10 +173,21 @@ async function loadLeaderboard() {
           { className: "boardStack" },
           renderBoardHeader(entries),
           renderPodium(entries),
-          entries.length > 3 ? renderTable(entries.slice(3)) : null,
+          entries.length > 3 ? renderTable(entries) : null,
           isRanked() ? el("div", {}, createRankDistributionCard(state.category)) : null,
         ),
   );
+}
+
+async function loadLeaderboard() {
+  const requestId = ++state.requestId;
+  state.page = 1;
+  replaceContent(results, el("div", { className: "stack" }, Array.from({ length: 6 }, () => createSkeleton({ height: 52 }))));
+
+  const entries = await getLeaderboard(state.category);
+  if (requestId !== state.requestId) return;
+  state.entries = entries;
+  renderBoard();
 }
 
 renderSubNav();
