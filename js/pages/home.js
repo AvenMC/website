@@ -1,5 +1,5 @@
-import { el, replaceContent } from "../dom.js?v=76";
-import { renderLayout } from "../layout.js?v=76";
+import { el, replaceContent } from "../dom.js?v=77";
+import { renderLayout } from "../layout.js?v=77";
 import {
   createAvatar,
   createBadge,
@@ -9,14 +9,14 @@ import {
   createSectionHeading,
   createSkeletonRows,
   createSocialLinks,
-} from "../components.js?v=76";
-import { createCopyField, openJoinModal } from "../join.js?v=76";
-import { gamemodes, regions, getTopPlayersPreview } from "../mockData.js?v=76";
-import { initSectionTone } from "../effects.js?v=76";
-import { formatNumber } from "../format.js?v=76";
-import { modeIconStyle, modeThemes } from "../modeTheme.js?v=76";
-import { allRankTiers, rankedBoardSize } from "../ranks.js?v=76";
-import { siteConfig } from "../siteConfig.js?v=76";
+} from "../components.js?v=77";
+import { createCopyField, openJoinModal } from "../join.js?v=77";
+import { gamemodes, regions, getTopPlayersPreview } from "../mockData.js?v=77";
+import { initSectionTone } from "../effects.js?v=77";
+import { formatNumber } from "../format.js?v=77";
+import { modeIconStyle, modeThemes } from "../modeTheme.js?v=77";
+import { allRankTiers, rankedBoardSize } from "../ranks.js?v=77";
+import { siteConfig } from "../siteConfig.js?v=77";
 
 const app = renderLayout("home");
 const reveal = (delay = 0) => ({ "data-reveal": "", style: `--revealDelay:${delay}ms` });
@@ -41,8 +41,7 @@ const hero = el(
         "div",
         { className: "heroStats" },
         [
-          [String(allRankTiers.length), "Ranks to climb"],
-          [String(rankedBoardSize), "Leaderboard spots"],
+          ["#1", "Bedrock PvP network"],
         ].map(([value, label]) => el("div", { className: "heroStat" }, el("span", { className: "heroStatValue" }, value), el("span", { className: "heroStatLabel" }, label))),
       ),
       el(
