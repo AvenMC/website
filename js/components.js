@@ -58,8 +58,7 @@ export function createAvatar({ username, skinUrl = null, size = "default" }) {
 }
 
 export function createFlag(code, { size = "medium" } = {}) {
-  const country = countries.find((item) => item.code === code);
-  if (!country) return null;
+  const country = countries.find((item) => item.code === code) ?? { code: "unknown", name: "No country selected" };
   return el("img", {
     className: `flag flag${size === "large" ? "Large" : "Medium"}`,
     src: `assets/flags/${country.code}.svg`,
