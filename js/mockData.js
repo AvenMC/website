@@ -4,8 +4,8 @@
  * the pages only depend on the shapes returned here.
  */
 
-import { countries } from "./countries.js?v=43";
-import { getRankedTier, mythicCap, mythicMinRating } from "./ranks.js?v=43";
+import { countries } from "./countries.js?v=44";
+import { getRankedTier, mythicCap, mythicMinRating, rankedBoardSize } from "./ranks.js?v=44";
 
 export const gamemodes = [
   { id: "nodebuff", name: "Nodebuff", short: "NB", description: "Classic potion PvP." },
@@ -103,7 +103,7 @@ function createRecentMatches(random, index) {
   });
 }
 
-const playerCount = 90;
+const playerCount = 150;
 const players = Array.from({ length: playerCount }, (_, index) => createPlayer(index));
 
 // Mythic is limited to the top mythicCap players per gamemode.
@@ -176,19 +176,20 @@ function getMetric(player, categoryId) {
 export async function getLeaderboard(categoryId) {
   await wait();
   const isRankedMode = gamemodes.some((mode) => mode.id === categoryId);
-  // Ranked gamemode boards only list Mythic players.
-  const source = isRankedMode ? players.filter((player) => mythicHolders[categoryId].has(player.username)) : players;
-
-  return source
+  const entries = players
     .map((player) => ({
       username: player.username,
       country: getCountry(player),
       skinUrl: player.skinUrl,
       rank: player.rank,
       metric: getMetric(player, categoryId),
+      isMythic: isRankedMode && mythicHolders[categoryId].has(player.username),
     }))
     .sort((a, b) => b.metric - a.metric)
     .map((entry, index) => ({ ...entry, position: index + 1 }));
+
+  // Ranked duel boards always list the top rankedBoardSize players.
+  return isRankedMode ? entries.slice(0, rankedBoardSize) : entries;
 }
 
 export async function getTopPlayersPreview() {

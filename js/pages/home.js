@@ -1,5 +1,5 @@
-import { el, replaceContent } from "../dom.js?v=43";
-import { renderLayout } from "../layout.js?v=43";
+import { el, replaceContent } from "../dom.js?v=44";
+import { renderLayout } from "../layout.js?v=44";
 import {
   createAvatar,
   createBadge,
@@ -8,13 +8,13 @@ import {
   createSectionHeading,
   createSkeletonRows,
   createSocialLinks,
-} from "../components.js?v=43";
-import { createCopyField, openJoinModal } from "../join.js?v=43";
-import { gamemodes, regions, getTopPlayersPreview } from "../mockData.js?v=43";
-import { formatNumber } from "../format.js?v=43";
-import { modeIcons, modeThemes } from "../modeTheme.js?v=43";
-import { rankTiers, mythicCap } from "../ranks.js?v=43";
-import { siteConfig } from "../siteConfig.js?v=43";
+} from "../components.js?v=44";
+import { createCopyField, openJoinModal } from "../join.js?v=44";
+import { gamemodes, regions, getTopPlayersPreview } from "../mockData.js?v=44";
+import { formatNumber } from "../format.js?v=44";
+import { modeIcons, modeThemes } from "../modeTheme.js?v=44";
+import { rankTiers, mythicCap } from "../ranks.js?v=44";
+import { siteConfig } from "../siteConfig.js?v=44";
 
 const app = renderLayout("home");
 const reveal = (delay = 0) => ({ "data-reveal": "", style: `--revealDelay:${delay}ms` });

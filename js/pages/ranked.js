@@ -1,8 +1,8 @@
-import { el, replaceContent } from "../dom.js?v=43";
-import { renderLayout } from "../layout.js?v=43";
-import { createButton, createSectionHeading } from "../components.js?v=43";
-import { createRankStatsSection } from "./rankStats.js?v=43";
-import { rankTiers, mythicCap } from "../ranks.js?v=43";
+import { el, replaceContent } from "../dom.js?v=44";
+import { renderLayout } from "../layout.js?v=44";
+import { createButton, createSectionHeading } from "../components.js?v=44";
+import { createRankStatsSection } from "./rankStats.js?v=44";
+import { rankTiers, mythicCap } from "../ranks.js?v=44";
 
 const app = renderLayout("ranked");
 const reveal = (delay = 0) => ({ "data-reveal": "", style: `--revealDelay:${delay}ms` });
@@ -57,7 +57,7 @@ const leaderboardLink = el(
   el(
     "div",
     { className: "container buttonRow" },
-    createButton({ label: "Mythic leaderboards", href: "leaderboards.html" }),
+    createButton({ label: "Ranked leaderboards", href: "leaderboards.html" }),
   ),
 );
 
