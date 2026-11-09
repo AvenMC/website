@@ -544,7 +544,7 @@
 
 .rankBar.isFilled .rankSegment { flex-basis: calc(var(--share) * 1%); }
 
-.rankSegment[data-tier="mythic"] { box-shadow: 0 0 14px var(--tierColor); }
+.rankSegment { box-shadow: 0 0 14px color-mix(in srgb, var(--tierColor) 72%, transparent); }
 
 .rankSegment.isDimmed, .rankLegendItem.isDimmed { opacity: 0.3; }
 
