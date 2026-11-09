@@ -1,11 +1,11 @@
-import { el, replaceContent } from "../dom.js?v=57";
-import { initReveal } from "../effects.js?v=57";
-import { renderLayout } from "../layout.js?v=57";
-import { createButton, createSectionHeading, createTabs } from "../components.js?v=57";
-import { createRankStatsSection } from "./rankStats.js?v=57";
-import { rankTiers, rankedBoardSize } from "../ranks.js?v=57";
-import { gamemodes, getRankDistribution } from "../mockData.js?v=57";
-import { modeThemes } from "../modeTheme.js?v=57";
+import { el, replaceContent } from "../dom.js?v=58";
+import { initReveal } from "../effects.js?v=58";
+import { renderLayout } from "../layout.js?v=58";
+import { createButton, createSectionHeading, createTabs } from "../components.js?v=58";
+import { createRankStatsSection } from "./rankStats.js?v=58";
+import { rankTiers, rankedBoardSize } from "../ranks.js?v=58";
+import { gamemodes, getRankDistribution } from "../mockData.js?v=58";
+import { modeThemes } from "../modeTheme.js?v=58";
 
 const app = renderLayout("ranked");
 const reveal = (delay = 0) => ({ "data-reveal": "", style: `--revealDelay:${delay}ms` });
@@ -36,32 +36,17 @@ const ladderGraphic = el("div", { className: "rankLadderGraphic", ...reveal(60) 
 
 function renderLadder(view) {
   const columns = ladderColumns(view);
-  const max = Math.max(...columns.map((column) => (column.count / ladderTotal) * 100));
-  const step = max > 30 ? 10 : 5;
-  const axisMax = Math.ceil(max / step) * step;
-  const gridValues = Array.from({ length: axisMax / step + 1 }, (_, index) => index * step);
+  const max = Math.max(...columns.map((column) => column.count));
   ladderGraphic.dataset.view = view;
   ladderGraphic.replaceChildren(
-    el(
-      "div",
-      { className: "rankGrid", "aria-hidden": "true" },
-      gridValues.map((value) => el("span", { className: "rankGridLine", style: `bottom:${(value / axisMax) * 100}%` }, el("span", { className: "rankGridLabel" }, `${value}%`))),
-    ),
-    el(
-      "div",
-      { className: "rankColumns" },
-      columns.map((column) =>
-        el(
-          "div",
-          { className: `rankStepColumn${column.mythic ? " isMythic" : ""}`, style: `--tierColor:${column.color}`, title: `${column.label}: ${column.count.toLocaleString("en-US")} players` },
-          el(
-            "div",
-            { className: "rankStepBarWrap" },
-            el("span", { className: "rankStepShare" }, formatShare(column.count)),
-            el("span", { className: "rankStepBar", style: `height:${(column.count / ladderTotal / (axisMax / 100)) * 100}%` }),
-          ),
-          el("span", { className: "rankStepName" }, el("span", {}, column.label)),
-        ),
+    ...columns.map((column) =>
+      el(
+        "div",
+        { className: `rankStepColumn${column.mythic ? " isMythic" : ""}`, style: `--tierColor:${column.color}`, title: `${column.label}: ${column.count.toLocaleString("en-US")} players` },
+        el("span", { className: "rankStepShare" }, formatShare(column.count)),
+        el("span", { className: "rankStepBar", style: `height:${Math.max(6, (column.count / max) * 100)}%` }),
+        el("span", { className: "rankStepName" }, column.label),
+        column.mythic ? el("span", { className: "rankStepNote" }, `Top ${rankedBoardSize}`) : null,
       ),
     ),
   );
