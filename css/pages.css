@@ -720,12 +720,6 @@
 
 .ladderHeader .badge { justify-self: end; }
 
-.divisionPanel { margin-top: var(--space5); padding: var(--space4); border: 1px solid var(--colorBorder); border-radius: var(--radiusLarge, 18px); background: var(--colorCard); }
-
-.divisionCard + .divisionCard { position: relative; }
-
-.divisionCard + .divisionCard::before { content: "→"; position: absolute; left: calc(var(--space3) / -2 - 6px); top: 50%; transform: translateY(-50%); color: var(--colorTextMuted); }
-
 .divisionGrid { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--space3); margin: 0; padding: 0; list-style: none; }
 
 .divisionCard {
@@ -735,19 +729,7 @@
   background: linear-gradient(160deg, color-mix(in srgb, var(--tierColor) 14%, var(--colorCard)), var(--colorCard) 70%);
 }
 
-.divisionStep { color: var(--colorTextMuted); font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; }
-
-.divisionDemo { display: flex; flex-direction: column; gap: var(--space1, 4px); margin-top: auto; }
-
-.divisionDemo .ladderTrack { flex: none; }
-
-.divisionDemo .scoreRankChip { align-self: flex-start; }
-
-.divisionDemo strong { font-family: var(--fontHeading); font-size: 22px; }
-
-.divisionDemo small { color: var(--colorTextMuted); font-size: 11px; }
-
-.divisionCard h3 { margin: calc(var(--space2) * -1) 0 0; color: var(--tierColor); font-family: var(--fontHeading); font-size: 18px; }
+.divisionCard h3 { margin: 0; color: var(--tierColor); font-family: var(--fontHeading); font-size: 18px; }
 
 .divisionBadges { display: flex; flex-wrap: wrap; gap: var(--space2); }
 
@@ -822,7 +804,7 @@
 .gainVersus b { color: var(--accent); }
 
 @media (max-width: 720px) {
-  .divisionCard + .divisionCard::before { display: none; }
+  .flowSteps li + li::before { display: none; }
   .divisionGrid { grid-template-columns: 1fr 1fr; }
   .ladderProgress { grid-column: 1 / -1; }
   .scoreSplit { grid-template-columns: 1fr; padding: var(--space5); }
