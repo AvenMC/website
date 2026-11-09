@@ -848,3 +848,16 @@
 
 .podium:not([style*="--accent"]) .podiumCard.place2 { --accent: var(--colorCrystal); --edge: var(--colorCrystalEdge); --panel: var(--colorCrystalPanel); }
 .podium:not([style*="--accent"]) .podiumCard.place3 { --accent: var(--colorMace); --edge: var(--colorMaceEdge); --panel: var(--colorMacePanel); }
+
+/* Scoring explainer */
+.scoreCard {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space2);
+  border-color: color-mix(in srgb, var(--accent) 35%, var(--colorBorder));
+  background: linear-gradient(135deg, color-mix(in srgb, var(--accent) 10%, var(--colorCard)), var(--colorCard));
+}
+
+.scoreCardLabel { color: var(--accent); font-size: 12px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; }
+
+.scoreCardValue { font-family: var(--fontHeading); font-size: 28px; }

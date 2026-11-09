@@ -1,5 +1,5 @@
-import { el, replaceContent } from "../dom.js?v=45";
-import { renderLayout } from "../layout.js?v=45";
+import { el, replaceContent } from "../dom.js?v=47";
+import { renderLayout } from "../layout.js?v=47";
 import {
   createAvatar,
   createBadge,
@@ -12,12 +12,12 @@ import {
   createSkeletonRows,
   createTable,
   createTabs,
-} from "../components.js?v=45";
-import { gamemodes, getLeaderboard, leaderboardCategories } from "../mockData.js?v=45";
-import { modeIconStyle, modeThemes } from "../modeTheme.js?v=45";
-import { createRankDistributionCard } from "./rankStats.js?v=45";
-import { getRankedTier, getTierProgress, rankTiers, rankedBoardSize } from "../ranks.js?v=45";
-import { formatNumber } from "../format.js?v=45";
+} from "../components.js?v=47";
+import { gamemodes, getLeaderboard, leaderboardCategories } from "../mockData.js?v=47";
+import { modeIconStyle, modeThemes } from "../modeTheme.js?v=47";
+import { createRankDistributionCard } from "./rankStats.js?v=47";
+import { getRankedTier, getTierProgress, rankTiers, rankedBoardSize } from "../ranks.js?v=47";
+import { formatNumber } from "../format.js?v=47";
 
 const app = renderLayout("leaderboards");
 
@@ -29,7 +29,16 @@ const groups = [
 const subLabels = { overall: "Avg. Rating", duels: "Duel Wins" };
 
 const pageSize = 15;
-const state = { group: "overall", category: "overall", requestId: 0, page: 1, entries: [] };
+// The board is selected with ?board=<id>, e.g. leaderboards.html?board=nodebuff
+const boardParam = new URLSearchParams(location.search).get("board");
+const initialGroup = groups.find((group) => group.categories.includes(boardParam)) ?? groups[0];
+const state = { group: initialGroup.id, category: initialGroup.categories.includes(boardParam) ? boardParam : initialGroup.categories[0], requestId: 0, page: 1, entries: [] };
+
+function syncUrl() {
+  const url = new URL(location.href);
+  url.searchParams.set("board", state.category);
+  history.replaceState(null, "", url);
+}
 const results = el("div", { "aria-live": "polite" });
 const subNav = el("div", { className: "boardSubNav" });
 
@@ -47,6 +56,7 @@ function renderSubNav() {
       tabs: group.categories.map((id) => ({ id, label: subLabels[id] ?? getCategory(id).label })),
       onChange: (id) => {
         state.category = id;
+        syncUrl();
         renderSubNav();
         loadLeaderboard();
       },
@@ -61,6 +71,7 @@ const groupTabs = createTabs({
   onChange: (id) => {
     state.group = id;
     state.category = groups.find((group) => group.id === id).categories[0];
+    syncUrl();
     renderSubNav();
     loadLeaderboard();
   },
