@@ -720,6 +720,21 @@
 
 .ladderHeader .badge { justify-self: end; }
 
+.divisionGrid { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--space3); margin: 0; padding: 0; list-style: none; }
+
+.divisionCard {
+  display: flex; flex-direction: column; gap: var(--space3); padding: var(--space4);
+  border: 1px solid color-mix(in srgb, var(--tierColor) 30%, var(--colorBorder));
+  border-radius: var(--radiusMedium);
+  background: linear-gradient(160deg, color-mix(in srgb, var(--tierColor) 14%, var(--colorCard)), var(--colorCard) 70%);
+}
+
+.divisionCard h3 { margin: 0; color: var(--tierColor); font-family: var(--fontHeading); font-size: 18px; }
+
+.divisionBadges { display: flex; flex-wrap: wrap; gap: var(--space2); }
+
+.divisionCard p { margin: 0; color: var(--colorTextMuted); font-size: 13px; }
+
 .rankLadder { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space2); margin: 0; padding: 0; list-style: none; }
 
 .ladderRow {
@@ -790,7 +805,7 @@
 
 @media (max-width: 720px) {
   .flowSteps li + li::before { display: none; }
-  .rankLadder { grid-template-columns: 1fr; }
+  .divisionGrid { grid-template-columns: 1fr 1fr; }
   .ladderProgress { grid-column: 1 / -1; }
   .scoreSplit { grid-template-columns: 1fr; padding: var(--space5); }
   .scoreArrow { transform: rotate(90deg); justify-self: center; }

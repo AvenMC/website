@@ -1,11 +1,11 @@
-import { el, replaceContent } from "../dom.js?v=84";
-import { initReveal } from "../effects.js?v=84";
-import { renderLayout } from "../layout.js?v=84";
-import { createButton, createRankedBadge, createSectionHeading } from "../components.js?v=84";
-import { createRankStatsSection } from "./rankStats.js?v=84";
-import { allRankTiers, rankedBoardSize } from "../ranks.js?v=84";
-import { gamemodes } from "../mockData.js?v=84";
-import { modeThemes } from "../modeTheme.js?v=84";
+import { el, replaceContent } from "../dom.js?v=85";
+import { initReveal } from "../effects.js?v=85";
+import { renderLayout } from "../layout.js?v=85";
+import { createButton, createRankedBadge, createSectionHeading } from "../components.js?v=85";
+import { createRankStatsSection } from "./rankStats.js?v=85";
+import { allRankTiers, rankTiers, rankedBoardSize } from "../ranks.js?v=85";
+import { gamemodes } from "../mockData.js?v=85";
+import { modeThemes } from "../modeTheme.js?v=85";
 
 const app = renderLayout("ranked");
 const reveal = (delay = 0) => ({ "data-reveal": "", style: `--revealDelay:${delay}ms` });
@@ -13,16 +13,15 @@ const format = (value) => value.toLocaleString("en-US");
 
 const flowSteps = ["Win duels", "Fill your percent bar", "Rank up", "Reach Mythic"];
 
-function createLadderRow(tier, index) {
-  const isMythic = tier.key === "mythic";
+function createDivisionCard(division) {
+  const isMythic = division.key === "mythic";
+  const badges = allRankTiers.filter((tier) => tier.key === division.key);
   return el(
     "li",
-    { className: `ladderRow${isMythic ? " isMythic" : ""}`, style: `--tierColor:${tier.color};--step:${index};--revealDelay:${(allRankTiers.length - index) * 50}ms`, "data-reveal": "" },
-    el("span", { className: "ladderBadge" }, createRankedBadge(tier)),
-    el("span", { className: "ladderElo" }, el("strong", {}, isMythic ? "Points" : "0–100%"), el("small", {}, isMythic ? "No cap" : "Per tier")),
-    isMythic
-      ? el("span", { className: "ladderProgress isOpen" }, el("span", { className: "ladderOpenText" }, `No limit · top ${rankedBoardSize} on the leaderboard`))
-      : el("span", { className: "ladderProgress" }, el("span", { className: "ladderTrack" }, el("span", { className: "ladderFill" }))),
+    { className: `divisionCard${isMythic ? " isMythic" : ""}`, "data-reveal": "", style: `--tierColor:${division.color}` },
+    el("h3", {}, division.label),
+    el("div", { className: "divisionBadges" }, badges.map((tier) => createRankedBadge(tier))),
+    el("p", {}, isMythic ? `Points, no cap. Top ${rankedBoardSize} on the leaderboard.` : "0–100% per tier"),
   );
 }
 
@@ -52,7 +51,7 @@ const ladderSection = el(
     "div",
     { className: "container" },
     el("div", reveal(), createSectionHeading({ eyebrow: "Divisions", title: "From Bronze I to Mythic" })),
-    el("ol", { className: "rankLadder" }, allRankTiers.map((tier, index) => createLadderRow(tier, index)).reverse()),
+    el("ol", { className: "divisionGrid" }, rankTiers.map((division) => createDivisionCard(division))),
   ),
 );
 
