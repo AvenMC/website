@@ -1,17 +1,16 @@
-import { el, replaceContent } from "../dom.js?v=52";
-import { renderLayout } from "../layout.js?v=52";
-import { createButton, createSectionHeading } from "../components.js?v=52";
-import { createRankStatsSection } from "./rankStats.js?v=52";
-import { rankTiers, rankedBoardSize } from "../ranks.js?v=52";
-import { gamemodes, getRankDistribution } from "../mockData.js?v=52";
-import { modeThemes } from "../modeTheme.js?v=52";
+import { el, replaceContent } from "../dom.js?v=54";
+import { renderLayout } from "../layout.js?v=54";
+import { createButton, createSectionHeading, createTabs } from "../components.js?v=54";
+import { createRankStatsSection } from "./rankStats.js?v=54";
+import { rankTiers, rankedBoardSize } from "../ranks.js?v=54";
+import { gamemodes, getRankDistribution } from "../mockData.js?v=54";
+import { modeThemes } from "../modeTheme.js?v=54";
 
 const app = renderLayout("ranked");
 const reveal = (delay = 0) => ({ "data-reveal": "", style: `--revealDelay:${delay}ms` });
 
 const { total: ladderTotal, tierCounts } = await getRankDistribution("nodebuff");
 const ladderMax = Math.max(...Object.values(tierCounts).flat());
-const romanTiers = ["I", "II", "III"];
 const formatShare = (count) => {
   const share = (count / ladderTotal) * 100;
   return `${share >= 10 ? share.toFixed(0) : share.toFixed(1)}%`;
@@ -23,6 +22,47 @@ const rankSteps = [
   ["Reach Mythic", `Mythic has no player limit. The top ${rankedBoardSize} Mythic players per gamemode make the leaderboard.`],
 ];
 
+const ladderColumns = (view) =>
+  rankTiers.flatMap((tier) => {
+    const counts = tierCounts[tier.key];
+    if (view === "simplified" || tier.tiers === 1) {
+      return [{ label: tier.label, color: tier.color, count: counts.reduce((sum, count) => sum + count, 0), mythic: tier.key === "mythic" }];
+    }
+    return counts.map((count, index) => ({ label: `${tier.label} ${index + 1}`, color: tier.color, count }));
+  });
+
+const ladderGraphic = el("div", { className: "rankLadderGraphic", ...reveal(60) });
+
+function renderLadder(view) {
+  const columns = ladderColumns(view);
+  const max = Math.max(...columns.map((column) => column.count));
+  ladderGraphic.dataset.view = view;
+  ladderGraphic.replaceChildren(
+    ...columns.map((column) =>
+      el(
+        "div",
+        { className: `rankStepColumn${column.mythic ? " isMythic" : ""}`, style: `--tierColor:${column.color}`, title: `${column.label}: ${column.count.toLocaleString("en-US")} players` },
+        el("span", { className: "rankStepShare" }, formatShare(column.count)),
+        el("span", { className: "rankStepBar", style: `height:${Math.max(6, (column.count / max) * 100)}%` }),
+        el("span", { className: "rankStepName" }, column.label),
+        column.mythic ? el("span", { className: "rankStepNote" }, `Top ${rankedBoardSize}`) : null,
+      ),
+    ),
+  );
+}
+
+const ladderToggle = createTabs({
+  label: "Ladder view",
+  active: "complex",
+  tabs: [
+    { id: "simplified", label: "Simplified" },
+    { id: "complex", label: "Complex" },
+  ],
+  onChange: renderLadder,
+});
+
+renderLadder("complex");
+
 const ladderSection = el(
   "section",
   { className: "section compact" },
@@ -30,31 +70,8 @@ const ladderSection = el(
     "div",
     { className: "container" },
     el("div", reveal(), createSectionHeading({ eyebrow: "Ranked", title: "How Ranked works", level: "h1" })),
-    el(
-      "div",
-      { className: "rankLadderGraphic", ...reveal(60) },
-      rankTiers.map((tier) =>
-        el(
-          "div",
-          { className: `rankStep${tier.key === "mythic" ? " isMythic" : ""}`, style: `--tierColor:${tier.color};--tierCount:${tier.tiers}` },
-          el(
-            "div",
-            { className: "rankStepBars" },
-            tierCounts[tier.key].map((count, tierIndex) =>
-              el(
-                "div",
-                { className: "rankStepColumn", title: `${tier.tiers > 1 ? `${tier.label} ${romanTiers[tierIndex]}` : tier.label}: ${count.toLocaleString("en-US")} players` },
-                el("span", { className: "rankStepShare" }, formatShare(count)),
-                el("span", { className: "rankStepBar", style: `height:${Math.max(6, (count / ladderMax) * 100)}%` }),
-                tier.tiers > 1 ? el("span", { className: "rankStepTier" }, romanTiers[tierIndex]) : null,
-              ),
-            ),
-          ),
-          el("span", { className: "rankStepName" }, tier.label),
-          tier.key === "mythic" ? el("span", { className: "rankStepNote" }, `Top ${rankedBoardSize} on the board`) : null,
-        ),
-      ),
-    ),
+    el("div", { className: "rankLadderToolbar", ...reveal(30) }, ladderToggle),
+    ladderGraphic,
     el(
       "div",
       { className: "grid cols3" },

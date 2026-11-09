@@ -609,11 +609,13 @@
   background: linear-gradient(160deg, color-mix(in srgb, var(--accent) 14%, var(--colorCard)), color-mix(in srgb, var(--accent) 4%, var(--colorBackground)) 80%);
 }
 
+.rankLadderToolbar { display: flex; justify-content: flex-end; margin-bottom: var(--space3); }
+
 .rankLadderGraphic {
-  display: grid;
-  grid-template-columns: 3fr 3fr 3fr 1.2fr;
-  align-items: end;
-  gap: var(--space4);
+  display: flex;
+  align-items: flex-end;
+  gap: var(--space2);
+  height: 340px;
   margin-bottom: var(--space5);
   padding: var(--space5) var(--space4) var(--space4);
   border: 1px solid var(--colorBorder);
@@ -621,19 +623,7 @@
   background: linear-gradient(180deg, var(--colorCard), var(--colorBackground));
 }
 
-.rankStep {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space2);
-  text-align: center;
-}
-
-.rankStepBars {
-  display: flex;
-  align-items: flex-end;
-  gap: 6px;
-  height: 260px;
-}
+.rankLadderGraphic[data-view="simplified"] { gap: var(--space4); }
 
 .rankStepColumn {
   display: flex;
@@ -644,6 +634,7 @@
   gap: 4px;
   height: 100%;
   min-width: 0;
+  text-align: center;
 }
 
 .rankStepShare {
@@ -663,19 +654,14 @@
 
 .rankStepColumn:hover .rankStepBar { transform: translateY(-4px); }
 
-.rankStep.isMythic .rankStepBar { box-shadow: 0 0 24px color-mix(in srgb, var(--tierColor) 40%, transparent); }
-
-.rankStepTier {
-  color: var(--colorTextSecondary);
-  font-size: 11px;
-  font-weight: 600;
-}
+.rankStepColumn.isMythic .rankStepBar { box-shadow: 0 0 24px color-mix(in srgb, var(--tierColor) 40%, transparent); }
 
 .rankStepName {
   color: var(--tierColor);
   font-family: var(--fontHeading);
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 600;
+  white-space: nowrap;
 }
 
 .rankStepNote {
@@ -684,9 +670,10 @@
 }
 
 @media (max-width: 720px) {
-  .rankLadderGraphic { gap: var(--space2); padding: var(--space4) var(--space3) var(--space3); }
-  .rankStepBars { gap: 3px; height: 200px; }
+  .rankLadderGraphic { height: 300px; gap: 3px; padding: var(--space4) var(--space2) var(--space3); }
   .rankStepShare { font-size: 9px; }
+  .rankStepName { font-size: 9px; white-space: normal; }
+  .rankStepNote { display: none; }
 }
 
 .rankNote { margin-top: var(--space4); color: var(--colorTextMuted); font-size: 13px; }
