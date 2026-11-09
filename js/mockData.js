@@ -4,13 +4,13 @@
  * the pages only depend on the shapes returned here.
  */
 
-import { countries } from "./countries.js?v=35";
-import { getRankedTier, unrealCap, unrealMinRating } from "./ranks.js?v=35";
+import { countries } from "./countries.js?v=36";
+import { getRankedTier, unrealCap, unrealMinRating } from "./ranks.js?v=36";
 
 export const gamemodes = [
   { id: "nodebuff", name: "Nodebuff", short: "NB", description: "Classic potion PvP." },
   { id: "crystalpvp", name: "CrystalPvP", short: "CP", description: "End crystal combat." },
-  { id: "spearmace", name: "SpearMace", short: "SM", description: "Spear and mace duels." },
+  { id: "spearmace", name: "SpearMace", short: "SM", description: "Spear and mace combat." },
 ];
 
 // Accounts, stats and leaderboards are shared across all regions.

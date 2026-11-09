@@ -1,14 +1,14 @@
-import { el, replaceContent } from "../dom.js?v=35";
-import { renderLayout } from "../layout.js?v=35";
-import { createButton, createSectionHeading } from "../components.js?v=35";
-import { createRankStatsSection } from "./rankStats.js?v=35";
-import { rankTiers, unrealCap } from "../ranks.js?v=35";
+import { el, replaceContent } from "../dom.js?v=36";
+import { renderLayout } from "../layout.js?v=36";
+import { createButton, createSectionHeading } from "../components.js?v=36";
+import { createRankStatsSection } from "./rankStats.js?v=36";
+import { rankTiers, unrealCap } from "../ranks.js?v=36";
 
 const app = renderLayout("ranked");
 const reveal = (delay = 0) => ({ "data-reveal": "", style: `--revealDelay:${delay}ms` });
 
 const rankSteps = [
-  ["Play ranked duels", "Win in Nodebuff, CrystalPvP or SpearMace to gain rating. Losses cost rating."],
+  ["Play ranked duels", "Win duels to gain rating in each gamemode. Losses cost rating."],
   ["Climb the divisions", "Bronze to Diamond have three tiers each (I–III). Then Elite and Champion."],
   ["Reach Unreal", `The top division is capped at ${unrealCap} players per gamemode. Hold your spot.`],
 ];
@@ -46,7 +46,7 @@ const ladderSection = el(
         ),
       ),
     ),
-    el("p", { className: "rankNote" }, "Divisions are separate per gamemode. Thresholds are placeholders until launch."),
+    el("p", { className: "rankNote" }, "Ranked is played in duels. The three FFA modes get duels too, and probably three more. Divisions are separate per gamemode. Thresholds are placeholders until launch."),
   ),
 );
 
