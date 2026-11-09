@@ -1,9 +1,10 @@
-import { el, replaceContent } from "../dom.js?v=47";
-import { renderLayout } from "../layout.js?v=47";
-import { createButton, createSectionHeading } from "../components.js?v=47";
-import { createRankStatsSection } from "./rankStats.js?v=47";
-import { rankTiers, mythicCap, rankedBoardSize } from "../ranks.js?v=47";
-import { gamemodes } from "../mockData.js?v=47";
+import { el, replaceContent } from "../dom.js?v=48";
+import { renderLayout } from "../layout.js?v=48";
+import { createButton, createSectionHeading } from "../components.js?v=48";
+import { createRankStatsSection } from "./rankStats.js?v=48";
+import { rankTiers, mythicCap, rankedBoardSize } from "../ranks.js?v=48";
+import { gamemodes } from "../mockData.js?v=48";
+import { modeThemes } from "../modeTheme.js?v=48";
 
 const app = renderLayout("ranked");
 const reveal = (delay = 0) => ({ "data-reveal": "", style: `--revealDelay:${delay}ms` });
@@ -91,7 +92,12 @@ const leaderboardLink = el(
     el(
       "div",
       { className: "buttonRow" },
-      gamemodes.map((mode, index) => createButton({ label: `${mode.name} top ${rankedBoardSize}`, variant: index === 0 ? "primary" : "secondary", href: `leaderboards.html?board=${mode.id}` })),
+      gamemodes.map((mode) => {
+        const button = createButton({ label: `${mode.name} top ${rankedBoardSize}`, variant: "secondary", href: `leaderboards.html?board=${mode.id}` });
+        button.classList.add("modeButton");
+        button.style.setProperty("--accent", modeThemes[mode.id].accent);
+        return button;
+      }),
     ),
   ),
 );

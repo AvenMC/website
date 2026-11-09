@@ -861,3 +861,15 @@
 .scoreCardLabel { color: var(--accent); font-size: 12px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; }
 
 .scoreCardValue { font-family: var(--fontHeading); font-size: 28px; }
+
+/* Outlined buttons in the gamemode color */
+.modeButton {
+  border-color: var(--accent);
+  background: transparent;
+  color: var(--accent);
+}
+
+.modeButton:hover {
+  background: color-mix(in srgb, var(--accent) 14%, transparent);
+  box-shadow: 0 0 18px color-mix(in srgb, var(--accent) 28%, transparent);
+}
