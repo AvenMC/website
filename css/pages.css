@@ -472,24 +472,19 @@
   padding: var(--space6);
 }
 
-.pixelIcon {
-  display: grid;
-  place-items: center;
-  width: 104px;
-  height: 104px;
-  border: 1px solid color-mix(in srgb, var(--accent) 50%, var(--colorBorder));
-  border-radius: var(--radiusLarge);
-  background: radial-gradient(circle at 50% 40%, color-mix(in srgb, var(--accent) 22%, transparent), transparent 75%), var(--colorBackground);
+.modeIcon {
+  display: block;
+  width: 72px;
+  height: 72px;
+  background: var(--accent);
+  mask: var(--iconUrl) center / contain no-repeat;
+  -webkit-mask: var(--iconUrl) center / contain no-repeat;
+  image-rendering: pixelated;
   transition: transform 300ms ease;
 }
 
-.pixelIcon svg {
-  image-rendering: pixelated;
-  filter: drop-shadow(0 6px 10px rgb(0 0 0 / 0.4));
-}
-
-.gamemodeCard:hover .pixelIcon {
-  transform: translateY(-4px) scale(1.06);
+.gamemodeCard:hover .modeIcon {
+  transform: translateY(-4px) scale(1.08);
 }
 
 .hasTilt {
@@ -603,4 +598,13 @@
 
 .regionCard .badge {
   margin-left: auto;
+}
+
+.gamemodeCard {
+  border-color: var(--edge);
+  background: linear-gradient(160deg, color-mix(in srgb, var(--edge) 55%, var(--panel)), var(--panel) 65%);
+}
+
+.regionCard {
+  background: linear-gradient(160deg, color-mix(in srgb, var(--accent) 14%, var(--colorCard)), color-mix(in srgb, var(--accent) 4%, var(--colorBackground)) 80%);
 }

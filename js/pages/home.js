@@ -12,7 +12,6 @@ import {
 import { createCopyField, openJoinModal } from "../join.js";
 import { gamemodes, regions, getTopPlayersPreview } from "../mockData.js";
 import { formatNumber } from "../format.js";
-import { createPixelIcon } from "../pixelIcons.js";
 import { siteConfig } from "../siteConfig.js";
 
 const app = renderLayout("home");
@@ -62,8 +61,12 @@ const ticker = el(
   el("div", { className: "tickerTrack" }, tickerGroup(), tickerGroup()),
 );
 
-const modeIcons = { nodebuff: "potion", crystalpvp: "crystal", spearmace: "mace" };
-const modeAccents = { nodebuff: "var(--colorNodebuff)", crystalpvp: "var(--colorCrystal)", spearmace: "var(--colorMace)" };
+const modeIcons = { nodebuff: "flask", crystalpvp: "diamond", spearmace: "mace" };
+const modeThemes = {
+  nodebuff: { accent: "var(--colorNodebuff)", panel: "var(--colorNodebuffPanel)", edge: "var(--colorNodebuffEdge)" },
+  crystalpvp: { accent: "var(--colorCrystal)", panel: "var(--colorCrystalPanel)", edge: "var(--colorCrystalEdge)" },
+  spearmace: { accent: "var(--colorMace)", panel: "var(--colorMacePanel)", edge: "var(--colorMaceEdge)" },
+};
 const regionIcons = { eu: "europe", na: "northAmerica", as: "asia" };
 const regionAccents = { eu: "var(--colorPrimary)", na: "var(--colorSuccess)", as: "var(--colorAsia)" };
 
@@ -80,8 +83,8 @@ const gamemodesSection = el(
       gamemodes.map((mode, index) =>
         el(
           "div",
-          { className: "card hasSpotlight hasTilt gamemodeCard", ...reveal(index * 90), style: `--accent:${modeAccents[mode.id]};--revealDelay:${index * 90}ms` },
-          createPixelIcon(modeIcons[mode.id], 72),
+          { className: "card hasSpotlight hasTilt gamemodeCard", ...reveal(index * 90), style: `--accent:${modeThemes[mode.id].accent};--panel:${modeThemes[mode.id].panel};--edge:${modeThemes[mode.id].edge};--revealDelay:${index * 90}ms` },
+          el("span", { className: "modeIcon", style: `--iconUrl:url(../assets/modes/${modeIcons[mode.id]}.png)`, "aria-hidden": "true" }),
           el("h3", {}, mode.name),
           el("p", { className: "cardText" }, mode.description),
           createBadge({ label: "Planned" }),
