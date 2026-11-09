@@ -1,7 +1,8 @@
-import { el, replaceContent } from "../dom.js?v=34";
-import { renderLayout } from "../layout.js?v=34";
-import { createButton, createSectionHeading } from "../components.js?v=34";
-import { rankTiers, unrealCap } from "../ranks.js?v=34";
+import { el, replaceContent } from "../dom.js?v=35";
+import { renderLayout } from "../layout.js?v=35";
+import { createButton, createSectionHeading } from "../components.js?v=35";
+import { createRankStatsSection } from "./rankStats.js?v=35";
+import { rankTiers, unrealCap } from "../ranks.js?v=35";
 
 const app = renderLayout("ranked");
 const reveal = (delay = 0) => ({ "data-reveal": "", style: `--revealDelay:${delay}ms` });
@@ -49,16 +50,14 @@ const ladderSection = el(
   ),
 );
 
-
 const leaderboardLink = el(
   "section",
   { className: "section compact" },
   el(
     "div",
     { className: "container buttonRow" },
-    createButton({ label: "Season statistics", href: "season.html" }),
-    createButton({ label: "Unreal leaderboards", variant: "secondary", href: "leaderboards.html" }),
+    createButton({ label: "Unreal leaderboards", href: "leaderboards.html" }),
   ),
 );
 
-replaceContent(app, ladderSection, leaderboardLink);
+replaceContent(app, ladderSection, createRankStatsSection(), leaderboardLink);
