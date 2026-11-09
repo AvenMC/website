@@ -1,16 +1,16 @@
-// AVENMC divisions. Zenith is capped: only the top zenithCap players above the rating threshold hold it.
-export const zenithCap = 50;
-export const zenithMinRating = 2200;
+// AVENMC divisions. Unreal is capped: only the top unrealCap players above the rating threshold hold it.
+export const unrealCap = 50;
+export const unrealMinRating = 2200;
 
 export const rankTiers = [
-  { key: "ripple", label: "Ripple", color: "#4fd8e8", minRating: 0 },
-  { key: "current", label: "Current", color: "#5b9cff", minRating: 900 },
-  { key: "tempest", label: "Tempest", color: "#ff8a3d", minRating: 1700 },
-  { key: "zenith", label: "Zenith", color: "#c56bff", minRating: zenithMinRating },
+  { key: "bronze", label: "Bronze", color: "#d98b52", minRating: 0 },
+  { key: "silver", label: "Silver", color: "#c3cfdf", minRating: 900 },
+  { key: "gold", label: "Gold", color: "#f2c94c", minRating: 1700 },
+  { key: "unreal", label: "Unreal", color: "#c56bff", minRating: unrealMinRating },
 ];
 
-export function getRankedTier(rating, { isZenith = false } = {}) {
-  if (isZenith && rating >= zenithMinRating) return { ...rankTiers[3], name: "Zenith" };
+export function getRankedTier(rating, { isUnreal = false } = {}) {
+  if (isUnreal && rating >= unrealMinRating) return { ...rankTiers[3], name: "Unreal" };
   const reached = rankTiers.slice(0, 3).filter((tier) => rating >= tier.minRating);
   const tier = reached[reached.length - 1] ?? rankTiers[0];
   return { ...tier, name: tier.label };

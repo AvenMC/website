@@ -1,5 +1,5 @@
-import { el, replaceContent } from "../dom.js?v=40";
-import { renderLayout } from "../layout.js?v=40";
+import { el, replaceContent } from "../dom.js?v=41";
+import { renderLayout } from "../layout.js?v=41";
 import {
   createAvatar,
   createBadge,
@@ -12,12 +12,12 @@ import {
   createSkeletonRows,
   createTable,
   createTabs,
-} from "../components.js?v=40";
-import { gamemodes, getLeaderboard, leaderboardCategories } from "../mockData.js?v=40";
-import { modeIconStyle, modeThemes } from "../modeTheme.js?v=40";
-import { createRankDistributionCard } from "./rankStats.js?v=40";
-import { getRankedTier, rankTiers, zenithCap } from "../ranks.js?v=40";
-import { formatNumber } from "../format.js?v=40";
+} from "../components.js?v=41";
+import { gamemodes, getLeaderboard, leaderboardCategories } from "../mockData.js?v=41";
+import { modeIconStyle, modeThemes } from "../modeTheme.js?v=41";
+import { createRankDistributionCard } from "./rankStats.js?v=41";
+import { getRankedTier, rankTiers, unrealCap } from "../ranks.js?v=41";
+import { formatNumber } from "../format.js?v=41";
 
 const app = renderLayout("leaderboards");
 
@@ -85,7 +85,7 @@ replaceContent(
 );
 
 function renderTierCell(row) {
-  return isRanked() ? createRankedBadge(getRankedTier(row.metric, { isZenith: true })) : createRankBadge(row.rank);
+  return isRanked() ? createRankedBadge(getRankedTier(row.metric, { isUnreal: true })) : createRankBadge(row.rank);
 }
 
 function renderPodium(entries) {
@@ -155,7 +155,7 @@ function renderBoardHeader(entries) {
     "div",
     { className: "boardHeader", style: theme ? `--accent:${theme.accent}` : "" },
     theme ? el("span", { className: "modeIcon small", style: modeIconStyle(state.category), "aria-hidden": "true" }) : null,
-    el("div", {}, el("h2", {}, category.label), el("p", {}, isRanked() ? `Zenith division · top ${zenithCap} only` : `Ranked by ${category.metricLabel.toLowerCase()}`)),
+    el("div", {}, el("h2", {}, category.label), el("p", {}, isRanked() ? `Unreal division · top ${unrealCap} only` : `Ranked by ${category.metricLabel.toLowerCase()}`)),
   );
 }
 
@@ -168,7 +168,7 @@ function renderBoard() {
   replaceContent(
     results,
     entries.length === 0
-      ? createEmptyState({ title: "No data yet", text: "No Zenith players yet." })
+      ? createEmptyState({ title: "No data yet", text: "No Unreal players yet." })
       : el(
           "div",
           { className: "boardStack" },
