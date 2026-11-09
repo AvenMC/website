@@ -13,6 +13,7 @@ import { createCopyField, openJoinModal } from "../join.js";
 import { gamemodes, regions, getTopPlayersPreview } from "../mockData.js";
 import { formatNumber } from "../format.js";
 import { createRankStatsSection } from "./rankStats.js";
+import { modeIcons, modeThemes } from "../modeTheme.js";
 import { rankTiers, unrealCap } from "../ranks.js";
 import { siteConfig } from "../siteConfig.js";
 
@@ -28,9 +29,9 @@ const hero = el(
     el(
       "div",
       { className: "heroContent" },
-      createBadge({ label: "Minecraft Bedrock", variant: "primary" }),
+      createBadge({ label: "Bedrock Practice Network", variant: "primary" }),
       el("h1", {}, "Duel. ", el("span", { className: "accent" }, "Rank."), " Rise."),
-      el("p", { className: "heroDescription" }, "The competitive Practice Network for Bedrock PvP."),
+      el("p", { className: "heroDescription" }, "Only 50 players per mode reach Unreal. One account, one ranking, every region."),
       el(
         "div",
         { className: "ipPanel" },
@@ -54,7 +55,7 @@ const hero = el(
   ),
 );
 
-const tickerItems = ["Bedrock PvP", "Ranked Duels", "Unreal Top 50", "Global Leaderboards", "Cross-Region Stats", "Player Flags", "Free to Play"];
+const tickerItems = ["Only 50 reach Unreal", "One account · every region", "Shared global leaderboards", "Season-based ranked ladder", "Your flag next to your name", "Built for Bedrock"];
 const tickerGroup = () =>
   el("div", { className: "tickerGroup" }, tickerItems.map((item) => el("span", { className: "tickerItem" }, item)));
 const ticker = el(
@@ -63,12 +64,6 @@ const ticker = el(
   el("div", { className: "tickerTrack" }, tickerGroup(), tickerGroup()),
 );
 
-const modeIcons = { nodebuff: "flask", crystalpvp: "diamond", spearmace: "mace" };
-const modeThemes = {
-  nodebuff: { accent: "var(--colorNodebuff)", panel: "var(--colorNodebuffPanel)", edge: "var(--colorNodebuffEdge)" },
-  crystalpvp: { accent: "var(--colorCrystal)", panel: "var(--colorCrystalPanel)", edge: "var(--colorCrystalEdge)" },
-  spearmace: { accent: "var(--colorMace)", panel: "var(--colorMacePanel)", edge: "var(--colorMaceEdge)" },
-};
 const regionIcons = { eu: "europe", na: "northAmerica", as: "asia" };
 const regionAccents = { eu: "var(--colorPrimary)", na: "var(--colorSuccess)", as: "var(--colorAsia)" };
 

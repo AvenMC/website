@@ -1,6 +1,6 @@
 import { el, replaceContent } from "../dom.js";
 import { createBadge, createSectionHeading, createSkeleton, createTabs } from "../components.js";
-import { gamemodes, getRankDistribution } from "../mockData.js";
+import { currentSeason, gamemodes, getRankDistribution } from "../mockData.js";
 import { rankTiers } from "../ranks.js";
 import { formatNumber } from "../format.js";
 
@@ -117,5 +117,16 @@ export function createRankStatsSection() {
         body,
       ),
     ),
+  );
+}
+
+export function createRankDistributionCard(modeId) {
+  const body = el("div", {}, createSkeleton({ height: 220 }));
+  getRankDistribution(modeId).then((data) => replaceContent(body, renderDistribution(data)));
+  return el(
+    "div",
+    { className: "card rankStatsCard" },
+    el("div", { className: "toolbar" }, el("h3", {}, `${currentSeason.name} rank distribution`), el("span", { className: "spacer" }), createBadge({ label: "Placeholder data", variant: "primary" })),
+    body,
   );
 }
