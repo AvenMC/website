@@ -1,11 +1,11 @@
-import { el, replaceContent } from "../dom.js?v=93";
-import { initReveal } from "../effects.js?v=93";
-import { renderLayout } from "../layout.js?v=93";
-import { createButton, createRankedBadge, createSectionHeading } from "../components.js?v=93";
-import { createRankStatsSection } from "./rankStats.js?v=93";
-import { allRankTiers, rankTiers } from "../ranks.js?v=93";
-import { gamemodes } from "../mockData.js?v=93";
-import { modeThemes } from "../modeTheme.js?v=93";
+import { el, replaceContent } from "../dom.js?v=94";
+import { initReveal } from "../effects.js?v=94";
+import { renderLayout } from "../layout.js?v=94";
+import { createButton, createRankedBadge, createSectionHeading } from "../components.js?v=94";
+import { createRankStatsSection } from "./rankStats.js?v=94";
+import { allRankTiers, rankTiers } from "../ranks.js?v=94";
+import { gamemodes } from "../mockData.js?v=94";
+import { modeThemes } from "../modeTheme.js?v=94";
 
 const app = renderLayout("ranked");
 const reveal = (delay = 0) => ({ "data-reveal": "", style: `--revealDelay:${delay}ms` });
@@ -35,7 +35,7 @@ const introSection = el(
     el(
       "div",
       reveal(),
-      createSectionHeading({ eyebrow: "Ranked", title: "Ten ranks. One goal.", description: "Win duels to fill your bar from 0 to 100% and reach the next tier.", level: "h1" }),
+      createSectionHeading({ eyebrow: "Ranked", title: "Rank progression", description: "Win duels to fill your bar from 0 to 100% and reach the next tier.", level: "h1" }),
     ),
     el("div", { className: "divisionPanel", ...reveal(40) }, el("ol", { className: "divisionGrid" }, rankTiers.map((division) => createDivisionCard(division)))),
   ),
@@ -58,7 +58,7 @@ const gainSection = el(
   el(
     "div",
     { className: "container" },
-    el("div", reveal(), createSectionHeading({ eyebrow: "Gains", title: "What a win is worth" })),
+    el("div", reveal(), createSectionHeading({ eyebrow: "Gains", title: "Factors affecting rank progress" })),
     el(
       "ul",
       { className: "gainList", ...reveal(60) },
@@ -75,7 +75,7 @@ const leaderboardLink = el(
   el(
     "div",
     { className: "container" },
-    el("div", reveal(), createSectionHeading({ eyebrow: "Leaderboards", title: "See who is on top" })),
+    el("div", reveal(), createSectionHeading({ eyebrow: "Leaderboards", title: "Ranked leaderboards" })),
     el(
       "div",
       { className: "buttonRow" },
