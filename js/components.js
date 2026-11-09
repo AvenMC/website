@@ -1,6 +1,6 @@
-import { countries } from "./countries.js?v=62";
-import { el } from "./dom.js?v=62";
-import { siteConfig } from "./siteConfig.js?v=62";
+import { countries } from "./countries.js?v=66";
+import { el } from "./dom.js?v=66";
+import { siteConfig } from "./siteConfig.js?v=66";
 
 export function createBrand({ showSubtitle = true } = {}) {
   return el(
@@ -89,11 +89,16 @@ export function createRankedBadge(tier) {
   return el("span", { className: `tierBadge${tier.key === "mythic" ? " isMythic" : ""}`, style: `--tierColor:${tier.color}` }, tier.name);
 }
 
-export function createStatCard({ label, value, hint, accent = false }) {
+export function createStatCard({ label, value, hint, icon, accent = false }) {
   return el(
     "div",
     { className: "statCard" },
-    el("span", { className: "statLabel" }, label),
+    el(
+      "span",
+      { className: "statLabel" },
+      icon && el("span", { className: "statIcon", "aria-hidden": "true", style: `--iconUrl:url(../assets/icons/${icon}.svg)` }),
+      label,
+    ),
     el("span", { className: `statValue${accent ? " isAccent" : ""}` }, value),
     hint && el("span", { className: "statHint" }, hint),
   );

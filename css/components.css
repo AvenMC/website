@@ -282,6 +282,9 @@ a.card:hover,
 }
 
 .statLabel {
+  display: flex;
+  align-items: center;
+  gap: var(--space2);
   color: var(--colorTextMuted);
   font-family: var(--fontBody);
   font-size: 12px;
@@ -920,13 +923,6 @@ a.card:hover,
   }
 }
 
-.rankLadder {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space2);
-  margin-bottom: var(--space4);
-}
-
 .pagination { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--space3); }
 
 .paginationInfo { color: var(--colorTextSecondary); font-size: 13px; }
@@ -1059,3 +1055,26 @@ a.card:hover,
 }
 
 .previewName .playerName { font-size: 12px; overflow-wrap: anywhere; }
+
+.statIcon {
+  width: 16px;
+  height: 16px;
+  flex: none;
+  background: currentColor;
+  mask: var(--iconUrl) center / contain no-repeat;
+  -webkit-mask: var(--iconUrl) center / contain no-repeat;
+}
+
+.profileElo { display: flex; flex-direction: column; align-items: flex-end; gap: var(--space1); padding-left: var(--space5); border-left: 1px solid var(--colorBorder); text-align: right; }
+
+.profileEloLabel { color: var(--colorTextMuted); font-size: 12px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; }
+
+.profileEloValue { color: var(--tierColor); font-family: var(--fontHeading); font-size: clamp(40px, 6vw, 56px); line-height: 1; }
+
+.eloUp { color: var(--colorSuccess); font-weight: 700; }
+
+.eloDown { color: var(--colorDanger); font-weight: 700; }
+
+@media (max-width: 640px) {
+  .profileElo { align-items: flex-start; width: 100%; padding: var(--space4) 0 0; border-top: 1px solid var(--colorBorder); border-left: 0; text-align: left; }
+}

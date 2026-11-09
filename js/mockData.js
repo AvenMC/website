@@ -4,8 +4,8 @@
  * the pages only depend on the shapes returned here.
  */
 
-import { countries } from "./countries.js?v=62";
-import { getRankedTier, mythicMinRating, rankedBoardSize } from "./ranks.js?v=62";
+import { countries } from "./countries.js?v=66";
+import { getRankedTier, mythicMinRating, rankedBoardSize } from "./ranks.js?v=66";
 
 export const gamemodes = [
   { id: "nodebuff", name: "Nodebuff", short: "NB", description: "Classic potion PvP." },
@@ -100,6 +100,7 @@ function createRecentMatches(random, index) {
       opponent: `SamplePlayer${String(((index + matchIndex + 1) % playerCount) + 1).padStart(2, "0")}`,
       opponentCountry: null,
       playedAt: new Date(baseTime - matchIndex * 47 * 60000).toISOString(),
+      eloChange: matchIndex % 4 === 3 ? null : (won ? 1 : -1) * (10 + ((index * 7 + matchIndex * 5) % 17)),
     };
   });
 }

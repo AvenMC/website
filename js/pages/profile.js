@@ -1,5 +1,5 @@
-import { el, replaceContent } from "../dom.js?v=62";
-import { renderLayout } from "../layout.js?v=62";
+import { el, replaceContent } from "../dom.js?v=66";
+import { renderLayout } from "../layout.js?v=66";
 import {
   createAvatar,
   createBadge,
@@ -15,11 +15,11 @@ import {
   createRankedBadge,
   createTabs,
   withTooltip,
-} from "../components.js?v=62";
-import { countries } from "../countries.js?v=62";
-import { getTierScore } from "../ranks.js?v=62";
-import { gamemodes, getPlayer, getPlayerTier, setCountry } from "../mockData.js?v=62";
-import { formatDateTime, formatNumber, formatPercent, formatPlaytime, formatRatio } from "../format.js?v=62";
+} from "../components.js?v=66";
+import { countries } from "../countries.js?v=66";
+import { getTierScore } from "../ranks.js?v=66";
+import { gamemodes, getPlayer, getPlayerTier, setCountry } from "../mockData.js?v=66";
+import { formatDateTime, formatNumber, formatPercent, formatPlaytime, formatRatio } from "../format.js?v=66";
 
 const app = renderLayout("profile");
 const modeName = (id) => gamemodes.find((mode) => mode.id === id).name;
@@ -94,6 +94,21 @@ function renderCountryPicker(player) {
   return el("div", { className: "countryPicker" }, el("span", { className: "mutedText" }, "Country flag"), dropdown, createBadge({ label: "Saved in this browser only" }));
 }
 
+function renderElo(player) {
+  const best = gamemodes
+    .map((mode) => ({ mode, rating: player.ratings[mode.id] }))
+    .reduce((top, entry) => (entry.rating > top.rating ? entry : top));
+  const tier = getPlayerTier(player, best.mode.id);
+  return el(
+    "div",
+    { className: "profileElo", style: `--tierColor:${tier.color}` },
+    el("span", { className: "profileEloLabel" }, "Elo"),
+    el("strong", { className: "profileEloValue" }, formatNumber(best.rating)),
+    createRankedBadge(tier),
+    el("span", { className: "mutedText" }, `Best in ${best.mode.name}`),
+  );
+}
+
 function renderHeader(player) {
   return el(
     "div",
@@ -129,6 +144,7 @@ function renderHeader(player) {
       ),
       renderCountryPicker(player),
     ),
+    renderElo(player),
   );
 }
 
@@ -138,13 +154,13 @@ function statGrid(stats) {
 
 function renderOverview({ overall }) {
   return statGrid([
-    { label: "Kills", value: formatNumber(overall.kills) },
-    { label: "Deaths", value: formatNumber(overall.deaths) },
-    { label: "K/D Ratio", value: formatRatio(overall.kills, overall.deaths), accent: true },
-    { label: "Win Rate", value: formatPercent(overall.wins, overall.wins + overall.losses), accent: true },
-    { label: "Wins", value: formatNumber(overall.wins) },
-    { label: "Losses", value: formatNumber(overall.losses) },
-    { label: "Playtime", value: formatPlaytime(overall.playtimeHours) },
+    { label: "Kills", icon: "sword", value: formatNumber(overall.kills) },
+    { label: "Deaths", icon: "skull", value: formatNumber(overall.deaths) },
+    { label: "K/D Ratio", icon: "crosshair", value: formatRatio(overall.kills, overall.deaths), accent: true },
+    { label: "Win Rate", icon: "percent", value: formatPercent(overall.wins, overall.wins + overall.losses), accent: true },
+    { label: "Wins", icon: "trophy", value: formatNumber(overall.wins) },
+    { label: "Losses", icon: "close", value: formatNumber(overall.losses) },
+    { label: "Playtime", icon: "clock", value: formatPlaytime(overall.playtimeHours) },
   ]);
 }
 
@@ -174,10 +190,10 @@ function renderDuels(player) {
     "div",
     { className: "stack" },
     statGrid([
-      { label: "Duel Wins", value: formatNumber(duels.wins) },
-      { label: "Duel Losses", value: formatNumber(duels.losses) },
-      { label: "Win Rate", value: formatPercent(duels.wins, duels.wins + duels.losses), accent: true },
-      { label: "Best Win Streak", value: duels.bestWinStreak },
+      { label: "Duel Wins", icon: "trophy", value: formatNumber(duels.wins) },
+      { label: "Duel Losses", icon: "close", value: formatNumber(duels.losses) },
+      { label: "Win Rate", icon: "percent", value: formatPercent(duels.wins, duels.wins + duels.losses), accent: true },
+      { label: "Best Win Streak", icon: "flame", value: duels.bestWinStreak },
     ]),
     renderRatingsTable(player),
   );
@@ -185,10 +201,10 @@ function renderDuels(player) {
 
 function renderFfa({ ffa }) {
   return statGrid([
-    { label: "Kills", value: formatNumber(ffa.kills) },
-    { label: "Deaths", value: formatNumber(ffa.deaths) },
-    { label: "K/D Ratio", value: formatRatio(ffa.kills, ffa.deaths), accent: true },
-    { label: "Best Kill Streak", value: ffa.bestKillStreak },
+    { label: "Kills", icon: "sword", value: formatNumber(ffa.kills) },
+    { label: "Deaths", icon: "skull", value: formatNumber(ffa.deaths) },
+    { label: "K/D Ratio", icon: "crosshair", value: formatRatio(ffa.kills, ffa.deaths), accent: true },
+    { label: "Best Kill Streak", icon: "flame", value: ffa.bestKillStreak },
   ]);
 }
 
@@ -208,10 +224,10 @@ function renderGamemodes(player) {
         el(
           "div",
           { className: "grid cols2 statGrid" },
-          createStatCard({ label: score.label, value: score.text, accent: true }),
-          createStatCard({ label: "K/D", value: formatRatio(stats.kills, stats.deaths) }),
-          createStatCard({ label: "Wins", value: formatNumber(stats.wins) }),
-          createStatCard({ label: "Losses", value: formatNumber(stats.losses) }),
+          createStatCard({ label: score.label, icon: "bolt", value: score.text, accent: true }),
+          createStatCard({ label: "K/D", icon: "crosshair", icon: "crosshair", value: formatRatio(stats.kills, stats.deaths) }),
+          createStatCard({ label: "Wins", icon: "trophy", icon: "trophy", value: formatNumber(stats.wins) }),
+          createStatCard({ label: "Losses", icon: "close", icon: "close", value: formatNumber(stats.losses) }),
         ),
       );
     }),
@@ -243,6 +259,14 @@ function renderMatches(player, container) {
               render: (row) => el("span", { className: row.result === "Win" ? "resultWin" : "resultLoss" }, row.result),
             },
             { label: "Score", key: "score" },
+            {
+              label: "Elo",
+              align: "right",
+              render: (row) =>
+                row.eloChange === null
+                  ? el("span", { className: "mutedText" }, "Unranked")
+                  : el("span", { className: row.eloChange > 0 ? "eloUp" : "eloDown" }, `${row.eloChange > 0 ? "+" : "−"}${Math.abs(row.eloChange)}`),
+            },
             { label: "Opponent", render: (row) => createPlayerName(row.opponent, { country: row.opponentCountry }) },
             { label: "Date", align: "right", render: (row) => el("span", { className: "mutedText" }, formatDateTime(row.playedAt)) },
           ],

@@ -4,7 +4,7 @@ export const mythicMinRating = 2200;
 export const rankedBoardSize = 50;
 
 // Nine tiers fill exactly up to mythicMinRating, so 100% in Gold III means Mythic.
-const tierStep = mythicMinRating / 9;
+export const tierStep = mythicMinRating / 9;
 const romanNumerals = ["I", "II", "III"];
 
 export const rankTiers = [

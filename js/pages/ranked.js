@@ -1,67 +1,36 @@
-import { el, replaceContent } from "../dom.js?v=62";
-import { initReveal } from "../effects.js?v=62";
-import { renderLayout } from "../layout.js?v=62";
-import { createButton, createSectionHeading, createTabs } from "../components.js?v=62";
-import { createRankStatsSection } from "./rankStats.js?v=62";
-import { rankTiers, rankedBoardSize } from "../ranks.js?v=62";
-import { gamemodes, getRankDistribution } from "../mockData.js?v=62";
-import { modeThemes } from "../modeTheme.js?v=62";
+import { el, replaceContent } from "../dom.js?v=66";
+import { initReveal } from "../effects.js?v=66";
+import { renderLayout } from "../layout.js?v=66";
+import { createButton, createRankedBadge, createSectionHeading } from "../components.js?v=66";
+import { createRankStatsSection } from "./rankStats.js?v=66";
+import { allRankTiers, mythicMinRating, rankedBoardSize, tierStep } from "../ranks.js?v=66";
+import { gamemodes } from "../mockData.js?v=66";
+import { modeThemes } from "../modeTheme.js?v=66";
 
 const app = renderLayout("ranked");
 const reveal = (delay = 0) => ({ "data-reveal": "", style: `--revealDelay:${delay}ms` });
+const format = (value) => value.toLocaleString("en-US");
 
-const { total: ladderTotal, tierCounts } = await getRankDistribution("nodebuff");
-const ladderMax = Math.max(...Object.values(tierCounts).flat());
-const formatShare = (count) => {
-  const share = (count / ladderTotal) * 100;
-  return `${share >= 10 ? share.toFixed(0) : share.toFixed(1)}%`;
-};
+const flowSteps = ["Win duels", "Fill your percent bar", "Rank up", "Reach Mythic"];
 
-const rankSteps = [
-  ["Play ranked duels", "Win duels to gain percent or points in each gamemode. Losses cost some of it."],
-  ["Climb the divisions", "Bronze, Silver and Gold each have three tiers (I–III). Above them waits Mythic."],
-  ["Reach Mythic", `Mythic has no player limit. The top ${rankedBoardSize} Mythic players per gamemode make the leaderboard.`],
-];
-
-const ladderColumns = (view) =>
-  rankTiers.flatMap((tier) => {
-    const counts = tierCounts[tier.key];
-    if (view === "simplified" || tier.tiers === 1) {
-      return [{ label: tier.label, color: tier.color, count: counts.reduce((sum, count) => sum + count, 0), mythic: tier.key === "mythic" }];
-    }
-    return counts.map((count, index) => ({ label: `${tier.label} ${index + 1}`, color: tier.color, count }));
-  });
-
-const ladderGraphic = el("div", { className: "rankLadderGraphic", ...reveal(60) });
-
-function renderLadder(view) {
-  const columns = ladderColumns(view);
-  const max = Math.max(...columns.map((column) => column.count));
-  ladderGraphic.dataset.view = view;
-  ladderGraphic.replaceChildren(
-    ...columns.map((column) =>
-      el(
-        "div",
-        { className: `rankStepColumn${column.mythic ? " isMythic" : ""}`, style: `--tierColor:${column.color}`, title: `${column.label}: ${column.count.toLocaleString("en-US")} players` },
-        el("span", { className: "rankStepShare" }, formatShare(column.count)),
-        el("span", { className: "rankStepBar", style: `height:${Math.max(6, (column.count / max) * 100)}%` }),
-        el("span", { className: "rankStepName" }, column.label),
-      ),
-    ),
-  );
+// Rating range of one tier, derived from the same step the scoring uses.
+function tierRange(index, tier) {
+  if (tier.key === "mythic") return `${format(mythicMinRating)}+`;
+  return `${format(Math.round(index * tierStep))} – ${format(Math.round((index + 1) * tierStep) - 1)}`;
 }
 
-const ladderToggle = createTabs({
-  label: "Ladder view",
-  active: "complex",
-  tabs: [
-    { id: "simplified", label: "Simplified" },
-    { id: "complex", label: "Complex" },
-  ],
-  onChange: renderLadder,
-});
-
-renderLadder("complex");
+function createLadderRow(tier, index) {
+  const isMythic = tier.key === "mythic";
+  return el(
+    "li",
+    { className: `ladderRow${isMythic ? " isMythic" : ""}`, style: `--tierColor:${tier.color};--step:${index};--revealDelay:${(allRankTiers.length - index) * 50}ms`, "data-reveal": "" },
+    el("span", { className: "ladderBadge" }, createRankedBadge(tier)),
+    el("span", { className: "ladderElo" }, el("strong", {}, tierRange(index, tier)), el("small", {}, isMythic ? "Points" : "Elo")),
+    isMythic
+      ? el("span", { className: "ladderProgress isOpen" }, el("span", { className: "ladderOpenText" }, `No limit · top ${rankedBoardSize} on the leaderboard`))
+      : el("span", { className: "ladderProgress" }, el("span", { className: "ladderTrack" }, el("span", { className: "ladderFill" })), el("span", { className: "ladderPercent" }, "0% → 100%")),
+  );
+}
 
 const ladderSection = el(
   "section",
@@ -69,32 +38,23 @@ const ladderSection = el(
   el(
     "div",
     { className: "container" },
-    el("div", reveal(), createSectionHeading({ eyebrow: "Ranked", title: "How Ranked works", level: "h1" })),
-    el("div", { className: "rankLadderToolbar", ...reveal(30) }, ladderToggle),
-    ladderGraphic,
     el(
       "div",
-      { className: "grid cols3" },
-      rankSteps.map(([title, text], index) =>
-        el(
-          "div",
-          { className: "card stepCard", ...reveal(index * 90) },
-          el("span", { className: "stepNumber" }, `0${index + 1}`),
-          el("h3", {}, title),
-          el("p", { className: "cardText" }, text),
-        ),
-      ),
+      reveal(),
+      createSectionHeading({ eyebrow: "Ranked", title: "Ten ranks. One goal.", description: "Win duels, fill your bar and climb from Bronze I to Mythic.", level: "h1" }),
     ),
-    el("p", { className: "rankNote" }, "New season: you only fall back a few tiers. Your rank is never fully reset."),
-    el("p", { className: "rankNote" }, "Ranked is played in duels. The three FFA modes get duels too, and probably three more. Divisions are separate per gamemode. Thresholds are placeholders until launch."),
+    el(
+      "ol",
+      { className: "flowSteps", ...reveal(40) },
+      flowSteps.map((step, index) => el("li", {}, el("span", { className: "flowNumber" }, index + 1), step)),
+    ),
+    el("ol", { className: "rankLadder" }, allRankTiers.map((tier, index) => createLadderRow(tier, index)).reverse()),
+    el("p", { className: "placeholderNote", ...reveal() }, "Elo ranges are placeholders until launch."),
   ),
 );
 
-const scoreCards = [
-  ["Bronze, Silver, Gold", "Progress in %", "Your progress through the current tier. Reach 100% to move up, and 100% in Gold III takes you into Mythic. These divisions have no leaderboard spot.", "var(--colorPrimary)"],
-  ["Mythic", "Points", "Once you enter Mythic, percent is replaced by an open-ended point total that goes up with every win. No tiers, no player limit.", rankTiers[3].color],
-  ["Leaderboards", `Top ${rankedBoardSize}`, `Only Mythic players are ranked. The top ${rankedBoardSize} by points per gamemode appear on the leaderboard.`, "var(--colorSuccess)"],
-];
+const silver = allRankTiers[4];
+const mythic = allRankTiers[9];
 
 const scoreSection = el(
   "section",
@@ -102,27 +62,40 @@ const scoreSection = el(
   el(
     "div",
     { className: "container" },
-    el("div", reveal(), createSectionHeading({ eyebrow: "Scoring", title: "Points and progress" })),
+    el("div", reveal(), createSectionHeading({ eyebrow: "Scoring", title: "Percent first, then points" })),
     el(
       "div",
-      { className: "grid cols3" },
-      scoreCards.map(([label, value, text, accent], index) =>
-        el(
-          "div",
-          { className: "card scoreCard", ...reveal(index * 90), style: `--accent:${accent};--revealDelay:${index * 90}ms` },
-          el("span", { className: "scoreCardLabel" }, label),
-          el("strong", { className: "scoreCardValue" }, value),
-          el("p", { className: "cardText" }, text),
-        ),
+      { className: "scoreSplit", ...reveal(60) },
+      el(
+        "div",
+        { className: "scoreSide", style: `--tierColor:${silver.color}` },
+        el("span", { className: "scoreSideLabel" }, "Bronze · Silver · Gold"),
+        el("div", { className: "scoreDemo" }, createRankedBadge(silver), el("strong", {}, "64%")),
+        el("div", { className: "ladderTrack isWide" }, el("span", { className: "ladderFill", style: "width:64%" })),
+        el("p", { className: "cardText" }, "Reach 100% to move up a tier."),
+      ),
+      el("span", { className: "scoreArrow", "aria-hidden": "true" }, "→"),
+      el(
+        "div",
+        { className: "scoreSide", style: `--tierColor:${mythic.color}` },
+        el("span", { className: "scoreSideLabel" }, "Mythic"),
+        el("div", { className: "scoreDemo" }, createRankedBadge(mythic), el("strong", {}, "2,431 pts")),
+        el("div", { className: "scoreRankChip" }, "#17 on the leaderboard"),
+        el("p", { className: "cardText" }, `Points have no cap. Top ${rankedBoardSize} are listed.`),
       ),
     ),
   ),
 );
 
-const gainFactors = [
-  ["Speed", "Faster wins", "The quicker you close out a duel, the more you earn.", "var(--colorNodebuff)"],
-  ["Health", "HP lost", "Winning with more health left is worth more than a close fight.", "var(--colorDanger)"],
-  ["Opponent", "Division gap", "Beating someone in a higher division earns more. If you are the higher division, you get less.", "var(--colorMace)"],
+const gainRows = [
+  ["Speed", "Faster wins earn more", "var(--colorNodebuff)", el("span", { className: "gainMeter" }, el("span", { style: "width:85%" }))],
+  ["HP lost", "More health left, more reward", "var(--colorDanger)", el("span", { className: "gainHearts" }, "♥♥♥♥♥♥♥♡♡♡")],
+  [
+    "Opponent",
+    "Beat a higher division for more, a lower one for less",
+    "var(--colorMace)",
+    el("span", { className: "gainVersus" }, createRankedBadge(allRankTiers[2]), el("b", {}, "▲"), createRankedBadge(allRankTiers[5])),
+  ],
 ];
 
 const gainSection = el(
@@ -131,21 +104,14 @@ const gainSection = el(
   el(
     "div",
     { className: "container" },
-    el("div", reveal(), createSectionHeading({ eyebrow: "Gains", title: "What decides your percent and points" })),
+    el("div", reveal(), createSectionHeading({ eyebrow: "Gains", title: "What a win is worth" })),
     el(
-      "div",
-      { className: "grid cols3" },
-      gainFactors.map(([label, value, text, accent], index) =>
-        el(
-          "div",
-          { className: "card scoreCard", ...reveal(index * 90), style: `--accent:${accent};--revealDelay:${index * 90}ms` },
-          el("span", { className: "scoreCardLabel" }, label),
-          el("strong", { className: "scoreCardValue" }, value),
-          el("p", { className: "cardText" }, text),
-        ),
+      "ul",
+      { className: "gainList", ...reveal(60) },
+      gainRows.map(([label, text, accent, visual]) =>
+        el("li", { style: `--accent:${accent}` }, el("strong", {}, label), el("span", { className: "gainText" }, text), visual),
       ),
     ),
-    el("p", { className: "rankNote" }, "This applies to both percent in Bronze, Silver and Gold and points in Mythic. Exact values are tuned before launch."),
   ),
 );
 
@@ -169,5 +135,5 @@ const leaderboardLink = el(
   ),
 );
 
-replaceContent(app, ladderSection, scoreSection, gainSection, createRankStatsSection(), leaderboardLink);
+replaceContent(app, ladderSection, scoreSection, createRankStatsSection(), gainSection, leaderboardLink);
 initReveal();
