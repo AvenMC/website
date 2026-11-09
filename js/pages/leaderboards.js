@@ -1,5 +1,5 @@
-import { el, replaceContent } from "../dom.js?v=42";
-import { renderLayout } from "../layout.js?v=42";
+import { el, replaceContent } from "../dom.js?v=43";
+import { renderLayout } from "../layout.js?v=43";
 import {
   createAvatar,
   createBadge,
@@ -12,12 +12,12 @@ import {
   createSkeletonRows,
   createTable,
   createTabs,
-} from "../components.js?v=42";
-import { gamemodes, getLeaderboard, leaderboardCategories } from "../mockData.js?v=42";
-import { modeIconStyle, modeThemes } from "../modeTheme.js?v=42";
-import { createRankDistributionCard } from "./rankStats.js?v=42";
-import { getRankedTier, rankTiers, zenithCap } from "../ranks.js?v=42";
-import { formatNumber } from "../format.js?v=42";
+} from "../components.js?v=43";
+import { gamemodes, getLeaderboard, leaderboardCategories } from "../mockData.js?v=43";
+import { modeIconStyle, modeThemes } from "../modeTheme.js?v=43";
+import { createRankDistributionCard } from "./rankStats.js?v=43";
+import { getRankedTier, rankTiers, mythicCap } from "../ranks.js?v=43";
+import { formatNumber } from "../format.js?v=43";
 
 const app = renderLayout("leaderboards");
 
@@ -85,7 +85,7 @@ replaceContent(
 );
 
 function renderTierCell(row) {
-  return isRanked() ? createRankedBadge(getRankedTier(row.metric, { isZenith: true })) : createRankBadge(row.rank);
+  return isRanked() ? createRankedBadge(getRankedTier(row.metric, { isMythic: true })) : createRankBadge(row.rank);
 }
 
 function renderPodium(entries) {
@@ -155,7 +155,7 @@ function renderBoardHeader(entries) {
     "div",
     { className: "boardHeader", style: theme ? `--accent:${theme.accent}` : "" },
     theme ? el("span", { className: "modeIcon small", style: modeIconStyle(state.category), "aria-hidden": "true" }) : null,
-    el("div", {}, el("h2", {}, category.label), el("p", {}, isRanked() ? `Zenith division · top ${zenithCap} only` : `Ranked by ${category.metricLabel.toLowerCase()}`)),
+    el("div", {}, el("h2", {}, category.label), el("p", {}, isRanked() ? `Mythic division · top ${mythicCap} only` : `Ranked by ${category.metricLabel.toLowerCase()}`)),
   );
 }
 
@@ -168,7 +168,7 @@ function renderBoard() {
   replaceContent(
     results,
     entries.length === 0
-      ? createEmptyState({ title: "No data yet", text: "No Zenith players yet." })
+      ? createEmptyState({ title: "No data yet", text: "No Mythic players yet." })
       : el(
           "div",
           { className: "boardStack" },

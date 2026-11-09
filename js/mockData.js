@@ -4,8 +4,8 @@
  * the pages only depend on the shapes returned here.
  */
 
-import { countries } from "./countries.js?v=42";
-import { getRankedTier, zenithCap, zenithMinRating } from "./ranks.js?v=42";
+import { countries } from "./countries.js?v=43";
+import { getRankedTier, mythicCap, mythicMinRating } from "./ranks.js?v=43";
 
 export const gamemodes = [
   { id: "nodebuff", name: "Nodebuff", short: "NB", description: "Classic potion PvP." },
@@ -106,22 +106,22 @@ function createRecentMatches(random, index) {
 const playerCount = 90;
 const players = Array.from({ length: playerCount }, (_, index) => createPlayer(index));
 
-// Zenith is limited to the top zenithCap players per gamemode.
-const zenithHolders = Object.fromEntries(
+// Mythic is limited to the top mythicCap players per gamemode.
+const mythicHolders = Object.fromEntries(
   gamemodes.map((mode) => [
     mode.id,
     new Set(
       players
-        .filter((player) => player.ratings[mode.id] >= zenithMinRating)
+        .filter((player) => player.ratings[mode.id] >= mythicMinRating)
         .sort((a, b) => b.ratings[mode.id] - a.ratings[mode.id])
-        .slice(0, zenithCap)
+        .slice(0, mythicCap)
         .map((player) => player.username),
     ),
   ]),
 );
 
 export function getPlayerTier(player, modeId) {
-  return getRankedTier(player.ratings[modeId], { isZenith: zenithHolders[modeId].has(player.username) });
+  return getRankedTier(player.ratings[modeId], { isMythic: mythicHolders[modeId].has(player.username) });
 }
 
 const wait = () => new Promise((resolve) => setTimeout(resolve, mockDelayMs));
@@ -176,8 +176,8 @@ function getMetric(player, categoryId) {
 export async function getLeaderboard(categoryId) {
   await wait();
   const isRankedMode = gamemodes.some((mode) => mode.id === categoryId);
-  // Ranked gamemode boards only list Zenith players.
-  const source = isRankedMode ? players.filter((player) => zenithHolders[categoryId].has(player.username)) : players;
+  // Ranked gamemode boards only list Mythic players.
+  const source = isRankedMode ? players.filter((player) => mythicHolders[categoryId].has(player.username)) : players;
 
   return source
     .map((player) => ({
@@ -198,17 +198,17 @@ export async function getTopPlayersPreview() {
 
 export const currentSeason = { name: "Season 1", isPlaceholder: true };
 
-const distributionTotals = { nodebuff: { total: 4180, zenith: 30 }, crystalpvp: { total: 2760, zenith: 24 }, spearmace: { total: 1490, zenith: 13 } };
-const distributionWeights = { ripple: 50, current: 33, tempest: 17 };
+const distributionTotals = { nodebuff: { total: 4180, mythic: 30 }, crystalpvp: { total: 2760, mythic: 24 }, spearmace: { total: 1490, mythic: 13 } };
+const distributionWeights = { bronze: 50, silver: 33, gold: 17 };
 
 // Replace with the real season endpoint once it exists. Keep the returned shape.
 export async function getRankDistribution(modeId) {
   await wait();
-  const { total, zenith } = distributionTotals[modeId];
+  const { total, mythic } = distributionTotals[modeId];
   const weightSum = Object.values(distributionWeights).reduce((sum, weight) => sum + weight, 0);
-  const remaining = total - zenith;
+  const remaining = total - mythic;
   const counts = Object.fromEntries(Object.entries(distributionWeights).map(([key, weight]) => [key, Math.round((remaining * weight) / weightSum)]));
-  counts.ripple += remaining - Object.values(counts).reduce((sum, count) => sum + count, 0);
-  counts.zenith = zenith;
-  return { season: currentSeason.name, total, zenithCap, counts };
+  counts.bronze += remaining - Object.values(counts).reduce((sum, count) => sum + count, 0);
+  counts.mythic = mythic;
+  return { season: currentSeason.name, total, mythicCap, counts };
 }

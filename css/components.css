@@ -926,7 +926,7 @@ a.card:hover,
   white-space: nowrap;
 }
 
-.tierBadge.isZenith {
+.tierBadge.isMythic {
   box-shadow: 0 0 14px color-mix(in srgb, var(--tierColor) 35%, transparent);
 }
 

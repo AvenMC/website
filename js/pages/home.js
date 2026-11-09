@@ -1,5 +1,5 @@
-import { el, replaceContent } from "../dom.js?v=42";
-import { renderLayout } from "../layout.js?v=42";
+import { el, replaceContent } from "../dom.js?v=43";
+import { renderLayout } from "../layout.js?v=43";
 import {
   createAvatar,
   createBadge,
@@ -8,13 +8,13 @@ import {
   createSectionHeading,
   createSkeletonRows,
   createSocialLinks,
-} from "../components.js?v=42";
-import { createCopyField, openJoinModal } from "../join.js?v=42";
-import { gamemodes, regions, getTopPlayersPreview } from "../mockData.js?v=42";
-import { formatNumber } from "../format.js?v=42";
-import { modeIcons, modeThemes } from "../modeTheme.js?v=42";
-import { rankTiers, zenithCap } from "../ranks.js?v=42";
-import { siteConfig } from "../siteConfig.js?v=42";
+} from "../components.js?v=43";
+import { createCopyField, openJoinModal } from "../join.js?v=43";
+import { gamemodes, regions, getTopPlayersPreview } from "../mockData.js?v=43";
+import { formatNumber } from "../format.js?v=43";
+import { modeIcons, modeThemes } from "../modeTheme.js?v=43";
+import { rankTiers, mythicCap } from "../ranks.js?v=43";
+import { siteConfig } from "../siteConfig.js?v=43";
 
 const app = renderLayout("home");
 const reveal = (delay = 0) => ({ "data-reveal": "", style: `--revealDelay:${delay}ms` });
@@ -30,7 +30,7 @@ const hero = el(
       { className: "heroContent" },
       createBadge({ label: "Bedrock Practice Network", variant: "primary" }),
       el("h1", {}, "Duel. ", el("span", { className: "accent" }, "Rank."), " Rise."),
-      el("p", { className: "heroDescription" }, "Only 30 players per mode reach Zenith. One account, one ranking, every region."),
+      el("p", { className: "heroDescription" }, "Only 30 players per mode reach Mythic. One account, one ranking, every region."),
       el(
         "div",
         { className: "ipPanel" },
@@ -103,8 +103,8 @@ const rankedTeaser = el(
         "div",
         { className: "rankedTeaserText" },
         createBadge({ label: "Ranked", variant: "primary" }),
-        el("h2", {}, `Only ${zenithCap} reach Zenith`),
-        el("p", { className: "cardText" }, "Climb the divisions from Ripple to Zenith. A new season only drops you back a few tiers, no full reset."),
+        el("h2", {}, `Only ${mythicCap} reach Mythic`),
+        el("p", { className: "cardText" }, "Climb the divisions from Bronze to Mythic. A new season only drops you back a few tiers, no full reset."),
         createButton({ label: "Explore Ranked", href: "ranked.html" }),
       ),
       el(

@@ -1,20 +1,20 @@
-// AVENMC divisions. The three lower divisions have tiers I-III. Zenith is capped: only the top zenithCap players above the rating threshold hold it.
-export const zenithCap = 30;
-export const zenithMinRating = 2200;
+// AVENMC divisions. The three lower divisions have tiers I-III. Mythic is capped: only the top mythicCap players above the rating threshold hold it.
+export const mythicCap = 30;
+export const mythicMinRating = 2200;
 
 const tierStep = 240;
 const romanNumerals = ["I", "II", "III"];
 
 export const rankTiers = [
-  { key: "ripple", label: "Ripple", color: "#4fd8e8", tiers: 3 },
-  { key: "current", label: "Current", color: "#5b9cff", tiers: 3 },
-  { key: "tempest", label: "Tempest", color: "#ff8a3d", tiers: 3 },
-  { key: "zenith", label: "Zenith", color: "#c56bff", tiers: 1 },
+  { key: "bronze", label: "Bronze", color: "#d98b52", tiers: 3 },
+  { key: "silver", label: "Silver", color: "#c3cfdf", tiers: 3 },
+  { key: "gold", label: "Gold", color: "#f2c94c", tiers: 3 },
+  { key: "mythic", label: "Mythic", color: "#c56bff", tiers: 1 },
 ];
 
-export function getRankedTier(rating, { isZenith = false } = {}) {
-  if (isZenith && rating >= zenithMinRating) return { ...rankTiers[3], tier: null, name: "Zenith" };
-  const step = Math.floor(Math.max(0, rating) / tierStep);
+export function getRankedTier(rating, { isMythic = false } = {}) {
+  if (isMythic && rating >= mythicMinRating) return { ...rankTiers[3], tier: null, name: "Mythic" };
+  const step = Math.min(8, Math.floor(Math.max(0, rating) / tierStep));
   const division = rankTiers[Math.min(2, Math.floor(step / 3))];
   const tier = romanNumerals[Math.min(2, step % 3)];
   return { ...division, tier, name: `${division.label} ${tier}` };
