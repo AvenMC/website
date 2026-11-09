@@ -6,6 +6,72 @@
   isolation: isolate;
 }
 
+/* Animated hero background: two slowly drifting glows */
+.hero::before,
+.hero::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  width: 60vw;
+  max-width: 720px;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.35;
+  pointer-events: none;
+}
+
+.hero::before {
+  top: -30%;
+  left: -10%;
+  background: radial-gradient(circle, var(--colorPrimary), transparent 65%);
+  animation: heroDriftA 16s ease-in-out infinite alternate;
+}
+
+.hero::after {
+  right: -10%;
+  bottom: -40%;
+  background: radial-gradient(circle, var(--colorCrystal, #a56bff), transparent 65%);
+  animation: heroDriftB 20s ease-in-out infinite alternate;
+}
+
+@keyframes heroDriftA {
+  to {
+    transform: translate(30vw, 12%) scale(1.25);
+  }
+}
+
+@keyframes heroDriftB {
+  to {
+    transform: translate(-30vw, -15%) scale(1.2);
+  }
+}
+
+/* Each home section gets its own background tint from its accent */
+.tintedSection {
+  position: relative;
+  isolation: isolate;
+  background: linear-gradient(180deg, transparent, color-mix(in srgb, var(--sectionAccent) 9%, var(--colorBackground)) 50%, transparent);
+}
+
+.tintedSection:nth-of-type(even)::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: radial-gradient(60% 70% at 85% 50%, color-mix(in srgb, var(--sectionAccent) 12%, transparent), transparent);
+  pointer-events: none;
+}
+
+.tintedSection:nth-of-type(odd)::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: radial-gradient(60% 70% at 15% 50%, color-mix(in srgb, var(--sectionAccent) 12%, transparent), transparent);
+  pointer-events: none;
+}
+
 .heroGrid {
   display: grid;
   grid-template-columns: 1fr;
@@ -584,6 +650,11 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .hero::before,
+  .hero::after {
+    animation: none;
+  }
+
   .rankRowFill, .rankDonutArc { animation: none; transition: none; }
 }
 
@@ -819,4 +890,38 @@
   .tabs { display: flex; width: 100%; }
   .tabs .tab { flex: 1 0 auto; padding-inline: var(--space3); }
   .seasonEntry { width: 100%; }
+}
+
+.onlineStatus {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space2);
+  padding: 6px 14px;
+  border: 1px solid color-mix(in srgb, var(--colorSuccess) 45%, var(--colorBorder));
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--colorSuccess) 10%, transparent);
+  color: var(--colorSuccess);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.onlineDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: currentColor;
+  box-shadow: 0 0 0 0 color-mix(in srgb, var(--colorSuccess) 60%, transparent);
+  animation: onlinePulse 2s ease-out infinite;
+}
+
+@keyframes onlinePulse {
+  to {
+    box-shadow: 0 0 0 8px transparent;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .onlineDot {
+    animation: none;
+  }
 }

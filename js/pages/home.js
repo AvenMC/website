@@ -1,5 +1,5 @@
-import { el, replaceContent } from "../dom.js?v=69";
-import { renderLayout } from "../layout.js?v=69";
+import { el, replaceContent } from "../dom.js?v=70";
+import { renderLayout } from "../layout.js?v=70";
 import {
   createAvatar,
   createBadge,
@@ -9,18 +9,21 @@ import {
   createSectionHeading,
   createSkeletonRows,
   createSocialLinks,
-} from "../components.js?v=69";
-import { createCopyField, openJoinModal } from "../join.js?v=69";
-import { gamemodes, regions, getTopPlayersPreview } from "../mockData.js?v=69";
-import { formatNumber } from "../format.js?v=69";
-import { modeIconStyle, modeThemes } from "../modeTheme.js?v=69";
-import { allRankTiers, rankedBoardSize } from "../ranks.js?v=69";
-import { siteConfig } from "../siteConfig.js?v=69";
+} from "../components.js?v=70";
+import { createCopyField, openJoinModal } from "../join.js?v=70";
+import { gamemodes, regions, getTopPlayersPreview } from "../mockData.js?v=70";
+import { formatNumber } from "../format.js?v=70";
+import { modeIconStyle, modeThemes } from "../modeTheme.js?v=70";
+import { allRankTiers, rankedBoardSize } from "../ranks.js?v=70";
+import { siteConfig } from "../siteConfig.js?v=70";
 
 const app = renderLayout("home");
 const reveal = (delay = 0) => ({ "data-reveal": "", style: `--revealDelay:${delay}ms` });
 
 const platforms = [["phone", "Mobile"], ["gamepad", "Console"], ["monitor", "PC"]];
+
+// Placeholder until the server reports live numbers.
+const onlinePlayers = 128;
 
 const hero = el(
   "section",
@@ -31,6 +34,12 @@ const hero = el(
     el(
       "div",
       { className: "heroContent" },
+      el(
+        "p",
+        { className: "onlineStatus" },
+        el("span", { className: "onlineDot", "aria-hidden": "true" }),
+        `${formatNumber(onlinePlayers)} players across ${regions.filter((region) => region.status === "At release").length} regions`,
+      ),
       el("h1", {}, "Duel. ", el("span", { className: "accent" }, "Rank."), " Rise."),
       el("p", { className: "heroDescription" }, "Reach Mythic and climb the top 50. One account, one ranking, every region."),
       el(
@@ -237,4 +246,7 @@ const sectionAccents = {
   [rankingSection, sectionAccents.ranking],
   [regionsSection, sectionAccents.regions],
   [communitySection, sectionAccents.community],
-].forEach(([section, accent]) => section.style.setProperty("--sectionAccent", accent));
+].forEach(([section, accent]) => {
+  section.classList.add("tintedSection");
+  section.style.setProperty("--sectionAccent", accent);
+});
