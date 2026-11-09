@@ -4,8 +4,8 @@
  * the pages only depend on the shapes returned here.
  */
 
-import { countries } from "./countries.js?v=82";
-import { getRankedTier, mythicMinRating, rankedBoardSize } from "./ranks.js?v=82";
+import { countries } from "./countries.js?v=83";
+import { getRankedTier, mythicMinRating, rankedBoardSize } from "./ranks.js?v=83";
 
 export const gamemodes = [
   { id: "nodebuff", name: "Nodebuff", short: "NB", description: "Classic potion PvP." },
@@ -192,6 +192,11 @@ function buildEntries(categoryId) {
     .map((entry, index) => ({ ...entry, position: index + 1 }));
 }
 
+// Every Mythic player has a place, even below the listed top rankedBoardSize. Null for other divisions.
+export function getMythicPosition(username, modeId) {
+  return buildEntries(modeId).find((entry) => entry.username === username)?.position ?? null;
+}
+
 export async function getLeaderboard(categoryId) {
   await wait();
   const entries = buildEntries(categoryId);
@@ -237,7 +242,7 @@ export async function getPlayerPreview(username) {
           playtimeHours: player.overall.playtimeHours,
           wins: player.duels.wins,
           losses: player.duels.losses,
-          ranked: gamemodes.map((mode) => ({ id: mode.id, name: mode.name, rating: player.ratings[mode.id], tier: getRankedTier(player.ratings[mode.id]) })),
+          ranked: gamemodes.map((mode) => ({ id: mode.id, name: mode.name, rating: player.ratings[mode.id], tier: getRankedTier(player.ratings[mode.id]), position: getMythicPosition(player.username, mode.id) })),
         };
       })(),
     );

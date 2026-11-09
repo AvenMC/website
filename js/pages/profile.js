@@ -1,5 +1,5 @@
-import { el, replaceContent } from "../dom.js?v=82";
-import { renderLayout } from "../layout.js?v=82";
+import { el, replaceContent } from "../dom.js?v=83";
+import { renderLayout } from "../layout.js?v=83";
 import {
   createAvatar,
   createBadge,
@@ -15,11 +15,11 @@ import {
   createRankedBadge,
   createTabs,
   withTooltip,
-} from "../components.js?v=82";
-import { countries } from "../countries.js?v=82";
-import { getTierScore } from "../ranks.js?v=82";
-import { createSeasonHistory, gamemodes, getPlayer, getPlayerTier, setCountry } from "../mockData.js?v=82";
-import { formatDateTime, formatNumber, formatPercent, formatPlaytime, formatRatio } from "../format.js?v=82";
+} from "../components.js?v=83";
+import { countries } from "../countries.js?v=83";
+import { getTierScore } from "../ranks.js?v=83";
+import { createSeasonHistory, gamemodes, getMythicPosition, getPlayer, getPlayerTier, setCountry } from "../mockData.js?v=83";
+import { formatDateTime, formatNumber, formatPercent, formatPlaytime, formatRatio } from "../format.js?v=83";
 
 const app = renderLayout("profile");
 const modeName = (id) => gamemodes.find((mode) => mode.id === id).name;
@@ -100,13 +100,14 @@ function renderElo(player) {
     .reduce((top, entry) => (entry.rating > top.rating ? entry : top));
   const tier = getPlayerTier(player, best.mode.id);
   const score = getTierScore(best.rating, tier);
+  const position = getMythicPosition(player.username, best.mode.id);
   return el(
     "div",
     { className: "profileElo", style: `--tierColor:${tier.color}` },
     el("span", { className: "profileEloLabel" }, score.label),
     el("strong", { className: "profileEloValue" }, score.text),
     createRankedBadge(tier),
-    el("span", { className: "mutedText" }, `Best in ${best.mode.name}`),
+    el("span", { className: "mutedText" }, position ? `Best in ${best.mode.name} · #${position}` : `Best in ${best.mode.name}`),
   );
 }
 
@@ -173,7 +174,7 @@ function renderRatingsTable(player) {
       {
         label: "Points / Progress",
         align: "right",
-        render: (row) => withTooltip(el("span", { className: "metricValue" }, getTierScore(row.rating, row.tier).text), "Placeholder data"),
+        render: (row) => withTooltip(el("span", { className: "metricValue" }, getTierScore(row.rating, row.tier).text + (row.position ? ` · #${row.position}` : "")), "Placeholder data"),
       },
       { label: "Division", align: "right", render: (row) => createRankedBadge(row.tier) },
     ],
@@ -181,6 +182,7 @@ function renderRatingsTable(player) {
       name: mode.name,
       rating: player.ratings[mode.id],
       tier: getPlayerTier(player, mode.id),
+      position: getMythicPosition(player.username, mode.id),
     })),
   });
 }
@@ -217,6 +219,7 @@ function renderGamemodes(player) {
       const stats = player.perMode[mode.id];
       const tier = getPlayerTier(player, mode.id);
       const score = getTierScore(player.ratings[mode.id], tier);
+      const position = getMythicPosition(player.username, mode.id);
       return el(
         "div",
         { className: "card stack" },
@@ -226,6 +229,7 @@ function renderGamemodes(player) {
           "div",
           { className: "grid cols2 statGrid" },
           createStatCard({ label: score.label, icon: "bolt", value: score.text, accent: true }),
+          position ? createStatCard({ label: "Position", icon: "trophy", value: `#${position}` }) : null,
           createStatCard({ label: "K/D", icon: "crosshair", icon: "crosshair", value: formatRatio(stats.kills, stats.deaths) }),
           createStatCard({ label: "Wins", icon: "trophy", icon: "trophy", value: formatNumber(stats.wins) }),
           createStatCard({ label: "Losses", icon: "close", icon: "close", value: formatNumber(stats.losses) }),

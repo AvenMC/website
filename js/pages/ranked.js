@@ -1,11 +1,11 @@
-import { el, replaceContent } from "../dom.js?v=82";
-import { initReveal } from "../effects.js?v=82";
-import { renderLayout } from "../layout.js?v=82";
-import { createButton, createRankedBadge, createSectionHeading } from "../components.js?v=82";
-import { createRankStatsSection } from "./rankStats.js?v=82";
-import { allRankTiers, rankedBoardSize } from "../ranks.js?v=82";
-import { gamemodes } from "../mockData.js?v=82";
-import { modeThemes } from "../modeTheme.js?v=82";
+import { el, replaceContent } from "../dom.js?v=83";
+import { initReveal } from "../effects.js?v=83";
+import { renderLayout } from "../layout.js?v=83";
+import { createButton, createRankedBadge, createSectionHeading } from "../components.js?v=83";
+import { createRankStatsSection } from "./rankStats.js?v=83";
+import { allRankTiers, rankedBoardSize } from "../ranks.js?v=83";
+import { gamemodes } from "../mockData.js?v=83";
+import { modeThemes } from "../modeTheme.js?v=83";
 
 const app = renderLayout("ranked");
 const reveal = (delay = 0) => ({ "data-reveal": "", style: `--revealDelay:${delay}ms` });
@@ -26,7 +26,7 @@ function createLadderRow(tier, index) {
   );
 }
 
-const ladderSection = el(
+const introSection = el(
   "section",
   { className: "section compact" },
   el(
@@ -42,6 +42,16 @@ const ladderSection = el(
       { className: "flowSteps", ...reveal(40) },
       flowSteps.map((step, index) => el("li", {}, el("span", { className: "flowNumber" }, index + 1), step)),
     ),
+  ),
+);
+
+const ladderSection = el(
+  "section",
+  { className: "section compact" },
+  el(
+    "div",
+    { className: "container" },
+    el("div", reveal(), createSectionHeading({ eyebrow: "Divisions", title: "From Bronze I to Mythic" })),
     el("ol", { className: "rankLadder" }, allRankTiers.map((tier, index) => createLadderRow(tier, index)).reverse()),
   ),
 );
@@ -128,5 +138,5 @@ const leaderboardLink = el(
   ),
 );
 
-replaceContent(app, ladderSection, scoreSection, createRankStatsSection(), gainSection, leaderboardLink);
+replaceContent(app, introSection, scoreSection, createRankStatsSection(), ladderSection, gainSection, leaderboardLink);
 initReveal();
