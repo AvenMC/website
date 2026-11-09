@@ -12,6 +12,7 @@ import {
 } from "../components.js?v=72";
 import { createCopyField, openJoinModal } from "../join.js?v=72";
 import { gamemodes, regions, getTopPlayersPreview } from "../mockData.js?v=72";
+import { initSectionTone } from "../effects.js?v=72";
 import { formatNumber } from "../format.js?v=72";
 import { modeIconStyle, modeThemes } from "../modeTheme.js?v=72";
 import { allRankTiers, rankedBoardSize } from "../ranks.js?v=72";
@@ -232,24 +233,13 @@ getTopPlayersPreview().then((entries) => {
   );
 });
 
-// One shared accent keeps the alternating section backgrounds consistent.
-const sectionAccents = {
-  gamemodes: "var(--colorPrimary)",
-  features: "var(--colorPrimary)",
-  ranking: "var(--colorCrystal)",
-  regions: "var(--colorPrimary)",
-  community: "var(--colorCrystal)",
-};
-[gamemodesSection, featuresSection, rankingSection, regionsSection, communitySection].forEach((section, index) => {
-  section.classList.add("tintedSection");
-  // Every second section gets a filled tone so the page alternates between dark and lighter bands.
-  section.classList.toggle("isTinted", index % 2 === 1);
-  section.dataset.side = index % 2 === 0 ? "right" : "left";
-});
-[
-  [gamemodesSection, sectionAccents.gamemodes],
-  [featuresSection, sectionAccents.features],
-  [rankingSection, sectionAccents.ranking],
-  [regionsSection, sectionAccents.regions],
-  [communitySection, sectionAccents.community],
-].forEach(([section, accent]) => section.style.setProperty("--sectionAccent", accent));
+// The backdrop color follows whichever section is crossing the middle of the screen.
+const sectionTones = [
+  [hero, "var(--colorPrimary)"],
+  [gamemodesSection, "var(--colorNodebuff)"],
+  [featuresSection, "var(--colorMace)"],
+  [rankingSection, "var(--colorCrystal)"],
+  [regionsSection, "var(--colorSuccess)"],
+  [communitySection, "var(--colorPrimary)"],
+];
+initSectionTone(sectionTones);

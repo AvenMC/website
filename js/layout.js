@@ -59,6 +59,7 @@ function createChrome() {
 
 // Builds the header and footer once. Later calls (client-side navigation) only update the active link.
 export function renderLayout(activePage) {
+  document.querySelector(".pageBackdrop")?.remove();
   chrome ??= createChrome();
   chrome.links.querySelectorAll(".navLink").forEach((link) => {
     const isActive = link.dataset.page === activePage;

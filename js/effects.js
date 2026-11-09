@@ -66,3 +66,24 @@ export function initTilt() {
     card.style.removeProperty("--tiltY");
   });
 }
+
+// Fades one fixed backdrop to each section's tone as it crosses the middle of the viewport.
+export function initSectionTone(entries) {
+  document.querySelector(".pageBackdrop")?.remove();
+  const backdrop = document.createElement("div");
+  backdrop.className = "pageBackdrop";
+  backdrop.setAttribute("aria-hidden", "true");
+  backdrop.style.setProperty("--tone", entries[0][1]);
+  document.body.prepend(backdrop);
+
+  const tones = new Map(entries);
+  const observer = new IntersectionObserver(
+    (items) => {
+      items.forEach((item) => {
+        if (item.isIntersecting) backdrop.style.setProperty("--tone", tones.get(item.target));
+      });
+    },
+    { rootMargin: "-50% 0px -50% 0px" },
+  );
+  entries.forEach(([section]) => observer.observe(section));
+}
