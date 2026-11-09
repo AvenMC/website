@@ -1,0 +1,65 @@
+/* Central design tokens. Every color, font and spacing value is defined here once. */
+@font-face {
+  font-family: "Minecraft Ten";
+  src: local("Minecraft Ten"), url("../assets/fonts/MinecraftTen.woff2") format("woff2");
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Minecraft Seven";
+  src: local("Minecraft Seven"), url("../assets/fonts/MinecraftSeven.woff2") format("woff2");
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Minecraft Five";
+  src: local("Minecraft Five"), url("../assets/fonts/MinecraftFive.woff2") format("woff2");
+  font-display: swap;
+}
+
+:root {
+  color-scheme: dark;
+
+  --colorBackground: #080f20;
+  --colorSurface: #0d1729;
+  --colorCard: #111f35;
+  --colorElevated: #172b49;
+  --colorPrimary: #28b9f5;
+  --colorSecondary: #2479c9;
+  --colorText: #ffffff;
+  --colorTextSecondary: #91a9c9;
+  --colorTextMuted: #637b9c;
+  --colorBorder: #1b2b45;
+  --colorSuccess: #39d69a;
+  --colorDanger: #f07878;
+
+  --colorPrimarySoft: color-mix(in srgb, var(--colorPrimary) 14%, transparent);
+  --colorPrimaryLine: color-mix(in srgb, var(--colorPrimary) 45%, var(--colorBorder));
+  --colorOverlay: color-mix(in srgb, var(--colorBackground) 80%, transparent);
+  --glowPrimary: 0 0 22px color-mix(in srgb, var(--colorPrimary) 35%, transparent);
+
+  --fontTen: "Minecraft Ten", "Segoe UI", system-ui, sans-serif;
+  --fontSeven: "Minecraft Seven", "Segoe UI", system-ui, sans-serif;
+  --fontFive: "Minecraft Five", "Segoe UI", system-ui, sans-serif;
+  --fontBody: "Inter", "Segoe UI", system-ui, -apple-system, sans-serif;
+
+  --space1: 4px;
+  --space2: 8px;
+  --space3: 12px;
+  --space4: 16px;
+  --space5: 24px;
+  --space6: 32px;
+  --space7: 48px;
+  --space8: 72px;
+
+  --radiusSmall: 8px;
+  --radiusMedium: 12px;
+  --radiusLarge: 16px;
+
+  --controlHeight: 44px;
+  --maxContentWidth: 1160px;
+  --pagePadding: clamp(16px, 4vw, 32px);
+  --navHeight: 68px;
+
+  --transitionFast: 160ms ease;
+}

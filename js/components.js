@@ -1,0 +1,266 @@
+import { el } from "./dom.js";
+
+export function createBrand({ showSubtitle = true } = {}) {
+  return el(
+    "a",
+    { className: "brand", href: "index.html", "aria-label": "AVENMC Practice Network" },
+    el("span", { className: "brandName" }, "AVEN", el("span", { className: "brandAccent" }, "MC")),
+    showSubtitle && el("span", { className: "brandSubtitle" }, "PRACTICE NETWORK"),
+  );
+}
+
+export function createButton({ label, variant = "primary", href, onClick, type = "button", icon }) {
+  const className = `button button${capitalize(variant)}`;
+  const children = [icon, label];
+  if (href) return el("a", { className, href }, children);
+  return el("button", { className, type, onClick }, children);
+}
+
+export function createCard({ title, text, highlighted = false, href, children = [] }) {
+  const tag = href ? "a" : "div";
+  return el(
+    tag,
+    { className: `card${highlighted ? " isHighlighted" : ""}`, href },
+    title && el("h3", { className: "cardTitle" }, title),
+    text && el("p", { className: "cardText" }, text),
+    children,
+  );
+}
+
+export function createSectionHeading({ eyebrow, title, description, level = "h2" }) {
+  return el(
+    "div",
+    { className: "sectionHeading" },
+    eyebrow && el("span", { className: "sectionEyebrow" }, eyebrow),
+    el(level, {}, title),
+    description && el("p", { className: "sectionDescription" }, description),
+  );
+}
+
+export function createBadge({ label, variant = "default" }) {
+  const variantClass = variant === "default" ? "" : ` badge${capitalize(variant)}`;
+  return el("span", { className: `badge${variantClass}` }, label);
+}
+
+export function createAvatar({ username, skinUrl = null, size = "default" }) {
+  const className = `avatar${size === "large" ? " avatarLarge" : ""}`;
+  const content = skinUrl
+    ? el("img", { src: skinUrl, alt: "", loading: "lazy" })
+    : username.charAt(0).toUpperCase();
+  return el("span", { className, "aria-hidden": "true" }, content);
+}
+
+export function createRankBadge(rank) {
+  return createBadge({ label: rank, variant: rank === "Member" ? "default" : "primary" });
+}
+
+export function createStatCard({ label, value, hint, accent = false }) {
+  return el(
+    "div",
+    { className: "statCard" },
+    el("span", { className: "statLabel" }, label),
+    el("span", { className: `statValue${accent ? " isAccent" : ""}` }, value),
+    hint && el("span", { className: "statHint" }, hint),
+  );
+}
+
+export function createTable({ columns, rows, caption, rowClass }) {
+  const head = el(
+    "tr",
+    {},
+    columns.map((column) => el("th", { scope: "col", className: cellClass(column) }, column.label)),
+  );
+  const body = rows.map((row, index) =>
+    el(
+      "tr",
+      { className: rowClass ? rowClass(row, index) : null },
+      columns.map((column) =>
+        el(
+          "td",
+          { className: cellClass(column) },
+          column.render ? column.render(row, index) : row[column.key],
+        ),
+      ),
+    ),
+  );
+
+  return el(
+    "div",
+    { className: "tableWrap" },
+    el(
+      "table",
+      { className: "table" },
+      caption && el("caption", { className: "srOnly" }, caption),
+      el("thead", {}, head),
+      el("tbody", {}, body),
+    ),
+  );
+}
+
+export function createTabs({ tabs, active, label, onChange }) {
+  const container = el("div", { className: "tabs", role: "tablist", "aria-label": label });
+
+  function select(id) {
+    container.querySelectorAll(".tab").forEach((tab) => {
+      tab.setAttribute("aria-selected", String(tab.dataset.id === id));
+      tab.tabIndex = tab.dataset.id === id ? 0 : -1;
+    });
+    onChange(id);
+  }
+
+  tabs.forEach((tab) => {
+    container.append(
+      el(
+        "button",
+        {
+          className: "tab",
+          type: "button",
+          role: "tab",
+          "data-id": tab.id,
+          "aria-selected": String(tab.id === active),
+          tabindex: tab.id === active ? "0" : "-1",
+          onClick: () => select(tab.id),
+        },
+        tab.label,
+      ),
+    );
+  });
+
+  container.addEventListener("keydown", (event) => {
+    if (event.key !== "ArrowRight" && event.key !== "ArrowLeft") return;
+    const items = [...container.querySelectorAll(".tab")];
+    const current = items.findIndex((item) => item.getAttribute("aria-selected") === "true");
+    const step = event.key === "ArrowRight" ? 1 : -1;
+    const next = items[(current + step + items.length) % items.length];
+    next.focus();
+    select(next.dataset.id);
+  });
+
+  return container;
+}
+
+export function createDropdown({ label, options, value, onChange }) {
+  let current = value;
+  const labelFor = (optionValue) => options.find((option) => option.value === optionValue)?.label;
+  const text = el("span", {}, labelFor(current));
+  const trigger = el(
+    "button",
+    {
+      className: "button buttonSecondary dropdownTrigger",
+      type: "button",
+      "aria-haspopup": "listbox",
+      "aria-expanded": "false",
+      "aria-label": label,
+    },
+    text,
+    el("span", { "aria-hidden": "true" }, "▾"),
+  );
+  const menu = el("ul", { className: "dropdownMenu", role: "listbox", hidden: true, "aria-label": label });
+  const container = el("div", { className: "dropdown" }, trigger, menu);
+
+  function setOpen(open) {
+    menu.hidden = !open;
+    trigger.setAttribute("aria-expanded", String(open));
+  }
+
+  function renderOptions() {
+    menu.replaceChildren(
+      ...options.map((option) =>
+        el(
+          "li",
+          {
+            className: "dropdownOption",
+            role: "option",
+            tabindex: "0",
+            "aria-selected": String(option.value === current),
+            onClick: () => choose(option.value),
+            onKeydown: (event) => {
+              if (event.key === "Enter" || event.key === " ") {
+                event.preventDefault();
+                choose(option.value);
+              }
+            },
+          },
+          option.label,
+          option.hint && el("span", { className: "mutedText" }, option.hint),
+        ),
+      ),
+    );
+  }
+
+  function choose(optionValue) {
+    current = optionValue;
+    text.textContent = labelFor(current);
+    renderOptions();
+    setOpen(false);
+    trigger.focus();
+    onChange(current);
+  }
+
+  trigger.addEventListener("click", () => setOpen(menu.hidden));
+  document.addEventListener("click", (event) => {
+    if (!container.contains(event.target)) setOpen(false);
+  });
+  container.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") {
+      setOpen(false);
+      trigger.focus();
+    }
+  });
+
+  renderOptions();
+  return container;
+}
+
+export function createSkeleton({ height = 16, width = "100%" } = {}) {
+  return el("span", {
+    className: "skeleton",
+    style: `--skeletonHeight:${height}px;width:${width}`,
+    "aria-hidden": "true",
+  });
+}
+
+export function createEmptyState({ title, text }) {
+  return el("div", { className: "emptyState" }, el("h3", {}, title), text && el("p", {}, text));
+}
+
+export function createModal({ title, body, actions }) {
+  const dialog = el("dialog", { className: "modal", "aria-label": title });
+  const close = () => dialog.close();
+
+  dialog.append(
+    el(
+      "div",
+      { className: "modalHeader" },
+      el("h3", {}, title),
+      el("button", { className: "button buttonSecondary buttonIcon", type: "button", "aria-label": "Close", onClick: close }, "✕"),
+    ),
+    el("div", { className: "modalBody" }, body),
+    el("div", { className: "modalActions" }, actions?.(close) ?? createButton({ label: "Close", variant: "secondary", onClick: close })),
+  );
+
+  dialog.addEventListener("click", (event) => {
+    if (event.target === dialog) close();
+  });
+  document.body.append(dialog);
+
+  return { open: () => dialog.showModal(), close };
+}
+
+export function withTooltip(node, text) {
+  node.setAttribute("data-tooltip", text);
+  if (!node.hasAttribute("tabindex")) node.setAttribute("tabindex", "0");
+  return node;
+}
+
+function capitalize(value) {
+  return value.charAt(0).toUpperCase() + value.slice(1);
+}
+
+function cellClass({ align, hideOnMobile }) {
+  const classes = [];
+  if (align === "right") classes.push("alignRight");
+  if (align === "center") classes.push("alignCenter");
+  if (hideOnMobile) classes.push("hideMobile");
+  return classes.join(" ") || null;
+}

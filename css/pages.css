@@ -1,0 +1,277 @@
+/* Hero */
+.hero {
+  padding-block: var(--space8) var(--space7);
+  background: radial-gradient(
+    ellipse 60% 70% at 85% 0%,
+    color-mix(in srgb, var(--colorSecondary) 22%, transparent),
+    transparent 70%
+  );
+}
+
+.heroGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+  gap: var(--space7);
+  align-items: center;
+}
+
+.heroContent {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space5);
+}
+
+.heroContent h1 .accent {
+  color: var(--colorPrimary);
+}
+
+.heroDescription {
+  max-width: 480px;
+  color: var(--colorTextSecondary);
+  font-size: 18px;
+}
+
+.buttonRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space3);
+}
+
+.previewCard {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space4);
+}
+
+.previewHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space3);
+}
+
+.previewRow {
+  display: flex;
+  align-items: center;
+  gap: var(--space3);
+  padding: var(--space3);
+  border-radius: var(--radiusMedium);
+  background: var(--colorSurface);
+}
+
+.previewRow .previewValue {
+  margin-left: auto;
+  color: var(--colorPrimary);
+  font-family: var(--fontSeven);
+}
+
+/* Gamemode and region cards */
+.gamemodeCard {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space3);
+}
+
+.gamemodeIcon {
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  border: 1px solid var(--colorPrimaryLine);
+  border-radius: var(--radiusMedium);
+  background: var(--colorPrimarySoft);
+  color: var(--colorPrimary);
+  font-family: var(--fontTen);
+  font-size: 18px;
+}
+
+.regionCard {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space4);
+}
+
+.regionCode {
+  color: var(--colorPrimary);
+  font-family: var(--fontTen);
+  font-size: 24px;
+}
+
+.regionLocation {
+  color: var(--colorTextSecondary);
+  font-size: 14px;
+}
+
+.regionCard.isMuted {
+  opacity: 0.7;
+}
+
+/* Page header */
+.pageHeader {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--space4);
+  padding-block: var(--space7) var(--space5);
+}
+
+.pageHeader .sectionHeading {
+  margin-bottom: 0;
+}
+
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space3);
+  margin-bottom: var(--space5);
+}
+
+.toolbar .spacer {
+  flex: 1;
+}
+
+/* Profile */
+.profileHeader {
+  display: flex;
+  align-items: center;
+  gap: var(--space5);
+}
+
+.profileInfo {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: var(--space3);
+  min-width: 0;
+}
+
+.profileName {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space3);
+}
+
+.profileName h1 {
+  font-size: clamp(28px, 4vw, 40px);
+  overflow-wrap: anywhere;
+}
+
+.levelRow {
+  display: flex;
+  align-items: center;
+  gap: var(--space4);
+  max-width: 460px;
+}
+
+.levelRow .progress {
+  flex: 1;
+}
+
+.levelLabel {
+  font-family: var(--fontSeven);
+  font-size: 14px;
+  white-space: nowrap;
+}
+
+.profileSearch {
+  display: flex;
+  gap: var(--space2);
+}
+
+.panelTitle {
+  margin-bottom: var(--space4);
+}
+
+/* Leaderboard */
+.positionBadge {
+  display: inline-grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: var(--radiusSmall);
+  background: var(--colorSurface);
+  color: var(--colorTextSecondary);
+  font-family: var(--fontSeven);
+  font-size: 14px;
+}
+
+.rowTop1 .positionBadge {
+  border: 1px solid var(--colorPrimary);
+  background: var(--colorPrimarySoft);
+  color: var(--colorPrimary);
+  box-shadow: var(--glowPrimary);
+}
+
+.rowTop2 .positionBadge {
+  border: 1px solid var(--colorPrimaryLine);
+  color: var(--colorText);
+}
+
+.rowTop3 .positionBadge {
+  border: 1px solid var(--colorBorder);
+  color: var(--colorText);
+}
+
+.rowTop1 td:first-child {
+  box-shadow: inset 3px 0 0 var(--colorPrimary);
+}
+
+.rowTop2 td:first-child {
+  box-shadow: inset 3px 0 0 var(--colorSecondary);
+}
+
+.rowTop3 td:first-child {
+  box-shadow: inset 3px 0 0 var(--colorBorder);
+}
+
+.metricValue {
+  color: var(--colorPrimary);
+  font-family: var(--fontSeven);
+}
+
+.placeholderNote {
+  margin-block: var(--space4) var(--space7);
+  color: var(--colorTextMuted);
+  font-size: 13px;
+}
+
+@media (max-width: 860px) {
+  .heroGrid {
+    grid-template-columns: 1fr;
+    gap: var(--space6);
+  }
+
+  .hero {
+    padding-block: var(--space7) var(--space6);
+  }
+}
+
+@media (max-width: 640px) {
+  .profileHeader {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .heroDescription {
+    font-size: 16px;
+  }
+
+  .buttonRow .button {
+    flex: 1;
+  }
+
+  .pageHeader {
+    padding-top: var(--space6);
+  }
+
+  .toolbar .dropdown,
+  .toolbar .dropdownTrigger {
+    width: 100%;
+  }
+}

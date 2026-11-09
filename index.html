@@ -1,65 +1,20 @@
 <!doctype html>
-<html lang="de">
+<html lang="en">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta
-      name="description"
-      content="AvenMC ist ein Minecraft-Netzwerk für gemeinsame Abenteuer."
-    >
-    <meta name="theme-color" content="#101710">
-    <title>AvenMC — Minecraft Network</title>
-    <link rel="stylesheet" href="styles.css">
+    <meta name="description" content="AVENMC is a competitive Minecraft Bedrock Practice Network.">
+    <meta name="theme-color" content="#080f20">
+    <title>Minecraft Bedrock PvP Practice Network | AVENMC</title>
+    <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="css/tokens.css">
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/pages.css">
   </head>
   <body>
-    <header class="site-header">
-      <a class="brand" href="#" aria-label="AvenMC Startseite">
-        <span class="brand-mark" aria-hidden="true">A</span>
-        <span>AvenMC</span>
-      </a>
-      <a class="header-link" href="#about">Über AvenMC <span aria-hidden="true">↗</span></a>
-    </header>
-
-    <main>
-      <section class="hero" aria-labelledby="hero-title">
-        <div class="hero-glow" aria-hidden="true"></div>
-        <p class="eyebrow"><span class="status-dot"></span> Willkommen bei AvenMC</p>
-        <h1 id="hero-title">Dein nächstes<br><span>Abenteuer</span> beginnt hier.</h1>
-        <p class="hero-copy">
-          Ein Minecraft-Netzwerk. Viele Möglichkeiten. Und eine Community,
-          die gemeinsam mehr erlebt.
-        </p>
-        <a class="button" href="#about">Entdecke AvenMC <span aria-hidden="true">↓</span></a>
-        <div class="hero-decoration" aria-hidden="true">
-          <span class="pixel pixel-one"></span>
-          <span class="pixel pixel-two"></span>
-          <span class="pixel pixel-three"></span>
-          <span class="pixel pixel-four"></span>
-          <span class="pixel pixel-five"></span>
-        </div>
-        <span class="scroll-note" aria-hidden="true">SCROLLEN, UM MEHR ZU ENTDECKEN</span>
-      </section>
-
-      <section class="about" id="about" aria-labelledby="about-title">
-        <div class="section-label">01 / ÜBER UNS</div>
-        <div>
-          <h2 id="about-title">Zusammen ist<br>das Spiel besser.</h2>
-          <p>
-            AvenMC ist ein Minecraft-Netzwerk, das Menschen zum Spielen,
-            Bauen und Entdecken zusammenbringt. Hier entsteht der nächste
-            Teil deiner Geschichte — Block für Block.
-          </p>
-        </div>
-      </section>
-    </main>
-
-    <footer class="site-footer">
-      <a class="brand footer-brand" href="#" aria-label="AvenMC Startseite">
-        <span class="brand-mark" aria-hidden="true">A</span>
-        <span>AvenMC</span>
-      </a>
-      <span>Mit Herz gebaut. Block für Block.</span>
-      <span>© AvenMC</span>
-    </footer>
+    <main id="app"></main>
+    <noscript><p class="container">JavaScript is required to view this page.</p></noscript>
+    <script type="module" src="js/pages/home.js"></script>
   </body>
 </html>
