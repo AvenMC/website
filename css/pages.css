@@ -729,7 +729,7 @@
   content: "→";
   position: absolute;
   left: calc(var(--space3) / -2 - 7px);
-  top: calc(var(--space4) + 46px);
+  top: calc(var(--space4) + 35px);
   display: grid;
   width: 14px;
   height: 14px;
