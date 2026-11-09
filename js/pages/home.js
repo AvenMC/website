@@ -1,5 +1,5 @@
-import { el, replaceContent } from "../dom.js?v=75";
-import { renderLayout } from "../layout.js?v=75";
+import { el, replaceContent } from "../dom.js?v=76";
+import { renderLayout } from "../layout.js?v=76";
 import {
   createAvatar,
   createBadge,
@@ -9,14 +9,14 @@ import {
   createSectionHeading,
   createSkeletonRows,
   createSocialLinks,
-} from "../components.js?v=75";
-import { createCopyField, openJoinModal } from "../join.js?v=75";
-import { gamemodes, regions, getTopPlayersPreview } from "../mockData.js?v=75";
-import { initSectionTone } from "../effects.js?v=75";
-import { formatNumber } from "../format.js?v=75";
-import { modeIconStyle, modeThemes } from "../modeTheme.js?v=75";
-import { allRankTiers, rankedBoardSize } from "../ranks.js?v=75";
-import { siteConfig } from "../siteConfig.js?v=75";
+} from "../components.js?v=76";
+import { createCopyField, openJoinModal } from "../join.js?v=76";
+import { gamemodes, regions, getTopPlayersPreview } from "../mockData.js?v=76";
+import { initSectionTone } from "../effects.js?v=76";
+import { formatNumber } from "../format.js?v=76";
+import { modeIconStyle, modeThemes } from "../modeTheme.js?v=76";
+import { allRankTiers, rankedBoardSize } from "../ranks.js?v=76";
+import { siteConfig } from "../siteConfig.js?v=76";
 
 const app = renderLayout("home");
 const reveal = (delay = 0) => ({ "data-reveal": "", style: `--revealDelay:${delay}ms` });
@@ -36,13 +36,27 @@ const hero = el(
       "div",
       { className: "heroContent" },
       el("h1", {}, "Duel. ", el("span", { className: "accent" }, "Rank."), " Rise."),
-      el("p", { className: "heroDescription" }, "Reach Mythic and climb the top 50. One account, one ranking, every region."),
+      el("p", { className: "heroEyebrow" }, "Minecraft Bedrock PvP Practice Network"),
+      el(
+        "div",
+        { className: "heroStats" },
+        [
+          [String(allRankTiers.length), "Ranks to climb"],
+          [String(rankedBoardSize), "Leaderboard spots"],
+        ].map(([value, label]) => el("div", { className: "heroStat" }, el("span", { className: "heroStatValue" }, value), el("span", { className: "heroStatLabel" }, label))),
+      ),
       el(
         "ul",
         { className: "platformRow", "aria-label": "Play on mobile, console and PC" },
         platforms.map(([icon, label]) =>
           el("li", {}, el("span", { className: "platformIcon", style: `--iconUrl:url(../assets/icons/${icon}.svg)`, "aria-hidden": "true" }), label),
         ),
+      ),
+      el(
+        "p",
+        { className: "onlineStatus" },
+        el("span", { className: "onlineDot", "aria-hidden": "true" }),
+        `${formatNumber(onlinePlayers)} players across ${regions.filter((region) => region.status === "At release").length} regions`,
       ),
       el(
         "div",
@@ -55,12 +69,6 @@ const hero = el(
         { className: "buttonRow" },
         createButton({ label: "How to join", onClick: openJoinModal }),
         createButton({ label: "Join Discord", variant: "secondary", href: siteConfig.discordUrl }),
-      ),
-      el(
-        "p",
-        { className: "onlineStatus" },
-        el("span", { className: "onlineDot", "aria-hidden": "true" }),
-        `${formatNumber(onlinePlayers)} players across ${regions.filter((region) => region.status === "At release").length} regions`,
       ),
     ),
     el(
