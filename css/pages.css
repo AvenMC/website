@@ -644,7 +644,7 @@
 
 .rankStep:hover .rankStepBar { transform: translateY(-4px); }
 
-.rankStep.isUnreal .rankStepBar { box-shadow: 0 0 24px color-mix(in srgb, var(--tierColor) 40%, transparent); }
+.rankStep.isZenith .rankStepBar { box-shadow: 0 0 24px color-mix(in srgb, var(--tierColor) 40%, transparent); }
 
 .rankStepDivisions {
   color: var(--tierColor);
@@ -739,7 +739,7 @@
   animation: rankFill 1s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
-.rankRow.isUnreal .rankRowFill { box-shadow: 0 0 12px var(--tierColor); }
+.rankRow.isZenith .rankRowFill { box-shadow: 0 0 12px var(--tierColor); }
 
 .rankRowCount { text-align: right; font-weight: 600; font-variant-numeric: tabular-nums; }
 
@@ -812,7 +812,7 @@
   justify-content: space-between;
   gap: var(--space5);
   padding: var(--space6, 32px);
-  background: linear-gradient(120deg, var(--colorCard), color-mix(in srgb, var(--colorUnreal, #c56bff) 10%, var(--colorBackground)));
+  background: linear-gradient(120deg, var(--colorCard), color-mix(in srgb, var(--colorZenith, #c56bff) 10%, var(--colorBackground)));
 }
 
 .rankedTeaserText { display: flex; flex-direction: column; align-items: flex-start; gap: var(--space3); }

@@ -1,6 +1,6 @@
-import { countries } from "./countries.js?v=41";
-import { el } from "./dom.js?v=41";
-import { siteConfig } from "./siteConfig.js?v=41";
+import { countries } from "./countries.js?v=42";
+import { el } from "./dom.js?v=42";
+import { siteConfig } from "./siteConfig.js?v=42";
 
 export function createBrand({ showSubtitle = true } = {}) {
   return el(
@@ -86,7 +86,7 @@ export function createRankBadge(rank) {
 }
 
 export function createRankedBadge(tier) {
-  return el("span", { className: `tierBadge${tier.key === "unreal" ? " isUnreal" : ""}`, style: `--tierColor:${tier.color}` }, tier.name);
+  return el("span", { className: `tierBadge${tier.key === "zenith" ? " isZenith" : ""}`, style: `--tierColor:${tier.color}` }, tier.name);
 }
 
 export function createStatCard({ label, value, hint, accent = false }) {
