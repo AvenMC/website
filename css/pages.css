@@ -798,3 +798,25 @@
   .scoreArrow { transform: rotate(90deg); justify-self: center; }
   .gainList li { grid-template-columns: 1fr; gap: var(--space2); }
 }
+
+.seasonHistory { display: flex; flex-direction: column; gap: var(--space3); }
+
+.seasonList { display: flex; flex-wrap: wrap; gap: var(--space3); }
+
+.seasonEntry { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space3); padding: var(--space3) var(--space4); border: 1px solid var(--colorBorder); border-radius: var(--radiusMedium); background: var(--colorCard); }
+
+.seasonName { font-weight: 600; }
+
+@media (max-width: 640px) {
+  .profileSearch { flex: 1 1 100%; width: auto; min-width: 0; }
+  .profileSearch .input { flex: 1; min-width: 0; }
+  .profileHeader { gap: var(--space4); padding: var(--space4); }
+  .profileInfo { width: 100%; }
+  .profileName h1 { font-size: 22px; }
+  .levelRow { flex-wrap: wrap; }
+  .countryPicker { flex-wrap: wrap; gap: var(--space2); }
+  .countryPicker .dropdown, .countryPicker .dropdownTrigger { width: 100%; }
+  .tabs { display: flex; width: 100%; }
+  .tabs .tab { flex: 1 0 auto; padding-inline: var(--space3); }
+  .seasonEntry { width: 100%; }
+}

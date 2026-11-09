@@ -1,5 +1,5 @@
-import { el, replaceContent } from "../dom.js?v=66";
-import { renderLayout } from "../layout.js?v=66";
+import { el, replaceContent } from "../dom.js?v=69";
+import { renderLayout } from "../layout.js?v=69";
 import {
   createAvatar,
   createBadge,
@@ -15,11 +15,11 @@ import {
   createRankedBadge,
   createTabs,
   withTooltip,
-} from "../components.js?v=66";
-import { countries } from "../countries.js?v=66";
-import { getTierScore } from "../ranks.js?v=66";
-import { gamemodes, getPlayer, getPlayerTier, setCountry } from "../mockData.js?v=66";
-import { formatDateTime, formatNumber, formatPercent, formatPlaytime, formatRatio } from "../format.js?v=66";
+} from "../components.js?v=69";
+import { countries } from "../countries.js?v=69";
+import { getTierScore } from "../ranks.js?v=69";
+import { createSeasonHistory, gamemodes, getPlayer, getPlayerTier, setCountry } from "../mockData.js?v=69";
+import { formatDateTime, formatNumber, formatPercent, formatPlaytime, formatRatio } from "../format.js?v=69";
 
 const app = renderLayout("profile");
 const modeName = (id) => gamemodes.find((mode) => mode.id === id).name;
@@ -275,6 +275,27 @@ function renderMatches(player, container) {
   );
 }
 
+function renderSeasonHistory(player) {
+  return el(
+    "div",
+    { className: "seasonHistory" },
+    el("h2", {}, "Season history"),
+    el(
+      "div",
+      { className: "seasonList" },
+      createSeasonHistory(player).map((entry) =>
+        el(
+          "div",
+          { className: "seasonEntry" },
+          el("span", { className: "seasonName" }, entry.season),
+          createRankedBadge(entry.tier),
+          el("span", { className: "mutedText" }, `Highest · ${entry.modeName}`),
+        ),
+      ),
+    ),
+  );
+}
+
 function renderProfile(player) {
   const tabPanel = el("div", { role: "tabpanel" });
   const matchesPanel = el("div");
@@ -314,6 +335,7 @@ function renderProfile(player) {
     renderHeader(player),
     tabs,
     tabPanel,
+    renderSeasonHistory(player),
     el("div", { className: "toolbar" }, el("h2", {}, "Recent matches"), el("span", { className: "spacer" }), filter),
     matchesPanel,
   );

@@ -4,8 +4,8 @@
  * the pages only depend on the shapes returned here.
  */
 
-import { countries } from "./countries.js?v=66";
-import { getRankedTier, mythicMinRating, rankedBoardSize } from "./ranks.js?v=66";
+import { countries } from "./countries.js?v=69";
+import { getRankedTier, mythicMinRating, rankedBoardSize } from "./ranks.js?v=69";
 
 export const gamemodes = [
   { id: "nodebuff", name: "Nodebuff", short: "NB", description: "Classic potion PvP." },
@@ -102,6 +102,22 @@ function createRecentMatches(random, index) {
       playedAt: new Date(baseTime - matchIndex * 47 * 60000).toISOString(),
       eloChange: matchIndex % 4 === 3 ? null : (won ? 1 : -1) * (10 + ((index * 7 + matchIndex * 5) % 17)),
     };
+  });
+}
+
+// Peak division per finished season, derived from the player's best rating.
+const pastSeasons = [
+  { name: "Season 2", factor: 0.93 },
+  { name: "Season 1", factor: 0.8 },
+];
+
+export function createSeasonHistory(player) {
+  const best = Math.max(...Object.values(player.ratings));
+  return pastSeasons.map((season, index) => {
+    const modeIds = Object.keys(player.ratings);
+    const modeId = modeIds[(modeIds.length + index) % modeIds.length];
+    const rating = Math.round(best * season.factor - index * 37);
+    return { season: season.name, modeName: gamemodes.find((mode) => mode.id === modeId).name, tier: getRankedTier(rating) };
   });
 }
 
@@ -235,7 +251,7 @@ export async function getTopPlayersPreview() {
   return entries.slice(0, 3);
 }
 
-export const currentSeason = { name: "Season 1", isPlaceholder: true };
+export const currentSeason = { name: "Season 3", isPlaceholder: true };
 
 const distributionTotals = { nodebuff: { total: 4180, mythic: 62 }, crystalpvp: { total: 2760, mythic: 41 }, spearmace: { total: 1490, mythic: 22 } };
 // Share of non-Mythic players per tier, modelled on Fortnite: the lowest tier is the most crowded, with small bumps at each new division.
