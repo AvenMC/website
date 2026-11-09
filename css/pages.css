@@ -415,11 +415,12 @@
   background: var(--accent);
   mask: var(--iconUrl) center / contain no-repeat;
   -webkit-mask: var(--iconUrl) center / contain no-repeat;
+  transform: scaleX(var(--iconFlip, 1));
   transition: transform 300ms ease;
 }
 
 .gamemodeCard:hover .modeIcon {
-  transform: translateY(-4px) scale(1.08);
+  transform: translateY(-4px) scale(1.08) scaleX(var(--iconFlip, 1));
 }
 
 .hasTilt {
