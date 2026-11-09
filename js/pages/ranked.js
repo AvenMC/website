@@ -1,17 +1,15 @@
-import { el, replaceContent } from "../dom.js?v=85";
-import { initReveal } from "../effects.js?v=85";
-import { renderLayout } from "../layout.js?v=85";
-import { createButton, createRankedBadge, createSectionHeading } from "../components.js?v=85";
-import { createRankStatsSection } from "./rankStats.js?v=85";
-import { allRankTiers, rankTiers, rankedBoardSize } from "../ranks.js?v=85";
-import { gamemodes } from "../mockData.js?v=85";
-import { modeThemes } from "../modeTheme.js?v=85";
+import { el, replaceContent } from "../dom.js?v=86";
+import { initReveal } from "../effects.js?v=86";
+import { renderLayout } from "../layout.js?v=86";
+import { createButton, createRankedBadge, createSectionHeading } from "../components.js?v=86";
+import { createRankStatsSection } from "./rankStats.js?v=86";
+import { allRankTiers, rankTiers, rankedBoardSize } from "../ranks.js?v=86";
+import { gamemodes } from "../mockData.js?v=86";
+import { modeThemes } from "../modeTheme.js?v=86";
 
 const app = renderLayout("ranked");
 const reveal = (delay = 0) => ({ "data-reveal": "", style: `--revealDelay:${delay}ms` });
 const format = (value) => value.toLocaleString("en-US");
-
-const flowSteps = ["Win duels", "Fill your percent bar", "Rank up", "Reach Mythic"];
 
 function createDivisionCard(division) {
   const isMythic = division.key === "mythic";
@@ -36,22 +34,7 @@ const introSection = el(
       reveal(),
       createSectionHeading({ eyebrow: "Ranked", title: "Ten ranks. One goal.", description: "Win duels, fill your bar and climb from Bronze I to Mythic.", level: "h1" }),
     ),
-    el(
-      "ol",
-      { className: "flowSteps", ...reveal(40) },
-      flowSteps.map((step, index) => el("li", {}, el("span", { className: "flowNumber" }, index + 1), step)),
-    ),
-  ),
-);
-
-const ladderSection = el(
-  "section",
-  { className: "section compact" },
-  el(
-    "div",
-    { className: "container" },
-    el("div", reveal(), createSectionHeading({ eyebrow: "Divisions", title: "From Bronze I to Mythic" })),
-    el("ol", { className: "divisionGrid" }, rankTiers.map((division) => createDivisionCard(division))),
+    el("div", { className: "divisionPanel", ...reveal(40) }, el("ol", { className: "divisionGrid" }, rankTiers.map((division) => createDivisionCard(division)))),
   ),
 );
 
@@ -137,5 +120,5 @@ const leaderboardLink = el(
   ),
 );
 
-replaceContent(app, introSection, scoreSection, createRankStatsSection(), ladderSection, gainSection, leaderboardLink);
+replaceContent(app, introSection, scoreSection, createRankStatsSection(), gainSection, leaderboardLink);
 initReveal();
