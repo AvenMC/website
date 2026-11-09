@@ -724,7 +724,19 @@
 
 .divisionCard + .divisionCard { position: relative; }
 
-.divisionCard + .divisionCard::before { content: "→"; position: absolute; left: calc(var(--space3) / -2 - 6px); top: 50%; transform: translateY(-50%); color: var(--colorTextMuted); }
+.divisionCard + .divisionCard::before {
+  content: "→";
+  position: absolute;
+  left: calc(var(--space3) / -2 - 7px);
+  top: calc(var(--space4) + 46px);
+  display: grid;
+  width: 14px;
+  height: 14px;
+  place-items: center;
+  transform: translateY(-50%);
+  color: var(--colorTextMuted);
+  line-height: 1;
+}
 
 .divisionGrid { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--space3); margin: 0; padding: 0; list-style: none; }
 
