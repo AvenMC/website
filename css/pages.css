@@ -11,8 +11,11 @@
   position: absolute;
   inset: -6%;
   z-index: -2;
-  background: url("../assets/heroBackground.webp") center / cover no-repeat;
-  animation: waveDrift 24s ease-in-out infinite alternate;
+  background:
+    radial-gradient(40% 35% at 20% 30%, color-mix(in srgb, var(--colorPrimary) 16%, transparent), transparent 70%),
+    radial-gradient(35% 30% at 80% 45%, color-mix(in srgb, var(--colorSecondary) 22%, transparent), transparent 70%),
+    radial-gradient(50% 40% at 50% 100%, color-mix(in srgb, var(--colorPrimary) 14%, transparent), transparent 70%);
+  animation: waterDrift 16s ease-in-out infinite alternate;
 }
 
 .hero::after {
@@ -20,16 +23,65 @@
   position: absolute;
   inset: 0;
   z-index: -1;
-  background: linear-gradient(180deg, color-mix(in srgb, var(--colorBackground) 45%, transparent), var(--colorBackground));
+  background: linear-gradient(180deg, color-mix(in srgb, var(--colorBackground) 10%, transparent), var(--colorBackground) 95%);
 }
 
-@keyframes waveDrift {
+@keyframes waterDrift {
   from {
-    transform: scale(1) translate3d(0, 0, 0);
+    transform: translate3d(-3%, 0, 0) scale(1);
   }
 
   to {
-    transform: scale(1.08) translate3d(-2%, -1.5%, 0);
+    transform: translate3d(3%, -2%, 0) scale(1.06);
+  }
+}
+
+.heroWaves {
+  position: absolute;
+  inset: auto 0 0;
+  z-index: 0;
+  height: 170px;
+  pointer-events: none;
+}
+
+.heroWave {
+  position: absolute;
+  inset: auto 0 0;
+  height: 100%;
+  background-repeat: repeat-x;
+  background-size: 1200px 100%;
+  animation: waveSlide var(--waveDuration) linear infinite;
+  opacity: var(--waveOpacity);
+}
+
+.heroWave.waveBack {
+  --waveDuration: 28s;
+  --waveOpacity: 0.22;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 180' preserveAspectRatio='none'%3E%3Cpath d='M0 80 C150 30 300 130 450 80 S750 30 900 80 S1200 110 1200 80 V180 H0Z' fill='%232479c9'/%3E%3C/svg%3E");
+}
+
+.heroWave.waveMid {
+  --waveDuration: 20s;
+  --waveOpacity: 0.32;
+  height: 75%;
+  animation-direction: reverse;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 135' preserveAspectRatio='none'%3E%3Cpath d='M0 60 C200 100 400 20 600 60 S1000 100 1200 60 V135 H0Z' fill='%2328b9f5'/%3E%3C/svg%3E");
+}
+
+.heroWave.waveFront {
+  --waveDuration: 14s;
+  --waveOpacity: 1;
+  height: 45%;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 80' preserveAspectRatio='none'%3E%3Cpath d='M0 40 C150 10 300 70 450 40 S750 10 900 40 S1050 60 1200 40 V80 H0Z' fill='%23080f20'/%3E%3C/svg%3E");
+}
+
+@keyframes waveSlide {
+  from {
+    background-position-x: 0;
+  }
+
+  to {
+    background-position-x: 1200px;
   }
 }
 
@@ -606,4 +658,9 @@
   .featureItem:first-child {
     border-top: 0;
   }
+}
+
+.hero .container {
+  position: relative;
+  z-index: 1;
 }

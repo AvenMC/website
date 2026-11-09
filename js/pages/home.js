@@ -32,6 +32,13 @@ const hero = el(
   bubbles,
   el(
     "div",
+    { className: "heroWaves", "aria-hidden": "true" },
+    el("span", { className: "heroWave waveBack" }),
+    el("span", { className: "heroWave waveMid" }),
+    el("span", { className: "heroWave waveFront" }),
+  ),
+  el(
+    "div",
     { className: "container heroGrid" },
     el(
       "div",
