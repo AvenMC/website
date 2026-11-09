@@ -1,9 +1,36 @@
 /* Hero */
 .hero {
+  position: relative;
+  overflow: hidden;
   padding-block: var(--space8) var(--space7);
-  background:
-    linear-gradient(180deg, color-mix(in srgb, var(--colorBackground) 55%, transparent), var(--colorBackground)),
-    url("../assets/heroBackground.webp") center / cover no-repeat;
+  isolation: isolate;
+}
+
+.hero::before {
+  content: "";
+  position: absolute;
+  inset: -6%;
+  z-index: -2;
+  background: url("../assets/heroBackground.webp") center / cover no-repeat;
+  animation: waveDrift 24s ease-in-out infinite alternate;
+}
+
+.hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(180deg, color-mix(in srgb, var(--colorBackground) 45%, transparent), var(--colorBackground));
+}
+
+@keyframes waveDrift {
+  from {
+    transform: scale(1) translate3d(0, 0, 0);
+  }
+
+  to {
+    transform: scale(1.08) translate3d(-2%, -1.5%, 0);
+  }
 }
 
 .heroGrid {
@@ -11,6 +38,168 @@
   grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
   gap: var(--space7);
   align-items: center;
+}
+
+.heroContent h1 {
+  font-size: clamp(40px, 7vw, 76px);
+}
+
+.ipPanel {
+  display: grid;
+  grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
+  gap: var(--space3);
+  width: 100%;
+  max-width: 520px;
+}
+
+.heroVisual {
+  position: relative;
+  display: grid;
+  place-items: center;
+  min-height: 360px;
+}
+
+.heroLogo {
+  position: relative;
+  width: min(100%, 340px);
+  height: auto;
+  filter: drop-shadow(0 20px 40px color-mix(in srgb, var(--colorPrimary) 30%, transparent));
+  animation: floatY 6s ease-in-out infinite;
+}
+
+.heroRing {
+  position: absolute;
+  width: min(80%, 380px);
+  aspect-ratio: 1;
+  border: 1px solid var(--colorPrimaryLine);
+  border-radius: 50%;
+  animation: ringPulse 4s ease-out infinite;
+}
+
+.heroRing.ringTwo {
+  animation-delay: 2s;
+}
+
+@keyframes floatY {
+  50% {
+    transform: translateY(-14px);
+  }
+}
+
+@keyframes ringPulse {
+  from {
+    opacity: 0.8;
+    transform: scale(0.7);
+  }
+
+  to {
+    opacity: 0;
+    transform: scale(1.25);
+  }
+}
+
+.heroDroplet {
+  position: absolute;
+  z-index: -1;
+  width: 10px;
+  height: 14px;
+  border-radius: 60% 0 60% 60%;
+  background: var(--colorPrimary);
+  opacity: 0.5;
+  transform: rotate(-45deg);
+  animation: floatY 7s ease-in-out infinite;
+}
+
+.dropletOne {
+  top: 22%;
+  left: 46%;
+}
+
+.dropletTwo {
+  top: 68%;
+  left: 8%;
+  animation-delay: -2s;
+}
+
+.dropletThree {
+  top: 30%;
+  right: 6%;
+  animation-delay: -4s;
+}
+
+/* Ticker */
+.ticker {
+  overflow: hidden;
+  border-block: 1px solid var(--colorBorder);
+  background: var(--colorSurface);
+}
+
+.tickerTrack {
+  display: flex;
+  width: max-content;
+  animation: tickerMove 28s linear infinite;
+}
+
+.tickerGroup {
+  display: flex;
+}
+
+.tickerItem {
+  padding: var(--space3) var(--space6);
+  color: var(--colorTextSecondary);
+  font-family: var(--fontSeven);
+  font-size: 14px;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.tickerItem::after {
+  content: "◆";
+  margin-left: var(--space6);
+  color: var(--colorPrimary);
+}
+
+@keyframes tickerMove {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+/* Steps, split and community */
+.stepCard {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space2);
+}
+
+.stepNumber {
+  color: var(--colorPrimary);
+  font-family: var(--fontTen);
+  font-size: 36px;
+  line-height: 1;
+}
+
+.sectionAction {
+  margin-top: var(--space5);
+}
+
+.splitSection {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr);
+  gap: var(--space7);
+  align-items: center;
+}
+
+.communityCard {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+  gap: var(--space6);
+  align-items: center;
+  padding: var(--space7);
+}
+
+.communityIntro .sectionHeading {
+  margin-bottom: var(--space5);
 }
 
 .heroContent {
@@ -103,7 +292,7 @@
   font-size: 14px;
 }
 
-.regionCard.isMuted {
+.regionCard.isMuted.isVisible {
   opacity: 0.7;
 }
 
@@ -240,9 +429,28 @@
 }
 
 @media (max-width: 860px) {
-  .heroGrid {
+  .heroGrid,
+  .splitSection,
+  .communityCard {
     grid-template-columns: 1fr;
     gap: var(--space6);
+  }
+
+  .heroVisual {
+    min-height: 240px;
+    order: -1;
+  }
+
+  .heroLogo {
+    width: 200px;
+  }
+
+  .heroRing {
+    width: 240px;
+  }
+
+  .communityCard {
+    padding: var(--space5);
   }
 
   .hero {
@@ -258,6 +466,10 @@
 
   .heroDescription {
     font-size: 16px;
+  }
+
+  .ipPanel {
+    grid-template-columns: 1fr;
   }
 
   .buttonRow .button {

@@ -46,7 +46,12 @@
 
 .button.navToggle {
   display: none;
+}
+
+.button.navJoin {
+  height: 38px;
   margin-left: auto;
+  padding-inline: var(--space4);
 }
 
 /* Brand */
@@ -138,6 +143,30 @@
 
 .buttonDanger:hover {
   background: color-mix(in srgb, var(--colorDanger) 14%, transparent);
+}
+
+.button.buttonSmall {
+  height: 34px;
+  padding-inline: var(--space3);
+  font-size: 12px;
+}
+
+.buttonPrimary {
+  overflow: hidden;
+  position: relative;
+}
+
+.buttonPrimary::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(105deg, transparent 35%, rgb(255 255 255 / 22%) 50%, transparent 65%);
+  transform: translateX(-120%);
+}
+
+.buttonPrimary:hover::after {
+  transform: translateX(120%);
+  transition: transform 600ms ease;
 }
 
 .buttonIcon {
@@ -652,5 +681,150 @@ a.card:hover,
 
   .dropdownTrigger {
     min-width: 160px;
+  }
+}
+
+/* Copy field */
+.copyField {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space4);
+  padding: var(--space2) var(--space2) var(--space2) var(--space4);
+  border: 1px solid var(--colorPrimaryLine);
+  border-radius: var(--radiusMedium);
+  background: var(--colorOverlay);
+}
+
+.copyFieldText {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.copyFieldText strong {
+  font-family: var(--fontSeven);
+  font-size: 18px;
+  font-weight: 400;
+}
+
+.joinSteps {
+  margin: 0;
+  padding-left: var(--space5);
+}
+
+/* Toast */
+.toast {
+  position: fixed;
+  bottom: var(--space5);
+  left: 50%;
+  z-index: 100;
+  max-width: calc(100vw - 32px);
+  padding: var(--space3) var(--space5);
+  border: 1px solid var(--colorPrimaryLine);
+  border-radius: var(--radiusMedium);
+  background: var(--colorElevated);
+  font-size: 14px;
+  opacity: 0;
+  pointer-events: none;
+  transform: translate(-50%, 16px);
+  transition: opacity var(--transitionFast), transform var(--transitionFast);
+}
+
+.toast.isVisible {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+
+/* Social links */
+.socialIcon {
+  display: inline-block;
+  flex: none;
+  width: 22px;
+  height: 22px;
+  background: currentColor;
+  mask: var(--iconUrl) center / contain no-repeat;
+  -webkit-mask: var(--iconUrl) center / contain no-repeat;
+}
+
+.socialLink {
+  display: flex;
+  align-items: center;
+  gap: var(--space4);
+  padding: var(--space4) var(--space5);
+  border: 1px solid var(--colorBorder);
+  border-radius: var(--radiusMedium);
+  background: var(--colorCard);
+  color: var(--colorPrimary);
+  transition: border-color var(--transitionFast), transform var(--transitionFast);
+}
+
+.socialLink:hover {
+  transform: translateY(-2px);
+  border-color: var(--colorPrimary);
+}
+
+.socialLink .socialIcon {
+  width: 28px;
+  height: 28px;
+}
+
+.socialText {
+  display: flex;
+  flex-direction: column;
+  color: var(--colorTextSecondary);
+  font-size: 14px;
+}
+
+.socialText strong {
+  color: var(--colorText);
+  font-family: var(--fontSeven);
+  font-weight: 400;
+}
+
+.socialLink.isCompact {
+  padding: var(--space2);
+  border-radius: var(--radiusSmall);
+}
+
+.footerSocials {
+  display: flex;
+  gap: var(--space2);
+}
+
+/* Scroll reveal and spotlight */
+[data-reveal] {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 600ms ease var(--revealDelay, 0ms), transform 600ms ease var(--revealDelay, 0ms);
+}
+
+[data-reveal].isVisible {
+  opacity: 1;
+  transform: none;
+}
+
+.hasSpotlight::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(240px circle at var(--mouseX, 50%) var(--mouseY, 50%), var(--colorPrimarySoft), transparent 70%);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--transitionFast);
+}
+
+.hasSpotlight:hover::before {
+  opacity: 1;
+}
+
+.hasSpotlight:hover {
+  border-color: var(--colorPrimaryLine);
+}
+
+@media (max-width: 760px) {
+  .brandSubtitle {
+    display: none;
   }
 }

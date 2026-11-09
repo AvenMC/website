@@ -1,0 +1,49 @@
+const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+export function initReveal() {
+  const targets = document.querySelectorAll("[data-reveal]");
+  if (prefersReducedMotion || !("IntersectionObserver" in window)) {
+    targets.forEach((node) => node.classList.add("isVisible"));
+    return;
+  }
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        entry.target.classList.add("isVisible");
+        observer.unobserve(entry.target);
+      });
+    },
+    { threshold: 0.15 },
+  );
+  targets.forEach((node) => observer.observe(node));
+}
+
+export function initSpotlight() {
+  if (prefersReducedMotion) return;
+  document.addEventListener("pointermove", (event) => {
+    const card = event.target.closest?.(".hasSpotlight");
+    if (!card) return;
+    const rect = card.getBoundingClientRect();
+    card.style.setProperty("--mouseX", `${event.clientX - rect.left}px`);
+    card.style.setProperty("--mouseY", `${event.clientY - rect.top}px`);
+  });
+}
+
+export async function copyText(text) {
+  try {
+    await navigator.clipboard.writeText(text);
+    return true;
+  } catch {
+    const input = document.createElement("textarea");
+    input.value = text;
+    input.style.position = "fixed";
+    input.style.opacity = "0";
+    document.body.append(input);
+    input.select();
+    const copied = document.execCommand("copy");
+    input.remove();
+    return copied;
+  }
+}

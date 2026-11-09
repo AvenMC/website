@@ -1,4 +1,5 @@
 import { el } from "./dom.js";
+import { siteConfig } from "./siteConfig.js";
 
 export function createBrand({ showSubtitle = true } = {}) {
   return el(
@@ -256,6 +257,41 @@ export function withTooltip(node, text) {
   node.setAttribute("data-tooltip", text);
   if (!node.hasAttribute("tabindex")) node.setAttribute("tabindex", "0");
   return node;
+}
+
+let toastTimer;
+
+export function showToast(message) {
+  let toast = document.getElementById("toast");
+  if (!toast) {
+    toast = el("div", { id: "toast", className: "toast", role: "status", "aria-live": "polite" });
+    document.body.append(toast);
+  }
+  toast.textContent = message;
+  toast.classList.add("isVisible");
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => toast.classList.remove("isVisible"), 2400);
+}
+
+export function createSocialIcon(id) {
+  return el("span", { className: "socialIcon", style: `--iconUrl:url(../assets/icons/${id}.svg)`, "aria-hidden": "true" });
+}
+
+export function createSocialLinks({ compact = false } = {}) {
+  return siteConfig.socials.map((social) =>
+    el(
+      "a",
+      {
+        className: compact ? "socialLink isCompact" : "socialLink hasSpotlight",
+        href: social.url,
+        target: "_blank",
+        rel: "noopener noreferrer",
+        "aria-label": `${social.label} ${social.handle}`,
+      },
+      createSocialIcon(social.id),
+      !compact && el("span", { className: "socialText" }, el("strong", {}, social.label), el("span", {}, social.handle)),
+    ),
+  );
 }
 
 function capitalize(value) {

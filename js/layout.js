@@ -1,5 +1,7 @@
 import { el } from "./dom.js";
-import { createBrand, createButton } from "./components.js";
+import { createBrand, createButton, createSocialLinks } from "./components.js";
+import { openJoinModal } from "./join.js";
+import { initReveal, initSpotlight } from "./effects.js";
 
 const navItems = [
   { id: "home", label: "Home", href: "index.html" },
@@ -37,10 +39,13 @@ export function renderLayout(activePage) {
   toggle.setAttribute("aria-controls", "navLinks");
   toggle.setAttribute("aria-expanded", "false");
 
+  const joinButton = createButton({ label: "Join", onClick: openJoinModal });
+  joinButton.classList.add("navJoin");
+
   const header = el(
     "header",
     { className: "navbar" },
-    el("div", { className: "container navbarInner" }, createBrand(), links, toggle),
+    el("div", { className: "container navbarInner" }, createBrand(), links, joinButton, toggle),
   );
 
   const footer = el(
@@ -51,12 +56,14 @@ export function renderLayout(activePage) {
       { className: "container footerInner" },
       createBrand({ showSubtitle: false }),
       el("span", {}, `© ${new Date().getFullYear()} AVENMC`),
-      el("div", { className: "footerLinks" }, el("a", { href: "https://avenmc.net" }, "avenmc.net")),
+      el("div", { className: "footerSocials" }, createSocialLinks({ compact: true })),
     ),
   );
 
   const main = document.getElementById("app");
   document.body.prepend(header);
   document.body.append(footer);
+  initSpotlight();
+  requestAnimationFrame(initReveal);
   return main;
 }
