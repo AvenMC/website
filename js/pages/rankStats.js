@@ -1,8 +1,8 @@
-import { el, replaceContent } from "../dom.js?v=90";
-import { createBadge, createSectionHeading, createSkeleton, createTabs } from "../components.js?v=90";
-import { currentSeason, gamemodes, getRankDistribution } from "../mockData.js?v=90";
-import { rankTiers } from "../ranks.js?v=90";
-import { formatNumber } from "../format.js?v=90";
+import { el, replaceContent } from "../dom.js?v=93";
+import { createBadge, createSectionHeading, createSkeleton, createTabs } from "../components.js?v=93";
+import { currentSeason, gamemodes, getRankDistribution } from "../mockData.js?v=93";
+import { rankTiers } from "../ranks.js?v=93";
+import { formatNumber } from "../format.js?v=93";
 
 function animateNumber(node, target, duration = 900) {
   const start = performance.now();
@@ -14,9 +14,9 @@ function animateNumber(node, target, duration = 900) {
   requestAnimationFrame(tick);
 }
 
-function renderDistribution(data) {
+function renderDistribution(data, embedded = false) {
   const totalNode = el("strong", {}, "0");
-  const tiers = rankTiers.slice().reverse();
+  const tiers = embedded ? rankTiers.slice() : rankTiers.slice().reverse();
   const percent = (tier) => ((data.counts[tier.key] / data.total) * 100).toFixed(1);
 
   // Tiny divisions still get a visible sliver.
@@ -26,7 +26,8 @@ function renderDistribution(data) {
       "data-tier": tier.key,
       style: `--tierColor:${tier.color};--share:${Math.max((data.counts[tier.key] / data.total) * 100, 1.2)}`,
       "aria-label": `${tier.label}: ${formatNumber(data.counts[tier.key])} players`,
-    }),
+      title: `${tier.label}: ${formatNumber(data.counts[tier.key])} players (${percent(tier)}%)`,
+    }, embedded && data.counts[tier.key] / data.total > 0.06 ? `${Math.round(percent(tier))}%` : ""),
   );
   const legend = tiers.map((tier) =>
     el(
@@ -56,15 +57,15 @@ function renderDistribution(data) {
     { className: "rankStats" },
     el("p", { className: "rankStatsTotal" }, totalNode, el("span", {}, "ranked players")),
     bar,
-    el("ul", { className: "rankLegend" }, legend),
+    embedded ? null : el("ul", { className: "rankLegend" }, legend),
   );
 }
 
-export function createRankStatsSection({ pageHeading = false } = {}) {
+export function createRankStatsSection({ pageHeading = false, embedded = false } = {}) {
   const body = el("div", {}, createSkeleton({ height: 220 }));
   const load = (modeId) => {
     replaceContent(body, createSkeleton({ height: 220 }));
-    getRankDistribution(modeId).then((data) => replaceContent(body, renderDistribution(data)));
+    getRankDistribution(modeId).then((data) => replaceContent(body, renderDistribution(data, embedded)));
   };
   const tabs = createTabs({
     label: "Gamemode",
@@ -73,6 +74,10 @@ export function createRankStatsSection({ pageHeading = false } = {}) {
     onChange: load,
   });
   load(gamemodes[0].id);
+
+  if (embedded) {
+    return el("div", { className: "rankStatsEmbedded" }, el("div", { className: "toolbar" }, el("h3", {}, "Players per division"), el("span", { className: "spacer" }), tabs), body);
+  }
 
   return el(
     "section",

@@ -1,11 +1,11 @@
-import { el, replaceContent } from "../dom.js?v=90";
-import { initReveal } from "../effects.js?v=90";
-import { renderLayout } from "../layout.js?v=90";
-import { createButton, createRankedBadge, createSectionHeading } from "../components.js?v=90";
-import { createRankStatsSection } from "./rankStats.js?v=90";
-import { allRankTiers, rankTiers, rankedBoardSize } from "../ranks.js?v=90";
-import { gamemodes } from "../mockData.js?v=90";
-import { modeThemes } from "../modeTheme.js?v=90";
+import { el, replaceContent } from "../dom.js?v=93";
+import { initReveal } from "../effects.js?v=93";
+import { renderLayout } from "../layout.js?v=93";
+import { createButton, createRankedBadge, createSectionHeading } from "../components.js?v=93";
+import { createRankStatsSection } from "./rankStats.js?v=93";
+import { allRankTiers, rankTiers, rankedBoardSize } from "../ranks.js?v=93";
+import { gamemodes } from "../mockData.js?v=93";
+import { modeThemes } from "../modeTheme.js?v=93";
 
 const app = renderLayout("ranked");
 const reveal = (delay = 0) => ({ "data-reveal": "", style: `--revealDelay:${delay}ms` });
@@ -48,7 +48,7 @@ const introSection = el(
       reveal(),
       createSectionHeading({ eyebrow: "Ranked", title: "From Bronze I to Mythic", description: "Win duels, fill your bar and climb.", level: "h1" }),
     ),
-    el("div", { className: "divisionPanel", ...reveal(40) }, el("ol", { className: "divisionGrid" }, rankTiers.map((division, index) => createDivisionCard(division, index)))),
+    el("div", { className: "divisionPanel", ...reveal(40) }, el("ol", { className: "divisionGrid" }, rankTiers.map((division, index) => createDivisionCard(division, index))), createRankStatsSection({ embedded: true })),
   ),
 );
 
@@ -100,5 +100,5 @@ const leaderboardLink = el(
   ),
 );
 
-replaceContent(app, introSection, createRankStatsSection(), gainSection, leaderboardLink);
+replaceContent(app, introSection, gainSection, leaderboardLink);
 initReveal();
