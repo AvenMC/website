@@ -20,9 +20,6 @@ const reveal = (delay = 0) => ({ "data-reveal": "", style: `--revealDelay:${dela
 const hero = el(
   "section",
   { className: "hero" },
-  el("span", { className: "heroDroplet dropletOne", "aria-hidden": "true" }),
-  el("span", { className: "heroDroplet dropletTwo", "aria-hidden": "true" }),
-  el("span", { className: "heroDroplet dropletThree", "aria-hidden": "true" }),
   el(
     "div",
     { className: "container heroGrid" },
@@ -48,8 +45,7 @@ const hero = el(
     el(
       "div",
       { className: "heroVisual", "aria-hidden": "true" },
-      el("span", { className: "heroRing" }),
-      el("span", { className: "heroRing ringTwo" }),
+      el("span", { className: "heroGlow" }),
       el("img", { className: "heroLogo", src: "assets/logoMark.png", alt: "", width: "384", height: "384" }),
     ),
   ),

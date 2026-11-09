@@ -63,68 +63,22 @@
   position: relative;
   width: min(100%, 340px);
   height: auto;
-  filter: drop-shadow(0 20px 40px color-mix(in srgb, var(--colorPrimary) 30%, transparent));
-  animation: floatY 6s ease-in-out infinite;
+  animation: logoIn 900ms ease-out both;
 }
 
-.heroRing {
+.heroGlow {
   position: absolute;
-  width: min(80%, 380px);
+  width: min(90%, 420px);
   aspect-ratio: 1;
-  border: 1px solid var(--colorPrimaryLine);
   border-radius: 50%;
-  animation: ringPulse 4s ease-out infinite;
+  background: radial-gradient(circle, color-mix(in srgb, var(--colorPrimary) 24%, transparent), transparent 68%);
 }
 
-.heroRing.ringTwo {
-  animation-delay: 2s;
-}
-
-@keyframes floatY {
-  50% {
-    transform: translateY(-14px);
-  }
-}
-
-@keyframes ringPulse {
+@keyframes logoIn {
   from {
-    opacity: 0.8;
-    transform: scale(0.7);
-  }
-
-  to {
     opacity: 0;
-    transform: scale(1.25);
+    transform: scale(0.94);
   }
-}
-
-.heroDroplet {
-  position: absolute;
-  z-index: -1;
-  width: 10px;
-  height: 14px;
-  border-radius: 60% 0 60% 60%;
-  background: var(--colorPrimary);
-  opacity: 0.5;
-  transform: rotate(-45deg);
-  animation: floatY 7s ease-in-out infinite;
-}
-
-.dropletOne {
-  top: 22%;
-  left: 46%;
-}
-
-.dropletTwo {
-  top: 68%;
-  left: 8%;
-  animation-delay: -2s;
-}
-
-.dropletThree {
-  top: 30%;
-  right: 6%;
-  animation-delay: -4s;
 }
 
 /* Ticker */
@@ -446,8 +400,8 @@
     width: 200px;
   }
 
-  .heroRing {
-    width: 240px;
+  .heroGlow {
+    width: 260px;
   }
 
   .communityCard {
