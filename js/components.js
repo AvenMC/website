@@ -1,6 +1,6 @@
-import { countries } from "./countries.js?v=36";
-import { el } from "./dom.js?v=36";
-import { siteConfig } from "./siteConfig.js?v=36";
+import { countries } from "./countries.js?v=37";
+import { el } from "./dom.js?v=37";
+import { siteConfig } from "./siteConfig.js?v=37";
 
 export function createBrand({ showSubtitle = true } = {}) {
   return el(
@@ -247,12 +247,28 @@ export function createDropdown({ label, options, value, onChange }) {
   return container;
 }
 
-export function createSkeleton({ height = 16, width = "100%" } = {}) {
+export function createSkeleton({ height = 16, width = "100%", circle = false, delay = 0 } = {}) {
   return el("span", {
-    className: "skeleton",
-    style: `--skeletonHeight:${height}px;width:${width}`,
+    className: `skeleton${circle ? " isCircle" : ""}`,
+    style: `--skeletonHeight:${height}px;--skeletonDelay:${delay}ms;width:${circle ? `${height}px` : width}`,
     "aria-hidden": "true",
   });
+}
+
+// Mimics a leaderboard/player row: rank, avatar, name and metric.
+export function createSkeletonRow({ delay = 0 } = {}) {
+  return el(
+    "div",
+    { className: "skeletonRow", "aria-hidden": "true" },
+    createSkeleton({ height: 14, width: "22px", delay }),
+    createSkeleton({ height: 36, circle: true, delay }),
+    el("div", { className: "skeletonLines" }, createSkeleton({ height: 12, width: "40%", delay }), createSkeleton({ height: 10, width: "22%", delay })),
+    createSkeleton({ height: 14, width: "56px", delay }),
+  );
+}
+
+export function createSkeletonRows(count, { delayStep = 70 } = {}) {
+  return el("div", { className: "skeletonList", role: "status", "aria-label": "Loading" }, Array.from({ length: count }, (_, i) => createSkeletonRow({ delay: i * delayStep })));
 }
 
 export function createEmptyState({ title, text }) {

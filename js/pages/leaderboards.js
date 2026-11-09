@@ -1,5 +1,5 @@
-import { el, replaceContent } from "../dom.js?v=36";
-import { renderLayout } from "../layout.js?v=36";
+import { el, replaceContent } from "../dom.js?v=37";
+import { renderLayout } from "../layout.js?v=37";
 import {
   createAvatar,
   createBadge,
@@ -9,15 +9,15 @@ import {
   createRankedBadge,
   createRankBadge,
   createSectionHeading,
-  createSkeleton,
+  createSkeletonRows,
   createTable,
   createTabs,
-} from "../components.js?v=36";
-import { gamemodes, getLeaderboard, leaderboardCategories } from "../mockData.js?v=36";
-import { modeIconStyle, modeThemes } from "../modeTheme.js?v=36";
-import { createRankDistributionCard } from "./rankStats.js?v=36";
-import { getRankedTier, rankTiers, unrealCap } from "../ranks.js?v=36";
-import { formatNumber } from "../format.js?v=36";
+} from "../components.js?v=37";
+import { gamemodes, getLeaderboard, leaderboardCategories } from "../mockData.js?v=37";
+import { modeIconStyle, modeThemes } from "../modeTheme.js?v=37";
+import { createRankDistributionCard } from "./rankStats.js?v=37";
+import { getRankedTier, rankTiers, unrealCap } from "../ranks.js?v=37";
+import { formatNumber } from "../format.js?v=37";
 
 const app = renderLayout("leaderboards");
 
@@ -183,7 +183,7 @@ function renderBoard() {
 async function loadLeaderboard() {
   const requestId = ++state.requestId;
   state.page = 1;
-  replaceContent(results, el("div", { className: "stack" }, Array.from({ length: 6 }, () => createSkeleton({ height: 52 }))));
+  replaceContent(results, createSkeletonRows(8));
 
   const entries = await getLeaderboard(state.category);
   if (requestId !== state.requestId) return;
