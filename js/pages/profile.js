@@ -1,5 +1,5 @@
-import { el, replaceContent } from "../dom.js?v=59";
-import { renderLayout } from "../layout.js?v=59";
+import { el, replaceContent } from "../dom.js?v=62";
+import { renderLayout } from "../layout.js?v=62";
 import {
   createAvatar,
   createBadge,
@@ -15,11 +15,11 @@ import {
   createRankedBadge,
   createTabs,
   withTooltip,
-} from "../components.js?v=59";
-import { countries } from "../countries.js?v=59";
-import { getTierScore } from "../ranks.js?v=59";
-import { gamemodes, getPlayer, getPlayerTier, setCountry } from "../mockData.js?v=59";
-import { formatDateTime, formatNumber, formatPercent, formatPlaytime, formatRatio } from "../format.js?v=59";
+} from "../components.js?v=62";
+import { countries } from "../countries.js?v=62";
+import { getTierScore } from "../ranks.js?v=62";
+import { gamemodes, getPlayer, getPlayerTier, setCountry } from "../mockData.js?v=62";
+import { formatDateTime, formatNumber, formatPercent, formatPlaytime, formatRatio } from "../format.js?v=62";
 
 const app = renderLayout("profile");
 const modeName = (id) => gamemodes.find((mode) => mode.id === id).name;

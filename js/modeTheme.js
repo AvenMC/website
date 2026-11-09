@@ -6,4 +6,4 @@ export const modeThemes = {
   spearmace: { accent: "var(--colorMace)", panel: "var(--colorMacePanel)", edge: "var(--colorMaceEdge)" },
 };
 
-export const modeIconStyle = (modeId) => `--iconUrl:url(../assets/modes/${modeIcons[modeId]}.png)`;
+export const modeIconStyle = (modeId) => `--iconUrl:url(../assets/modes/${modeIcons[modeId]}.svg)`;

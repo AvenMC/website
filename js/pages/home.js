@@ -1,23 +1,26 @@
-import { el, replaceContent } from "../dom.js?v=59";
-import { renderLayout } from "../layout.js?v=59";
+import { el, replaceContent } from "../dom.js?v=62";
+import { renderLayout } from "../layout.js?v=62";
 import {
   createAvatar,
   createBadge,
   createButton,
   createPlayerName,
+  createRankedBadge,
   createSectionHeading,
   createSkeletonRows,
   createSocialLinks,
-} from "../components.js?v=59";
-import { createCopyField, openJoinModal } from "../join.js?v=59";
-import { gamemodes, regions, getTopPlayersPreview } from "../mockData.js?v=59";
-import { formatNumber } from "../format.js?v=59";
-import { modeIcons, modeThemes } from "../modeTheme.js?v=59";
-import { rankTiers, rankedBoardSize } from "../ranks.js?v=59";
-import { siteConfig } from "../siteConfig.js?v=59";
+} from "../components.js?v=62";
+import { createCopyField, openJoinModal } from "../join.js?v=62";
+import { gamemodes, regions, getTopPlayersPreview } from "../mockData.js?v=62";
+import { formatNumber } from "../format.js?v=62";
+import { modeIconStyle, modeThemes } from "../modeTheme.js?v=62";
+import { allRankTiers, rankedBoardSize } from "../ranks.js?v=62";
+import { siteConfig } from "../siteConfig.js?v=62";
 
 const app = renderLayout("home");
 const reveal = (delay = 0) => ({ "data-reveal": "", style: `--revealDelay:${delay}ms` });
+
+const platforms = [["phone", "Mobile"], ["gamepad", "Console"], ["monitor", "PC"]];
 
 const hero = el(
   "section",
@@ -28,9 +31,15 @@ const hero = el(
     el(
       "div",
       { className: "heroContent" },
-      createBadge({ label: "Bedrock Practice Network", variant: "primary" }),
       el("h1", {}, "Duel. ", el("span", { className: "accent" }, "Rank."), " Rise."),
       el("p", { className: "heroDescription" }, "Reach Mythic and climb the top 50. One account, one ranking, every region."),
+      el(
+        "ul",
+        { className: "platformRow", "aria-label": "Play on mobile, console and PC" },
+        platforms.map(([icon, label]) =>
+          el("li", {}, el("span", { className: "platformIcon", style: `--iconUrl:url(../assets/icons/${icon}.svg)`, "aria-hidden": "true" }), label),
+        ),
+      ),
       el(
         "div",
         { className: "ipPanel" },
@@ -43,24 +52,13 @@ const hero = el(
         createButton({ label: "How to join", onClick: openJoinModal }),
         createButton({ label: "Join Discord", variant: "secondary", href: siteConfig.discordUrl }),
       ),
-      el("div", { className: "heroSocials" }, createSocialLinks({ compact: true })),
     ),
     el(
       "div",
       { className: "heroVisual", "aria-hidden": "true" },
-      el("span", { className: "heroGlow" }),
       el("img", { className: "heroLogo", src: "assets/logoMark.png", alt: "", width: "384", height: "384" }),
     ),
   ),
-);
-
-const tickerItems = ["Seasonal Divisions", "EU & NA Servers", "Unique Ranked Gamemode"];
-const tickerGroup = () =>
-  el("div", { className: "tickerGroup" }, Array.from({ length: 3 }, () => tickerItems).flat().map((item) => el("span", { className: "tickerItem" }, item)));
-const ticker = el(
-  "div",
-  { className: "ticker", "aria-hidden": "true" },
-  el("div", { className: "tickerTrack" }, tickerGroup(), tickerGroup()),
 );
 
 const regionIcons = { eu: "europe", na: "northAmerica", as: "asia" };
@@ -80,7 +78,7 @@ const gamemodesSection = el(
         el(
           "div",
           { className: "card hasSpotlight hasTilt gamemodeCard", ...reveal(index * 90), style: `--accent:${modeThemes[mode.id].accent};--panel:${modeThemes[mode.id].panel};--edge:${modeThemes[mode.id].edge};--revealDelay:${index * 90}ms` },
-          el("span", { className: "modeIcon", style: `--iconUrl:url(../assets/modes/${modeIcons[mode.id]}.png)`, "aria-hidden": "true" }),
+          el("span", { className: "modeIcon", style: modeIconStyle(mode.id), "aria-hidden": "true" }),
           el("h3", {}, mode.name),
           el("p", { className: "cardText" }, mode.description),
           createBadge({ label: "At release" }),
@@ -99,48 +97,21 @@ const rankedTeaser = el(
     el(
       "div",
       { className: "card rankedTeaser", ...reveal() },
+      createSectionHeading({ eyebrow: "Ranked", title: `Climb to the top ${rankedBoardSize}` }),
+      el("p", { className: "cardText" }, "Climb from Bronze to Mythic and fight for a spot on the leaderboard. A new season only drops you back a few tiers, no full reset."),
       el(
         "div",
-        { className: "rankedTeaserText" },
-        createBadge({ label: "Ranked", variant: "primary" }),
-        el("h2", {}, `Climb to the top ${rankedBoardSize}`),
-        el("p", { className: "cardText" }, "Climb from Bronze to Mythic and fight for a spot on the leaderboard. A new season only drops you back a few tiers, no full reset."),
-        createButton({ label: "Explore Ranked", href: "ranked.html" }),
+        { className: "rankedTeaserTiers", role: "list", "aria-label": "Divisions" },
+        allRankTiers.map((tier, index) => {
+          const badge = createRankedBadge(tier);
+          badge.classList.add("isLarge");
+          badge.setAttribute("role", "listitem");
+          badge.style.setProperty("--badgeDelay", `${index * 45}ms`);
+          return badge;
+        }),
       ),
-      el(
-        "div",
-        { className: "rankedTeaserTiers", "aria-hidden": "true" },
-        rankTiers.map((tier) => el("span", { className: "rankedTeaserTier", style: `--tierColor:${tier.color}` }, tier.label)),
-      ),
+      createButton({ label: "Explore Ranked", href: "ranked.html" }),
     ),
-  ),
-);
-
-const stepsSection = el(
-  "section",
-  { className: "section compact" },
-  el(
-    "div",
-    { className: "container" },
-    el("div", reveal(), createSectionHeading({ eyebrow: "Get started", title: "Join in 30 seconds" })),
-    el(
-      "div",
-      { className: "grid cols3" },
-      [
-        ["01", "Open Bedrock", "Launch Minecraft Bedrock Edition.", "var(--colorNodebuff)", "var(--colorNodebuffPanel)", "var(--colorNodebuffEdge)"],
-        ["02", "Add server", `${siteConfig.serverIp} · port ${siteConfig.serverPort}`, "var(--colorPrimary)", "var(--colorSurface)", "var(--colorBorder)"],
-        ["03", "Start dueling", "Queue up and climb the divisions.", "var(--colorMace)", "var(--colorMacePanel)", "var(--colorMaceEdge)"],
-      ].map(([number, title, text, accent, panel, edge], index) =>
-        el(
-          "div",
-          { className: "card stepCard", ...reveal(index * 90), style: `--revealDelay:${index * 90}ms;--accent:${accent};--panel:${panel};--edge:${edge}` },
-          el("span", { className: "stepNumber" }, number),
-          el("h3", {}, title),
-          el("p", { className: "cardText" }, text),
-        ),
-      ),
-    ),
-    el("div", { className: "buttonRow sectionAction", ...reveal() }, createButton({ label: "Copy join details", onClick: openJoinModal })),
   ),
 );
 
@@ -234,23 +205,7 @@ const featuresSection = el(
   ),
 );
 
-const finalCta = el(
-  "section",
-  { className: "section" },
-  el(
-    "div",
-    { className: "container" },
-    el(
-      "div",
-      { className: "finalCta", ...reveal() },
-      el("h2", {}, "Ready to ", el("span", { className: "accent" }, "duel"), "?"),
-      el("p", { className: "heroDescription" }, `${siteConfig.serverIp} · port ${siteConfig.serverPort}`),
-      el("div", { className: "buttonRow" }, createButton({ label: "Copy join details", onClick: openJoinModal }), createButton({ label: "Join Discord", variant: "secondary", href: siteConfig.discordUrl })),
-    ),
-  ),
-);
-
-replaceContent(app, hero, ticker, gamemodesSection, featuresSection, rankedTeaser, stepsSection, rankingSection, regionsSection, communitySection, finalCta);
+replaceContent(app, hero, gamemodesSection, featuresSection, rankedTeaser, rankingSection, regionsSection, communitySection);
 
 getTopPlayersPreview().then((entries) => {
   replaceContent(
@@ -272,7 +227,6 @@ getTopPlayersPreview().then((entries) => {
 const sectionAccents = {
   gamemodes: "var(--colorNodebuff)",
   features: "var(--colorMace)",
-  steps: "var(--colorNodebuff)",
   ranking: "var(--colorCrystal)",
   regions: "var(--colorSuccess)",
   community: "var(--colorCrystal)",
@@ -280,7 +234,6 @@ const sectionAccents = {
 [
   [gamemodesSection, sectionAccents.gamemodes],
   [featuresSection, sectionAccents.features],
-  [stepsSection, sectionAccents.steps],
   [rankingSection, sectionAccents.ranking],
   [regionsSection, sectionAccents.regions],
   [communitySection, sectionAccents.community],

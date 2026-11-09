@@ -123,7 +123,6 @@
 
 .buttonPrimary:hover {
   background: color-mix(in srgb, var(--colorSecondary) 70%, var(--colorPrimary));
-  box-shadow: var(--glowPrimary);
 }
 
 .buttonSecondary {
@@ -150,24 +149,6 @@
   height: 34px;
   padding-inline: var(--space3);
   font-size: 12px;
-}
-
-.buttonPrimary {
-  overflow: hidden;
-  position: relative;
-}
-
-.buttonPrimary::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(105deg, transparent 35%, rgb(255 255 255 / 22%) 50%, transparent 65%);
-  transform: translateX(-120%);
-}
-
-.buttonPrimary:hover::after {
-  transform: translateX(120%);
-  transition: transform 600ms ease;
 }
 
 .buttonIcon {
@@ -864,7 +845,7 @@ a.card:hover,
   position: absolute;
   inset: 0;
   border-radius: inherit;
-  background: radial-gradient(240px circle at var(--mouseX, 50%) var(--mouseY, 50%), var(--colorPrimarySoft), transparent 70%);
+  background: radial-gradient(260px circle at var(--mouseX, 50%) var(--mouseY, 50%), color-mix(in srgb, var(--accent, var(--colorPrimary)) 16%, transparent), transparent 70%);
   opacity: 0;
   pointer-events: none;
   transition: opacity var(--transitionFast);
@@ -875,7 +856,7 @@ a.card:hover,
 }
 
 .hasSpotlight:hover {
-  border-color: var(--colorPrimaryLine);
+  border-color: color-mix(in srgb, var(--accent, var(--colorPrimary)) 55%, var(--colorBorder));
 }
 
 @media (max-width: 760px) {
@@ -926,8 +907,17 @@ a.card:hover,
   white-space: nowrap;
 }
 
-.tierBadge.isMythic {
-  box-shadow: 0 0 14px color-mix(in srgb, var(--tierColor) 35%, transparent);
+.tierBadge.isLarge {
+  padding: var(--space2) var(--space4);
+  font-size: 14px;
+  animation: badgeIn 400ms ease-out var(--badgeDelay, 0ms) both;
+}
+
+@keyframes badgeIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
 }
 
 .rankLadder {
@@ -964,3 +954,108 @@ a.card:hover,
 .pageButton:disabled { opacity: 0.4; cursor: default; }
 
 .paginationGap { color: var(--colorTextMuted); }
+
+/* Player names: colour and underline on hover */
+.cellPlayer .playerLabel { cursor: pointer; }
+
+.cellPlayer .playerName,
+.podiumCard .playerName {
+  background: linear-gradient(currentColor, currentColor) 0 100% / 0 1px no-repeat;
+  transition: background-size 220ms ease, color 160ms ease, transform 220ms ease;
+}
+
+.cellPlayer .playerLabel:hover .playerName,
+.podiumCard .playerLabel:hover .playerName {
+  background-size: 100% 1px;
+  color: var(--nameColor, var(--colorPrimary));
+  transform: translateX(2px);
+}
+
+.tierBadge.isCompact {
+  padding: 0 var(--space2);
+  font-size: 10px;
+  line-height: 18px;
+}
+
+/* Profile card shown on player name hover */
+.playerPreview {
+  position: fixed;
+  z-index: 80;
+  width: 300px;
+  padding: var(--space4);
+  border: 1px solid var(--colorBorder);
+  border-radius: var(--radiusMedium);
+  background: var(--colorCard);
+  box-shadow: 0 12px 32px rgb(0 0 0 / 45%);
+  opacity: 0;
+  transform: translateY(4px);
+  pointer-events: none;
+  transition: opacity 140ms ease, transform 140ms ease;
+}
+
+.playerPreview.isOpen { opacity: 1; transform: none; }
+
+.previewHead { display: flex; align-items: center; gap: var(--space3); }
+
+.previewWho { display: flex; flex: 1; flex-direction: column; min-width: 0; }
+
+.previewName { display: inline-flex; align-items: center; gap: var(--space2); }
+
+.previewSince { color: var(--colorTextMuted); font-size: 12px; }
+
+.previewStats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space2);
+  margin: var(--space4) 0;
+  padding-block: var(--space3);
+  border-block: 1px solid var(--colorBorder);
+}
+
+.previewStats div { display: flex; flex-direction: column; }
+
+.previewStats dt { color: var(--colorTextMuted); font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; }
+
+.previewStats dd { margin: 0; font-weight: 600; font-size: 14px; }
+
+.previewRanked { display: flex; flex-direction: column; gap: var(--space2); margin: 0; padding: 0; list-style: none; }
+
+.previewRanked li { display: grid; grid-template-columns: 20px 1fr auto auto; align-items: center; gap: var(--space2); font-size: 13px; }
+
+.previewRanked .modeIcon.small { width: 18px; height: 18px; }
+
+.previewMode { color: var(--colorTextSecondary); }
+
+.previewScore { color: var(--colorTextMuted); font-size: 12px; }
+
+/* Your own position, pinned to the bottom of the viewport */
+.selfRow {
+  position: sticky;
+  bottom: var(--space4);
+  z-index: 5;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space4);
+  padding: var(--space3) var(--space4);
+  border: 1px solid var(--colorPrimaryLine);
+  border-radius: var(--radiusMedium);
+  background: color-mix(in srgb, var(--colorElevated) 92%, transparent);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 8px 24px rgb(0 0 0 / 40%);
+}
+
+.selfLabel { color: var(--colorPrimary); font-size: 12px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; }
+
+.selfHint { margin-left: auto; color: var(--colorTextMuted); font-size: 13px; }
+
+.selfValue { margin-left: auto; font-family: var(--fontHeading); font-size: 18px; }
+
+.selfHint + .selfValue { margin-left: 0; }
+
+@media (max-width: 640px) {
+  .selfRow { gap: var(--space3); }
+  .selfHint { display: none; }
+}
+
+.previewName .playerName { font-size: 12px; overflow-wrap: anywhere; }

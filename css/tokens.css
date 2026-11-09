@@ -49,7 +49,6 @@
   --colorPrimarySoft: color-mix(in srgb, var(--colorPrimary) 14%, transparent);
   --colorPrimaryLine: color-mix(in srgb, var(--colorPrimary) 45%, var(--colorBorder));
   --colorOverlay: color-mix(in srgb, var(--colorBackground) 80%, transparent);
-  --glowPrimary: 0 0 22px color-mix(in srgb, var(--colorPrimary) 35%, transparent);
 
   --fontHeading: "Space Grotesk", "Inter", system-ui, sans-serif;
   --fontBody: "Inter", "Segoe UI", system-ui, -apple-system, sans-serif;

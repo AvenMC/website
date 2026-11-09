@@ -1,7 +1,8 @@
-import { el } from "./dom.js?v=59";
-import { createBrand, createButton, createSocialLinks } from "./components.js?v=59";
-import { openJoinModal } from "./join.js?v=59";
-import { initReveal, initSpotlight, initTilt } from "./effects.js?v=59";
+import { el } from "./dom.js?v=62";
+import { createBrand, createButton, createSocialLinks } from "./components.js?v=62";
+import { openJoinModal } from "./join.js?v=62";
+import { initReveal, initSpotlight, initTilt } from "./effects.js?v=62";
+import { initRouter } from "./router.js?v=62";
 
 const navItems = [
   { id: "home", label: "Home", href: "index.html" },
@@ -10,21 +11,13 @@ const navItems = [
   { id: "leaderboards", label: "Leaderboards", href: "leaderboards.html" },
 ];
 
-export function renderLayout(activePage) {
+let chrome = null;
+
+function createChrome() {
   const links = el(
     "nav",
     { className: "navLinks", id: "navLinks", "aria-label": "Main navigation" },
-    navItems.map((item) =>
-      el(
-        "a",
-        {
-          className: `navLink${item.id === activePage ? " isActive" : ""}`,
-          href: item.href,
-          "aria-current": item.id === activePage ? "page" : null,
-        },
-        item.label,
-      ),
-    ),
+    navItems.map((item) => el("a", { className: "navLink", href: item.href, "data-page": item.id }, item.label)),
   );
 
   const toggle = createButton({
@@ -52,20 +45,28 @@ export function renderLayout(activePage) {
   const footer = el(
     "footer",
     { className: "footer" },
-    el(
-      "div",
-      { className: "container footerInner" },
-      createBrand({ showSubtitle: false }),
-      el("span", {}, `© ${new Date().getFullYear()} AVENMC`),
-      el("div", { className: "footerSocials" }, createSocialLinks({ compact: true })),
-    ),
+    el("div", { className: "container footerInner" }, createBrand({ showSubtitle: false }), el("span", {}, `© ${new Date().getFullYear()} AVENMC`)),
   );
 
-  const main = document.getElementById("app");
   document.body.prepend(header);
   document.body.append(footer);
   initSpotlight();
   initTilt();
+  initRouter();
   requestAnimationFrame(initReveal);
-  return main;
+  return { links, toggle };
+}
+
+// Builds the header and footer once. Later calls (client-side navigation) only update the active link.
+export function renderLayout(activePage) {
+  chrome ??= createChrome();
+  chrome.links.querySelectorAll(".navLink").forEach((link) => {
+    const isActive = link.dataset.page === activePage;
+    link.classList.toggle("isActive", isActive);
+    if (isActive) link.setAttribute("aria-current", "page");
+    else link.removeAttribute("aria-current");
+  });
+  chrome.links.classList.remove("isOpen");
+  chrome.toggle.setAttribute("aria-expanded", "false");
+  return document.getElementById("app");
 }

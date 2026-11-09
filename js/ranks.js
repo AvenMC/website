@@ -14,6 +14,16 @@ export const rankTiers = [
   { key: "mythic", label: "Mythic", color: "#c56bff", tiers: 1 },
 ];
 
+// Every tier as a badge object (Bronze I ... Gold III, Mythic), in climbing order.
+export const allRankTiers = rankTiers.flatMap((division) =>
+  division.tiers === 1
+    ? [{ ...division, tier: null, name: division.label }]
+    : romanNumerals.map((tier) => ({ ...division, tier, name: `${division.label} ${tier}` })),
+);
+
+// In-game ranks shown next to player names. Members get no badge.
+export const memberRankColors = { VIP: "#39d69a", Elite: "#ffa147" };
+
 // Progress through the current tier in percent (0-99). Mythic has no tiers, it shows rating points instead.
 export function getTierProgress(rating) {
   const step = Math.floor(Math.max(0, rating) / tierStep);

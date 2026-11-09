@@ -4,8 +4,8 @@
  * the pages only depend on the shapes returned here.
  */
 
-import { countries } from "./countries.js?v=59";
-import { getRankedTier, mythicMinRating, rankedBoardSize } from "./ranks.js?v=59";
+import { countries } from "./countries.js?v=62";
+import { getRankedTier, mythicMinRating, rankedBoardSize } from "./ranks.js?v=62";
 
 export const gamemodes = [
   { id: "nodebuff", name: "Nodebuff", short: "NB", description: "Classic potion PvP." },
@@ -70,6 +70,7 @@ function createPlayer(index) {
     skinUrl: null,
     rank: ranks[index % ranks.length],
     level,
+    joinedAt: new Date(Date.UTC(2025, 0, 1) + between(random, 0, 540) * 86400000).toISOString(),
     levelProgress: Math.round(random() * 100) / 100,
     ratings,
     perMode,
@@ -159,12 +160,11 @@ function getMetric(player, categoryId) {
   return player.ratings[categoryId];
 }
 
-export async function getLeaderboard(categoryId) {
-  await wait();
+function buildEntries(categoryId) {
   const isRankedMode = gamemodes.some((mode) => mode.id === categoryId);
-  // Ranked duel boards only list Mythic players, limited to the top rankedBoardSize.
+  // Ranked duel boards only list Mythic players.
   const source = isRankedMode ? players.filter((player) => player.ratings[categoryId] >= mythicMinRating) : players;
-  const entries = source
+  return source
     .map((player) => ({
       username: player.username,
       country: getCountry(player),
@@ -174,8 +174,59 @@ export async function getLeaderboard(categoryId) {
     }))
     .sort((a, b) => b.metric - a.metric)
     .map((entry, index) => ({ ...entry, position: index + 1 }));
+}
 
-  return isRankedMode ? entries.slice(0, rankedBoardSize) : entries;
+export async function getLeaderboard(categoryId) {
+  await wait();
+  const entries = buildEntries(categoryId);
+  return gamemodes.some((mode) => mode.id === categoryId) ? entries.slice(0, rankedBoardSize) : entries;
+}
+
+// Stand-in for the signed-in player until accounts exist.
+export const mockCurrentUsername = "SamplePlayer42";
+
+// position is null when the player has no leaderboard position (not Mythic on a ranked board).
+export async function getMyStanding(categoryId) {
+  await wait();
+  const me = players.find((player) => player.username === mockCurrentUsername);
+  const entry = buildEntries(categoryId).find((item) => item.username === me.username);
+  return {
+    username: me.username,
+    country: getCountry(me),
+    skinUrl: me.skinUrl,
+    rank: me.rank,
+    metric: getMetric(me, categoryId),
+    position: entry?.position ?? null,
+    isRankedMode: gamemodes.some((mode) => mode.id === categoryId),
+  };
+}
+
+const previewCache = new Map();
+
+// Compact profile used by the hover card on leaderboards.
+export async function getPlayerPreview(username) {
+  if (!previewCache.has(username)) {
+    previewCache.set(
+      username,
+      (async () => {
+        await new Promise((resolve) => setTimeout(resolve, 120));
+        const player = players.find((item) => item.username === username);
+        if (!player) return null;
+        return {
+          username: player.username,
+          country: getCountry(player),
+          rank: player.rank,
+          level: player.level,
+          joinedAt: player.joinedAt,
+          playtimeHours: player.overall.playtimeHours,
+          wins: player.duels.wins,
+          losses: player.duels.losses,
+          ranked: gamemodes.map((mode) => ({ id: mode.id, name: mode.name, rating: player.ratings[mode.id], tier: getRankedTier(player.ratings[mode.id]) })),
+        };
+      })(),
+    );
+  }
+  return previewCache.get(username);
 }
 
 export async function getTopPlayersPreview() {

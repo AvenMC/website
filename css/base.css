@@ -149,20 +149,20 @@ h3 {
   }
 }
 
-/* Page backdrop: block grid plus soft accent glows */
-body::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  z-index: -1;
-  pointer-events: none;
-  background:
-    radial-gradient(45% 35% at 8% 12%, color-mix(in srgb, var(--colorPrimary) 14%, transparent), transparent 70%),
-    radial-gradient(40% 35% at 95% 30%, color-mix(in srgb, var(--colorCrystal) 12%, transparent), transparent 70%),
-    radial-gradient(45% 35% at 5% 75%, color-mix(in srgb, var(--colorNodebuff) 8%, transparent), transparent 70%),
-    radial-gradient(40% 30% at 92% 95%, color-mix(in srgb, var(--colorMace) 10%, transparent), transparent 70%),
-    linear-gradient(color-mix(in srgb, var(--colorPrimary) 5%, transparent) 1px, transparent 1px) 0 0 / 48px 48px,
-    linear-gradient(90deg, color-mix(in srgb, var(--colorPrimary) 5%, transparent) 1px, transparent 1px) 0 0 / 48px 48px;
-  -webkit-mask-image: linear-gradient(180deg, #000 0%, rgb(0 0 0 / 0.55) 100%);
-  mask-image: linear-gradient(180deg, #000 0%, rgb(0 0 0 / 0.55) 100%);
+/* Page transition for client-side navigation */
+main.isLeaving {
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 140ms ease, transform 140ms ease;
+}
+
+main.isEntering {
+  animation: pageEnter 280ms ease-out both;
+}
+
+@keyframes pageEnter {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
 }
