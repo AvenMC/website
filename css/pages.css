@@ -899,7 +899,7 @@
   display: inline-flex;
   align-items: center;
   gap: var(--space5);
-  padding: var(--space4) var(--space5);
+  padding: var(--space4) var(--space5) var(--space4) 0;
   color: var(--colorTextSecondary);
   font-family: var(--fontHeading);
   font-size: 15px;

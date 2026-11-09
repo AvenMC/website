@@ -1,5 +1,5 @@
-import { el, replaceContent } from "../dom.js?v=79";
-import { renderLayout } from "../layout.js?v=79";
+import { el, replaceContent } from "../dom.js?v=80";
+import { renderLayout } from "../layout.js?v=80";
 import {
   createAvatar,
   createBadge,
@@ -9,14 +9,14 @@ import {
   createSectionHeading,
   createSkeletonRows,
   createSocialLinks,
-} from "../components.js?v=79";
-import { createCopyField, openJoinModal } from "../join.js?v=79";
-import { gamemodes, regions, getTopPlayersPreview } from "../mockData.js?v=79";
-import { initSectionTone } from "../effects.js?v=79";
-import { formatNumber } from "../format.js?v=79";
-import { modeIconStyle, modeThemes } from "../modeTheme.js?v=79";
-import { allRankTiers, rankedBoardSize } from "../ranks.js?v=79";
-import { siteConfig } from "../siteConfig.js?v=79";
+} from "../components.js?v=80";
+import { createCopyField, openJoinModal } from "../join.js?v=80";
+import { gamemodes, regions, getTopPlayersPreview } from "../mockData.js?v=80";
+import { initSectionTone } from "../effects.js?v=80";
+import { formatNumber } from "../format.js?v=80";
+import { modeIconStyle, modeThemes } from "../modeTheme.js?v=80";
+import { allRankTiers, rankedBoardSize } from "../ranks.js?v=80";
+import { siteConfig } from "../siteConfig.js?v=80";
 
 const app = renderLayout("home");
 const reveal = (delay = 0) => ({ "data-reveal": "", style: `--revealDelay:${delay}ms` });
@@ -35,7 +35,7 @@ const hero = el(
     el(
       "div",
       { className: "heroContent" },
-      el("h1", {}, "The ", el("span", { className: "accent" }, "#1"), " Bedrock PvP Network"),
+      el("h1", {}, el("span", { className: "accent" }, "#1"), " Bedrock PvP Network"),
       el(
         "ul",
         { className: "platformRow", "aria-label": "Play on mobile, console and PC" },
