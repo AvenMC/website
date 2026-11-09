@@ -195,3 +195,20 @@ export async function getTopPlayersPreview() {
   const entries = await getLeaderboard("overall");
   return entries.slice(0, 3);
 }
+
+export const currentSeason = { name: "Season 1", isPlaceholder: true };
+
+const distributionTotals = { nodebuff: { total: 4180, unreal: 50 }, crystalpvp: { total: 2760, unreal: 38 }, spearmace: { total: 1490, unreal: 21 } };
+const distributionWeights = { bronze: 27, silver: 24, gold: 19, platinum: 13, diamond: 8, elite: 5, champion: 2 };
+
+// Replace with the real season endpoint once it exists. Keep the returned shape.
+export async function getRankDistribution(modeId) {
+  await wait();
+  const { total, unreal } = distributionTotals[modeId];
+  const weightSum = Object.values(distributionWeights).reduce((sum, weight) => sum + weight, 0);
+  const remaining = total - unreal;
+  const counts = Object.fromEntries(Object.entries(distributionWeights).map(([key, weight]) => [key, Math.round((remaining * weight) / weightSum)]));
+  counts.bronze += remaining - Object.values(counts).reduce((sum, count) => sum + count, 0);
+  counts.unreal = unreal;
+  return { season: currentSeason.name, total, unrealCap, counts };
+}

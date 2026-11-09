@@ -12,6 +12,7 @@ import {
 import { createCopyField, openJoinModal } from "../join.js";
 import { gamemodes, regions, getTopPlayersPreview } from "../mockData.js";
 import { formatNumber } from "../format.js";
+import { createRankStatsSection } from "./rankStats.js";
 import { rankTiers, unrealCap } from "../ranks.js";
 import { siteConfig } from "../siteConfig.js";
 
@@ -272,7 +273,7 @@ const finalCta = el(
   ),
 );
 
-replaceContent(app, hero, ticker, gamemodesSection, featuresSection, ranksSection, stepsSection, rankingSection, regionsSection, communitySection, finalCta);
+replaceContent(app, hero, ticker, gamemodesSection, featuresSection, ranksSection, createRankStatsSection(), stepsSection, rankingSection, regionsSection, communitySection, finalCta);
 
 getTopPlayersPreview().then((entries) => {
   replaceContent(
