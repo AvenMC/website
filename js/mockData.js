@@ -4,8 +4,8 @@
  * the pages only depend on the shapes returned here.
  */
 
-import { countries } from "./countries.js";
-import { getRankedTier, unrealCap, unrealMinRating } from "./ranks.js";
+import { countries } from "./countries.js?v=24";
+import { getRankedTier, unrealCap, unrealMinRating } from "./ranks.js?v=24";
 
 export const gamemodes = [
   { id: "nodebuff", name: "Nodebuff", short: "NB", description: "Classic potion PvP." },
