@@ -728,14 +728,20 @@
 .divisionCard + .divisionCard::before {
   content: "→";
   position: absolute;
-  left: calc(var(--space3) / -2 - 7px);
-  top: calc(var(--space4) + 35px);
+  z-index: 1;
+  left: calc(var(--space3) / -2 - 13px);
+  top: 50%;
   display: grid;
-  width: 14px;
-  height: 14px;
+  width: 26px;
+  height: 26px;
   place-items: center;
   transform: translateY(-50%);
-  color: var(--colorTextMuted);
+  border: 1px solid var(--colorBorder);
+  border-radius: 50%;
+  background: var(--colorCard);
+  color: var(--colorPrimary);
+  font-size: 17px;
+  font-weight: 700;
   line-height: 1;
 }
 
