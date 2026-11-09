@@ -1,7 +1,7 @@
 import { el } from "./dom.js";
 import { createBrand, createButton, createSocialLinks } from "./components.js";
 import { openJoinModal } from "./join.js";
-import { initReveal, initSpotlight } from "./effects.js";
+import { initReveal, initSpotlight, initTilt } from "./effects.js";
 
 const navItems = [
   { id: "home", label: "Home", href: "index.html" },
@@ -64,6 +64,7 @@ export function renderLayout(activePage) {
   document.body.prepend(header);
   document.body.append(footer);
   initSpotlight();
+  initTilt();
   requestAnimationFrame(initReveal);
   return main;
 }

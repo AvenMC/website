@@ -47,3 +47,22 @@ export async function copyText(text) {
     return copied;
   }
 }
+
+export function initTilt() {
+  if (prefersReducedMotion) return;
+  document.addEventListener("pointermove", (event) => {
+    const card = event.target.closest?.(".hasTilt");
+    if (!card) return;
+    const rect = card.getBoundingClientRect();
+    const x = (event.clientX - rect.left) / rect.width - 0.5;
+    const y = (event.clientY - rect.top) / rect.height - 0.5;
+    card.style.setProperty("--tiltX", `${(-y * 6).toFixed(2)}deg`);
+    card.style.setProperty("--tiltY", `${(x * 6).toFixed(2)}deg`);
+  });
+  document.addEventListener("pointerout", (event) => {
+    const card = event.target.closest?.(".hasTilt");
+    if (!card || card.contains(event.relatedTarget)) return;
+    card.style.removeProperty("--tiltX");
+    card.style.removeProperty("--tiltY");
+  });
+}

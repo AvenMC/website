@@ -12,14 +12,24 @@ import {
 import { createCopyField, openJoinModal } from "../join.js";
 import { gamemodes, regions, getTopPlayersPreview } from "../mockData.js";
 import { formatNumber } from "../format.js";
+import { createPixelIcon } from "../pixelIcons.js";
 import { siteConfig } from "../siteConfig.js";
 
 const app = renderLayout("home");
 const reveal = (delay = 0) => ({ "data-reveal": "", style: `--revealDelay:${delay}ms` });
 
+const bubbles = el(
+  "div",
+  { className: "heroBubbles", "aria-hidden": "true" },
+  Array.from({ length: 14 }, (_, index) =>
+    el("span", { style: `--bubbleX:${(index * 73) % 100}%;--bubbleSize:${6 + ((index * 5) % 12)}px;--bubbleDelay:${-((index * 2.3) % 14)}s;--bubbleDuration:${11 + ((index * 3) % 9)}s` }),
+  ),
+);
+
 const hero = el(
   "section",
   { className: "hero" },
+  bubbles,
   el(
     "div",
     { className: "container heroGrid" },
@@ -61,6 +71,8 @@ const ticker = el(
   el("div", { className: "tickerTrack" }, tickerGroup(), tickerGroup()),
 );
 
+const modeIcons = { nodebuff: "potion", crystalpvp: "crystal", spearmace: "mace" };
+
 const gamemodesSection = el(
   "section",
   { className: "section compact" },
@@ -74,8 +86,8 @@ const gamemodesSection = el(
       gamemodes.map((mode, index) =>
         el(
           "div",
-          { className: "card hasSpotlight gamemodeCard", ...reveal(index * 90) },
-          el("span", { className: "gamemodeIcon", "aria-hidden": "true" }, mode.short),
+          { className: "card hasSpotlight hasTilt gamemodeCard", ...reveal(index * 90) },
+          createPixelIcon(modeIcons[mode.id], 72),
           el("h3", {}, mode.name),
           el("p", { className: "cardText" }, mode.description),
           createBadge({ label: "Planned" }),
@@ -178,7 +190,47 @@ const communitySection = el(
   ),
 );
 
-replaceContent(app, hero, ticker, gamemodesSection, stepsSection, rankingSection, regionsSection, communitySection);
+const features = [
+  ["Ranked duels", "Rating per gamemode and a competitive tier to climb."],
+  ["Free for all", "Drop in, fight, and build your kill streak."],
+  ["Detailed stats", "K/D, win rate, streaks and recent matches at a glance."],
+  ["Bedrock native", "Join from mobile, console or PC."],
+];
+
+const featuresSection = el(
+  "section",
+  { className: "section compact" },
+  el(
+    "div",
+    { className: "container" },
+    el("div", reveal(), createSectionHeading({ eyebrow: "Why AVENMC", title: "Built for competitive play" })),
+    el(
+      "div",
+      { className: "grid cols4 featureGrid" },
+      features.map(([title, text], index) =>
+        el("div", { className: "featureItem", ...reveal(index * 80) }, el("h3", {}, title), el("p", { className: "cardText" }, text)),
+      ),
+    ),
+  ),
+);
+
+const finalCta = el(
+  "section",
+  { className: "section" },
+  el(
+    "div",
+    { className: "container" },
+    el(
+      "div",
+      { className: "finalCta", ...reveal() },
+      el("h2", {}, "Ready to ", el("span", { className: "accent" }, "duel"), "?"),
+      el("p", { className: "heroDescription" }, `${siteConfig.serverIp} · port ${siteConfig.serverPort}`),
+      el("div", { className: "buttonRow" }, createButton({ label: "Copy join details", onClick: openJoinModal }), createButton({ label: "Join Discord", variant: "secondary", href: siteConfig.discordUrl })),
+    ),
+  ),
+);
+
+replaceContent(app, hero, ticker, gamemodesSection, featuresSection, stepsSection, rankingSection, regionsSection, communitySection, finalCta);
 
 getTopPlayersPreview().then((entries) => {
   replaceContent(
