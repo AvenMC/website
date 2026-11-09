@@ -714,26 +714,25 @@
 .flowNumber { display: inline-grid; place-items: center; width: 22px; height: 22px; border-radius: 50%; background: var(--colorPrimary); color: #fff; font-size: 12px; font-weight: 700; }
 
 .ladderHeader,
-.ladderRow { display: grid; grid-template-columns: 150px 150px 1fr; align-items: center; gap: var(--space4); }
+.ladderRow { display: grid; grid-template-columns: auto 1fr; align-items: center; gap: var(--space4); }
 
 .ladderHeader { margin-bottom: var(--space3); padding-inline: var(--space4); color: var(--colorTextMuted); font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; }
 
 .ladderHeader .badge { justify-self: end; }
 
-.rankLadder { display: flex; flex-direction: column; gap: var(--space2); margin: 0; padding: 0; list-style: none; }
+.rankLadder { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space2); margin: 0; padding: 0; list-style: none; }
 
 .ladderRow {
-  padding: var(--space3) var(--space4);
+  padding: var(--space2) var(--space3);
   border: 1px solid color-mix(in srgb, var(--tierColor) 28%, var(--colorBorder));
   border-radius: var(--radiusMedium);
   background: linear-gradient(90deg, color-mix(in srgb, var(--tierColor) 10%, var(--colorCard)), var(--colorCard) 70%);
-  margin-left: calc(var(--step) * 14px);
   transition: transform 180ms ease, border-color 180ms ease;
 }
 
 .ladderRow:hover { transform: translateX(4px); border-color: var(--tierColor); }
 
-.ladderRow.isMythic { border-color: var(--tierColor); background: linear-gradient(90deg, color-mix(in srgb, var(--tierColor) 20%, var(--colorCard)), var(--colorCard) 80%); }
+.ladderRow.isMythic { grid-column: 1 / -1; border-color: var(--tierColor); background: linear-gradient(90deg, color-mix(in srgb, var(--tierColor) 20%, var(--colorCard)), var(--colorCard) 80%); }
 
 .ladderElo { display: flex; flex-direction: column; line-height: 1.2; }
 
@@ -743,6 +742,8 @@
 
 .ladderProgress { display: flex; align-items: center; gap: var(--space3); }
 
+.ladderRow:not(.isMythic) .ladderProgress { grid-column: 1 / -1; }
+.ladderRow.isMythic { grid-template-columns: 130px 90px 1fr; }
 .ladderProgress.isOpen { color: var(--tierColor); font-weight: 600; font-size: 14px; }
 
 .ladderTrack { flex: 1; height: 8px; overflow: hidden; border-radius: 999px; background: color-mix(in srgb, var(--tierColor) 16%, var(--colorBackground)); }
@@ -789,7 +790,7 @@
 
 @media (max-width: 720px) {
   .flowSteps li + li::before { display: none; }
-  .ladderRow { grid-template-columns: auto 1fr; margin-left: calc(var(--step) * 4px); }
+  .rankLadder { grid-template-columns: 1fr; }
   .ladderProgress { grid-column: 1 / -1; }
   .scoreSplit { grid-template-columns: 1fr; padding: var(--space5); }
   .scoreArrow { transform: rotate(90deg); justify-self: center; }
