@@ -1,20 +1,20 @@
-import { el, replaceContent } from "../dom.js?v=93";
-import { initReveal } from "../effects.js?v=93";
-import { renderLayout } from "../layout.js?v=93";
-import { createButton, createRankedBadge, createSectionHeading } from "../components.js?v=93";
-import { createRankStatsSection } from "./rankStats.js?v=93";
-import { allRankTiers, rankTiers, rankedBoardSize } from "../ranks.js?v=93";
-import { gamemodes } from "../mockData.js?v=93";
-import { modeThemes } from "../modeTheme.js?v=93";
+import { el, replaceContent } from "../dom.js?v=88";
+import { initReveal } from "../effects.js?v=88";
+import { renderLayout } from "../layout.js?v=88";
+import { createButton, createRankedBadge, createSectionHeading } from "../components.js?v=88";
+import { createRankStatsSection } from "./rankStats.js?v=88";
+import { allRankTiers, rankTiers, rankedBoardSize } from "../ranks.js?v=88";
+import { gamemodes } from "../mockData.js?v=88";
+import { modeThemes } from "../modeTheme.js?v=88";
 
 const app = renderLayout("ranked");
 const reveal = (delay = 0) => ({ "data-reveal": "", style: `--revealDelay:${delay}ms` });
 const format = (value) => value.toLocaleString("en-US");
 
 const stepTexts = {
-  bronze: "Win duels to fill the bar. At 100% you reach the next tier.",
-  silver: "Keep winning. At 100% you reach the next tier.",
-  gold: "Fill the bar of Gold III to reach Mythic.",
+  bronze: "Start here. Win duels to fill the bar. At 100% you move up.",
+  silver: "Same again: fill the bar to 100% to move up.",
+  gold: "Fill the bar one last time to reach Mythic.",
 };
 
 function createDivisionCard(division, index) {
@@ -32,7 +32,7 @@ function createDivisionCard(division, index) {
     el(
       "p",
       {},
-      isMythic ? "No bar anymore. You collect points and get a place on the leaderboard." : stepTexts[division.key],
+      isMythic ? `No bar anymore. You collect points and get a place on the leaderboard. Top ${rankedBoardSize} are listed.` : stepTexts[division.key],
     ),
   );
 }
@@ -46,9 +46,9 @@ const introSection = el(
     el(
       "div",
       reveal(),
-      createSectionHeading({ eyebrow: "Ranked", title: "From Bronze I to Mythic", description: "Win duels, fill your bar and climb.", level: "h1" }),
+      createSectionHeading({ eyebrow: "Ranked", title: "From Bronze I to Mythic", description: "Win duels to fill your bar and rank up. Each of Bronze, Silver and Gold has three tiers (I, II, III). Mythic is the top.", level: "h1" }),
     ),
-    el("div", { className: "divisionPanel", ...reveal(40) }, el("ol", { className: "divisionGrid" }, rankTiers.map((division, index) => createDivisionCard(division, index))), createRankStatsSection({ embedded: true })),
+    el("div", { className: "divisionPanel", ...reveal(40) }, el("ol", { className: "divisionGrid" }, rankTiers.map((division, index) => createDivisionCard(division, index)))),
   ),
 );
 
@@ -100,5 +100,5 @@ const leaderboardLink = el(
   ),
 );
 
-replaceContent(app, introSection, gainSection, leaderboardLink);
+replaceContent(app, introSection, createRankStatsSection(), gainSection, leaderboardLink);
 initReveal();

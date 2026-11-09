@@ -531,14 +531,6 @@
 
 .rankStatsTotal strong { color: var(--colorText); font-family: var(--fontHeading); font-size: 32px; line-height: 1.1; }
 
-.rankStatsEmbedded { display: flex; flex-direction: column; gap: var(--space3); margin-top: var(--space4); padding-top: var(--space4); border-top: 1px solid var(--colorBorder); }
-
-.rankStatsEmbedded h3 { margin: 0; font-size: 15px; }
-
-.rankStatsEmbedded .rankStatsTotal { display: none; }
-
-.rankSegment { display: grid; place-items: center; color: #0b1020; font-size: 12px; font-weight: 700; }
-
 .rankBar { display: flex; gap: 3px; height: 28px; }
 
 .rankSegment {
@@ -745,7 +737,7 @@
 
 .divisionStep { color: var(--colorTextMuted); font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; }
 
-.divisionDemo { display: flex; flex-direction: column; gap: var(--space1, 4px); }
+.divisionDemo { display: flex; flex-direction: column; gap: var(--space1, 4px); margin-top: auto; }
 
 .divisionDemo .ladderTrack { flex: none; }
 
@@ -757,9 +749,7 @@
 
 .divisionCard h3 { margin: calc(var(--space2) * -1) 0 0; color: var(--tierColor); font-family: var(--fontHeading); font-size: 18px; }
 
-.divisionCard.isMythic .divisionBadges { min-height: 0; }
-
-.divisionBadges { min-height: 66px; align-content: flex-start; display: flex; flex-wrap: wrap; gap: var(--space2); }
+.divisionBadges { display: flex; flex-wrap: wrap; gap: var(--space2); }
 
 .divisionCard p { margin: 0; color: var(--colorTextMuted); font-size: 13px; }
 
