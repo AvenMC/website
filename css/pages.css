@@ -5,68 +5,24 @@
   isolation: isolate;
 }
 
-/* Animated hero background: two slowly drifting glows */
-.hero::before,
-.hero::after {
+/* Animated hero background: a wide color band that slowly shifts sideways and fades out downwards */
+.hero::before {
   content: "";
   position: absolute;
-  z-index: -1;
-  width: 60vw;
-  max-width: 720px;
-  aspect-ratio: 1;
-  border-radius: 50%;
-  filter: blur(80px);
-  opacity: 0.35;
-  pointer-events: none;
-}
-
-.hero::before {
-  top: -30%;
-  left: -10%;
-  background: radial-gradient(circle, var(--colorPrimary), transparent 65%);
-  animation: heroDriftA 16s ease-in-out infinite alternate;
-}
-
-.hero::after {
-  right: -10%;
-  bottom: -40%;
-  background: radial-gradient(circle, var(--colorCrystal, #a56bff), transparent 65%);
-  animation: heroDriftB 20s ease-in-out infinite alternate;
-}
-
-@keyframes heroDriftA {
-  to {
-    transform: translate(30vw, 12%) scale(1.25);
-  }
-}
-
-@keyframes heroDriftB {
-  to {
-    transform: translate(-30vw, -15%) scale(1.2);
-  }
-}
-
-/* Page backdrop: one fixed layer whose color eases from section to section while scrolling */
-@property --tone {
-  syntax: "<color>";
-  inherits: true;
-  initial-value: #28b9f5;
-}
-
-.pageBackdrop {
-  position: fixed;
   inset: 0;
   z-index: -1;
+  background: linear-gradient(100deg, var(--colorSecondary), var(--colorPrimary), var(--colorCrystal), var(--colorSecondary)) 0 0 / 300% 100%;
+  opacity: 0.2;
   pointer-events: none;
-  background:
-    radial-gradient(90% 70% at 50% 0%, color-mix(in srgb, var(--tone) 24%, transparent), transparent 70%),
-    radial-gradient(70% 60% at 100% 100%, color-mix(in srgb, var(--tone) 14%, transparent), transparent 70%),
-    var(--colorBackground);
-  transition: --tone 1.2s ease;
+  -webkit-mask-image: linear-gradient(#000, transparent);
+  mask-image: linear-gradient(#000, transparent);
+  animation: heroShift 24s linear infinite;
 }
 
-#app {
-  overflow-x: clip;
+@keyframes heroShift {
+  to {
+    background-position: -300% 0;
+  }
 }
 
 .heroGrid {
@@ -647,8 +603,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .hero::before,
-  .hero::after {
+  .hero::before {
     animation: none;
   }
 

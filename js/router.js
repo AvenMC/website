@@ -1,4 +1,4 @@
-import { initReveal } from "./effects.js?v=72";
+import { initReveal } from "./effects.js?v=73";
 
 // Client-side navigation: swaps the page content and keeps header and footer in place.
 // Every page is its own module that renders into #app when it runs, so a fresh import re-renders it.
