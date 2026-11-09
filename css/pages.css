@@ -739,6 +739,16 @@
 
 .divisionBadges { display: flex; flex-wrap: wrap; gap: var(--space2); }
 
+.divisionDemo { display: flex; flex-direction: column; gap: var(--space2); margin-top: auto; }
+
+.divisionDemo .ladderTrack { flex: none; }
+
+.divisionDemo .scoreRankChip { align-self: flex-start; }
+
+.divisionDemo strong { font-family: var(--fontHeading); font-size: 22px; }
+
+.divisionDemo small { color: var(--colorTextMuted); font-size: 12px; }
+
 .divisionCard p { margin: 0; color: var(--colorTextMuted); font-size: 13px; }
 
 .rankLadder { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space2); margin: 0; padding: 0; list-style: none; }

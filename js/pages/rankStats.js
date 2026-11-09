@@ -1,8 +1,8 @@
-import { el, replaceContent } from "../dom.js?v=88";
-import { createBadge, createSectionHeading, createSkeleton, createTabs } from "../components.js?v=88";
-import { currentSeason, gamemodes, getRankDistribution } from "../mockData.js?v=88";
-import { rankTiers } from "../ranks.js?v=88";
-import { formatNumber } from "../format.js?v=88";
+import { el, replaceContent } from "../dom.js?v=90";
+import { createBadge, createSectionHeading, createSkeleton, createTabs } from "../components.js?v=90";
+import { currentSeason, gamemodes, getRankDistribution } from "../mockData.js?v=90";
+import { rankTiers } from "../ranks.js?v=90";
+import { formatNumber } from "../format.js?v=90";
 
 function animateNumber(node, target, duration = 900) {
   const start = performance.now();

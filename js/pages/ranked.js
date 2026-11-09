@@ -1,11 +1,11 @@
-import { el, replaceContent } from "../dom.js?v=88";
-import { initReveal } from "../effects.js?v=88";
-import { renderLayout } from "../layout.js?v=88";
-import { createButton, createRankedBadge, createSectionHeading } from "../components.js?v=88";
-import { createRankStatsSection } from "./rankStats.js?v=88";
-import { allRankTiers, rankTiers, rankedBoardSize } from "../ranks.js?v=88";
-import { gamemodes } from "../mockData.js?v=88";
-import { modeThemes } from "../modeTheme.js?v=88";
+import { el, replaceContent } from "../dom.js?v=90";
+import { initReveal } from "../effects.js?v=90";
+import { renderLayout } from "../layout.js?v=90";
+import { createButton, createRankedBadge, createSectionHeading } from "../components.js?v=90";
+import { createRankStatsSection } from "./rankStats.js?v=90";
+import { allRankTiers, rankTiers, rankedBoardSize } from "../ranks.js?v=90";
+import { gamemodes } from "../mockData.js?v=90";
+import { modeThemes } from "../modeTheme.js?v=90";
 
 const app = renderLayout("ranked");
 const reveal = (delay = 0) => ({ "data-reveal": "", style: `--revealDelay:${delay}ms` });
@@ -19,7 +19,10 @@ function createDivisionCard(division) {
     { className: `divisionCard${isMythic ? " isMythic" : ""}`, "data-reveal": "", style: `--tierColor:${division.color}` },
     el("h3", {}, division.label),
     el("div", { className: "divisionBadges" }, badges.map((tier) => createRankedBadge(tier))),
-    el("p", {}, isMythic ? `Points instead of a bar, no cap. Top ${rankedBoardSize} on the leaderboard.` : null),
+    isMythic
+      ? el("div", { className: "divisionDemo" }, el("strong", {}, "2,431 pts"), el("span", { className: "scoreRankChip" }, "#17 on the leaderboard"))
+      : el("div", { className: "divisionDemo" }, el("div", { className: "ladderTrack isWide" }, el("span", { className: "ladderFill", style: "width:64%" })), el("small", {}, "64% · at 100% you reach the next tier")),
+    isMythic ? el("p", {}, `Points instead of a bar, no cap. Top ${rankedBoardSize} are listed.`) : null,
   );
 }
 
