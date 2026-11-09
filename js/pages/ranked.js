@@ -1,16 +1,16 @@
-import { el, replaceContent } from "../dom.js?v=38";
-import { renderLayout } from "../layout.js?v=38";
-import { createButton, createSectionHeading } from "../components.js?v=38";
-import { createRankStatsSection } from "./rankStats.js?v=38";
-import { rankTiers, unrealCap } from "../ranks.js?v=38";
+import { el, replaceContent } from "../dom.js?v=40";
+import { renderLayout } from "../layout.js?v=40";
+import { createButton, createSectionHeading } from "../components.js?v=40";
+import { createRankStatsSection } from "./rankStats.js?v=40";
+import { rankTiers, zenithCap } from "../ranks.js?v=40";
 
 const app = renderLayout("ranked");
 const reveal = (delay = 0) => ({ "data-reveal": "", style: `--revealDelay:${delay}ms` });
 
 const rankSteps = [
   ["Play ranked duels", "Win duels to gain rating in each gamemode. Losses cost rating."],
-  ["Climb the divisions", "Bronze to Diamond have three tiers each (I–III). Then Elite and Champion."],
-  ["Reach Unreal", `The top division is capped at ${unrealCap} players per gamemode. Hold your spot.`],
+  ["Climb the divisions", "Four divisions: Ripple, Current, Tempest and Zenith. Every win moves you closer to the next one."],
+  ["Reach Zenith", `The top division is capped at ${zenithCap} players per gamemode. Hold your spot.`],
 ];
 
 const ladderSection = el(
@@ -26,10 +26,10 @@ const ladderSection = el(
       rankTiers.map((tier, index) =>
         el(
           "div",
-          { className: `rankStep${tier.key === "unreal" ? " isUnreal" : ""}`, style: `--tierColor:${tier.color};--stepIndex:${index}` },
-          el("span", { className: "rankStepBar" }, tier.divisions > 1 ? el("span", { className: "rankStepDivisions" }, "I · II · III") : null),
+          { className: `rankStep${tier.key === "zenith" ? " isZenith" : ""}`, style: `--tierColor:${tier.color};--stepIndex:${index}` },
+          el("span", { className: "rankStepBar" }, null),
           el("span", { className: "rankStepName" }, tier.label),
-          tier.key === "unreal" ? el("span", { className: "rankStepNote" }, `Top ${unrealCap}`) : null,
+          tier.key === "zenith" ? el("span", { className: "rankStepNote" }, `Top ${zenithCap}`) : null,
         ),
       ),
     ),
@@ -46,7 +46,7 @@ const ladderSection = el(
         ),
       ),
     ),
-    el("p", { className: "rankNote" }, "New season: you only fall back a few divisions. Your rank is never fully reset."),
+    el("p", { className: "rankNote" }, "New season: you only fall back one division. Your rank is never fully reset."),
     el("p", { className: "rankNote" }, "Ranked is played in duels. The three FFA modes get duels too, and probably three more. Divisions are separate per gamemode. Thresholds are placeholders until launch."),
   ),
 );
@@ -57,7 +57,7 @@ const leaderboardLink = el(
   el(
     "div",
     { className: "container buttonRow" },
-    createButton({ label: "Unreal leaderboards", href: "leaderboards.html" }),
+    createButton({ label: "Zenith leaderboards", href: "leaderboards.html" }),
   ),
 );
 

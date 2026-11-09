@@ -1,8 +1,8 @@
-import { el, replaceContent } from "../dom.js?v=38";
-import { createBadge, createSectionHeading, createSkeleton, createTabs } from "../components.js?v=38";
-import { currentSeason, gamemodes, getRankDistribution } from "../mockData.js?v=38";
-import { rankTiers } from "../ranks.js?v=38";
-import { formatNumber } from "../format.js?v=38";
+import { el, replaceContent } from "../dom.js?v=40";
+import { createBadge, createSectionHeading, createSkeleton, createTabs } from "../components.js?v=40";
+import { currentSeason, gamemodes, getRankDistribution } from "../mockData.js?v=40";
+import { rankTiers } from "../ranks.js?v=40";
+import { formatNumber } from "../format.js?v=40";
 
 const donutRadius = 70;
 const circumference = 2 * Math.PI * donutRadius;
@@ -61,8 +61,8 @@ function renderDistribution(data) {
     .map((tier) =>
       el(
         "div",
-        { className: `rankRow${tier.key === "unreal" ? " isUnreal" : ""}`, "data-tier": tier.key, style: `--tierColor:${tier.color}` },
-        el("span", { className: "rankRowName" }, tier.key === "unreal" ? `Unreal · ${data.counts.unreal}/${data.unrealCap}` : tier.label),
+        { className: `rankRow${tier.key === "zenith" ? " isZenith" : ""}`, "data-tier": tier.key, style: `--tierColor:${tier.color}` },
+        el("span", { className: "rankRowName" }, tier.key === "zenith" ? `Zenith · ${data.counts.zenith}/${data.zenithCap}` : tier.label),
         el("span", { className: "rankRowBar" }, el("span", { className: "rankRowFill", style: `--fill:${(data.counts[tier.key] / maxCount) * 100}%` })),
         el("span", { className: "rankRowCount" }, formatNumber(data.counts[tier.key])),
         el("span", { className: "rankRowShare" }, `${((data.counts[tier.key] / data.total) * 100).toFixed(1)}%`),
