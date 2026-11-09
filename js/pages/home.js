@@ -1,5 +1,5 @@
-import { el, replaceContent } from "../dom.js?v=91";
-import { renderLayout } from "../layout.js?v=91";
+import { el, replaceContent } from "../dom.js?v=92";
+import { renderLayout } from "../layout.js?v=92";
 import {
   createAvatar,
   createBadge,
@@ -9,14 +9,14 @@ import {
   createSectionHeading,
   createSkeletonRows,
   createSocialLinks,
-} from "../components.js?v=91";
-import { createCopyField, openJoinModal } from "../join.js?v=91";
-import { gamemodes, regions, getTopPlayersPreview } from "../mockData.js?v=91";
-import { initSectionTone } from "../effects.js?v=91";
-import { formatNumber } from "../format.js?v=91";
-import { modeIconStyle, modeThemes } from "../modeTheme.js?v=91";
-import { allRankTiers, rankedBoardSize } from "../ranks.js?v=91";
-import { siteConfig } from "../siteConfig.js?v=91";
+} from "../components.js?v=92";
+import { createCopyField, openJoinModal } from "../join.js?v=92";
+import { gamemodes, regions, getTopPlayersPreview } from "../mockData.js?v=92";
+import { initSectionTone } from "../effects.js?v=92";
+import { formatNumber } from "../format.js?v=92";
+import { modeIconStyle, modeThemes } from "../modeTheme.js?v=92";
+import { allRankTiers } from "../ranks.js?v=92";
+import { siteConfig } from "../siteConfig.js?v=92";
 
 const app = renderLayout("home");
 const reveal = (delay = 0) => ({ "data-reveal": "", style: `--revealDelay:${delay}ms` });
@@ -119,7 +119,7 @@ const rankedTeaser = el(
     el(
       "div",
       { className: "card rankedTeaser", ...reveal() },
-      createSectionHeading({ eyebrow: "Ranked", title: `Climb to the top ${rankedBoardSize}` }),
+      createSectionHeading({ eyebrow: "Ranked", title: "Climb to the top" }),
       el("p", { className: "cardText" }, "Climb from Bronze to Mythic and fight for a spot on the leaderboard. A new season only drops you back a few tiers, no full reset."),
       el(
         "div",
