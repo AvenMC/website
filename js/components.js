@@ -1,6 +1,6 @@
-import { countries } from "./countries.js?v=88";
-import { el } from "./dom.js?v=88";
-import { siteConfig } from "./siteConfig.js?v=88";
+import { countries } from "./countries.js?v=89";
+import { el } from "./dom.js?v=89";
+import { siteConfig } from "./siteConfig.js?v=89";
 
 export function createBrand({ showSubtitle = true } = {}) {
   return el(

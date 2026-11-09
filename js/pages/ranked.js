@@ -1,20 +1,20 @@
-import { el, replaceContent } from "../dom.js?v=88";
-import { initReveal } from "../effects.js?v=88";
-import { renderLayout } from "../layout.js?v=88";
-import { createButton, createRankedBadge, createSectionHeading } from "../components.js?v=88";
-import { createRankStatsSection } from "./rankStats.js?v=88";
-import { allRankTiers, rankTiers, rankedBoardSize } from "../ranks.js?v=88";
-import { gamemodes } from "../mockData.js?v=88";
-import { modeThemes } from "../modeTheme.js?v=88";
+import { el, replaceContent } from "../dom.js?v=89";
+import { initReveal } from "../effects.js?v=89";
+import { renderLayout } from "../layout.js?v=89";
+import { createButton, createRankedBadge, createSectionHeading } from "../components.js?v=89";
+import { createRankStatsSection } from "./rankStats.js?v=89";
+import { allRankTiers, rankTiers, rankedBoardSize } from "../ranks.js?v=89";
+import { gamemodes } from "../mockData.js?v=89";
+import { modeThemes } from "../modeTheme.js?v=89";
 
 const app = renderLayout("ranked");
 const reveal = (delay = 0) => ({ "data-reveal": "", style: `--revealDelay:${delay}ms` });
 const format = (value) => value.toLocaleString("en-US");
 
 const stepTexts = {
-  bronze: "Start here. Win duels to fill the bar. At 100% you move up.",
-  silver: "Same again: fill the bar to 100% to move up.",
-  gold: "Fill the bar one last time to reach Mythic.",
+  bronze: "Win duels to fill the bar. At 100% you reach the next tier.",
+  silver: "Keep winning. At 100% you reach the next tier.",
+  gold: "Fill the bar of Gold III to reach Mythic.",
 };
 
 function createDivisionCard(division, index) {
