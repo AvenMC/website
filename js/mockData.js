@@ -4,8 +4,8 @@
  * the pages only depend on the shapes returned here.
  */
 
-import { countries } from "./countries.js?v=51";
-import { getRankedTier, mythicMinRating, rankedBoardSize } from "./ranks.js?v=51";
+import { countries } from "./countries.js?v=52";
+import { getRankedTier, mythicMinRating, rankedBoardSize } from "./ranks.js?v=52";
 
 export const gamemodes = [
   { id: "nodebuff", name: "Nodebuff", short: "NB", description: "Classic potion PvP." },
@@ -187,6 +187,8 @@ export const currentSeason = { name: "Season 1", isPlaceholder: true };
 
 const distributionTotals = { nodebuff: { total: 4180, mythic: 212 }, crystalpvp: { total: 2760, mythic: 138 }, spearmace: { total: 1490, mythic: 74 } };
 const distributionWeights = { bronze: 50, silver: 33, gold: 17 };
+// Share of non-Mythic players per tier, split inside each division (I is the most crowded).
+const tierWeights = { bronze: [22, 16, 12], silver: [14, 11, 8], gold: [8, 5.5, 3.5] };
 
 // Replace with the real season endpoint once it exists. Keep the returned shape.
 export async function getRankDistribution(modeId) {
@@ -197,5 +199,9 @@ export async function getRankDistribution(modeId) {
   const counts = Object.fromEntries(Object.entries(distributionWeights).map(([key, weight]) => [key, Math.round((remaining * weight) / weightSum)]));
   counts.bronze += remaining - Object.values(counts).reduce((sum, count) => sum + count, 0);
   counts.mythic = mythic;
-  return { season: currentSeason.name, total, counts };
+  const tierCounts = Object.fromEntries(
+    Object.entries(tierWeights).map(([key, weights]) => [key, weights.map((weight) => Math.round((remaining * weight) / weightSum))]),
+  );
+  tierCounts.mythic = [mythic];
+  return { season: currentSeason.name, total, counts, tierCounts };
 }

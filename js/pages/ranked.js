@@ -1,13 +1,21 @@
-import { el, replaceContent } from "../dom.js?v=51";
-import { renderLayout } from "../layout.js?v=51";
-import { createButton, createSectionHeading } from "../components.js?v=51";
-import { createRankStatsSection } from "./rankStats.js?v=51";
-import { rankTiers, rankedBoardSize } from "../ranks.js?v=51";
-import { gamemodes } from "../mockData.js?v=51";
-import { modeThemes } from "../modeTheme.js?v=51";
+import { el, replaceContent } from "../dom.js?v=52";
+import { renderLayout } from "../layout.js?v=52";
+import { createButton, createSectionHeading } from "../components.js?v=52";
+import { createRankStatsSection } from "./rankStats.js?v=52";
+import { rankTiers, rankedBoardSize } from "../ranks.js?v=52";
+import { gamemodes, getRankDistribution } from "../mockData.js?v=52";
+import { modeThemes } from "../modeTheme.js?v=52";
 
 const app = renderLayout("ranked");
 const reveal = (delay = 0) => ({ "data-reveal": "", style: `--revealDelay:${delay}ms` });
+
+const { total: ladderTotal, tierCounts } = await getRankDistribution("nodebuff");
+const ladderMax = Math.max(...Object.values(tierCounts).flat());
+const romanTiers = ["I", "II", "III"];
+const formatShare = (count) => {
+  const share = (count / ladderTotal) * 100;
+  return `${share >= 10 ? share.toFixed(0) : share.toFixed(1)}%`;
+};
 
 const rankSteps = [
   ["Play ranked duels", "Win duels to gain percent or points in each gamemode. Losses cost some of it."],
@@ -25,11 +33,23 @@ const ladderSection = el(
     el(
       "div",
       { className: "rankLadderGraphic", ...reveal(60) },
-      rankTiers.map((tier, index) =>
+      rankTiers.map((tier) =>
         el(
           "div",
-          { className: `rankStep${tier.key === "mythic" ? " isMythic" : ""}`, style: `--tierColor:${tier.color};--stepIndex:${index}` },
-          el("span", { className: "rankStepBar" }, tier.tiers > 1 ? el("span", { className: "rankStepDivisions" }, "I · II · III") : null),
+          { className: `rankStep${tier.key === "mythic" ? " isMythic" : ""}`, style: `--tierColor:${tier.color};--tierCount:${tier.tiers}` },
+          el(
+            "div",
+            { className: "rankStepBars" },
+            tierCounts[tier.key].map((count, tierIndex) =>
+              el(
+                "div",
+                { className: "rankStepColumn", title: `${tier.tiers > 1 ? `${tier.label} ${romanTiers[tierIndex]}` : tier.label}: ${count.toLocaleString("en-US")} players` },
+                el("span", { className: "rankStepShare" }, formatShare(count)),
+                el("span", { className: "rankStepBar", style: `height:${Math.max(6, (count / ladderMax) * 100)}%` }),
+                tier.tiers > 1 ? el("span", { className: "rankStepTier" }, romanTiers[tierIndex]) : null,
+              ),
+            ),
+          ),
           el("span", { className: "rankStepName" }, tier.label),
           tier.key === "mythic" ? el("span", { className: "rankStepNote" }, `Top ${rankedBoardSize} on the board`) : null,
         ),

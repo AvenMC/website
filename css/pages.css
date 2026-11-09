@@ -611,9 +611,9 @@
 
 .rankLadderGraphic {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: 3fr 3fr 3fr 1.2fr;
   align-items: end;
-  gap: var(--space3);
+  gap: var(--space4);
   margin-bottom: var(--space5);
   padding: var(--space5) var(--space4) var(--space4);
   border: 1px solid var(--colorBorder);
@@ -624,33 +624,51 @@
 .rankStep {
   display: flex;
   flex-direction: column;
-  align-items: center;
   gap: var(--space2);
   text-align: center;
 }
 
-.rankStepBar {
+.rankStepBars {
   display: flex;
   align-items: flex-end;
-  justify-content: center;
-  width: 100%;
-  height: calc(80px + var(--stepIndex) * 48px);
-  padding-bottom: var(--space2);
-  border: 1px solid color-mix(in srgb, var(--tierColor) 55%, transparent);
-  border-radius: var(--radiusMedium) var(--radiusMedium) 4px 4px;
-  background: linear-gradient(180deg, color-mix(in srgb, var(--tierColor) 38%, transparent), color-mix(in srgb, var(--tierColor) 8%, transparent));
-  transition: transform 0.2s ease;
+  gap: 6px;
+  height: 260px;
 }
 
-.rankStep:hover .rankStepBar { transform: translateY(-4px); }
+.rankStepColumn {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 4px;
+  height: 100%;
+  min-width: 0;
+}
 
-.rankStep.isMythic .rankStepBar { box-shadow: 0 0 24px color-mix(in srgb, var(--tierColor) 40%, transparent); }
-
-.rankStepDivisions {
+.rankStepShare {
   color: var(--tierColor);
   font-size: 11px;
   font-weight: 600;
-  letter-spacing: 0.04em;
+}
+
+.rankStepBar {
+  display: block;
+  width: 100%;
+  border: 1px solid color-mix(in srgb, var(--tierColor) 55%, transparent);
+  border-radius: var(--radiusSmall) var(--radiusSmall) 3px 3px;
+  background: linear-gradient(180deg, color-mix(in srgb, var(--tierColor) 45%, transparent), color-mix(in srgb, var(--tierColor) 8%, transparent));
+  transition: transform 0.2s ease;
+}
+
+.rankStepColumn:hover .rankStepBar { transform: translateY(-4px); }
+
+.rankStep.isMythic .rankStepBar { box-shadow: 0 0 24px color-mix(in srgb, var(--tierColor) 40%, transparent); }
+
+.rankStepTier {
+  color: var(--colorTextSecondary);
+  font-size: 11px;
+  font-weight: 600;
 }
 
 .rankStepName {
@@ -666,10 +684,9 @@
 }
 
 @media (max-width: 720px) {
-  .rankLadderGraphic { grid-template-columns: 1fr; gap: var(--space2); padding: var(--space4); }
-  .rankStep { flex-direction: row-reverse; justify-content: space-between; }
-  .rankStepBar { width: calc(35% + var(--stepIndex) * 20%); height: 32px; padding: 0 var(--space3); align-items: center; justify-content: flex-end; border-radius: 4px var(--radiusMedium) var(--radiusMedium) 4px; }
-  .rankStepName { min-width: 90px; text-align: left; }
+  .rankLadderGraphic { gap: var(--space2); padding: var(--space4) var(--space3) var(--space3); }
+  .rankStepBars { gap: 3px; height: 200px; }
+  .rankStepShare { font-size: 9px; }
 }
 
 .rankNote { margin-top: var(--space4); color: var(--colorTextMuted); font-size: 13px; }
