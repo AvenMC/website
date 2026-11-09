@@ -4,8 +4,8 @@
  * the pages only depend on the shapes returned here.
  */
 
-import { countries } from "./countries.js?v=90";
-import { getRankedTier, mythicMinRating, rankedBoardSize } from "./ranks.js?v=90";
+import { countries } from "./countries.js?v=91";
+import { getRankedTier, mythicMinRating, rankedBoardSize } from "./ranks.js?v=91";
 
 export const gamemodes = [
   { id: "nodebuff", name: "Nodebuff", short: "NB", description: "Classic potion PvP." },
@@ -178,9 +178,7 @@ function getMetric(player, categoryId) {
 
 function buildEntries(categoryId) {
   const isRankedMode = gamemodes.some((mode) => mode.id === categoryId);
-  // Ranked duel boards only list Mythic players.
-  const source = isRankedMode ? players.filter((player) => player.ratings[categoryId] >= mythicMinRating) : players;
-  return source
+  return players
     .map((player) => ({
       username: player.username,
       country: getCountry(player),
@@ -194,7 +192,8 @@ function buildEntries(categoryId) {
 
 // Every Mythic player has a place, even below the listed top rankedBoardSize. Null for other divisions.
 export function getMythicPosition(username, modeId) {
-  return buildEntries(modeId).find((entry) => entry.username === username)?.position ?? null;
+  const entry = buildEntries(modeId).find((item) => item.username === username);
+  return entry && entry.metric >= mythicMinRating ? entry.position : null;
 }
 
 export async function getLeaderboard(categoryId) {
@@ -206,7 +205,7 @@ export async function getLeaderboard(categoryId) {
 // Stand-in for the signed-in player until accounts exist.
 export const mockCurrentUsername = "SamplePlayer42";
 
-// position is null when the player has no leaderboard position (not Mythic on a ranked board).
+// position is null when the player has no leaderboard position (below Mythic and outside the listed top).
 export async function getMyStanding(categoryId) {
   await wait();
   const me = players.find((player) => player.username === mockCurrentUsername);
@@ -217,7 +216,7 @@ export async function getMyStanding(categoryId) {
     skinUrl: me.skinUrl,
     rank: me.rank,
     metric: getMetric(me, categoryId),
-    position: entry?.position ?? null,
+    position: entry && (entry.position <= rankedBoardSize || entry.metric >= mythicMinRating) ? entry.position : null,
     isRankedMode: gamemodes.some((mode) => mode.id === categoryId),
   };
 }

@@ -1,5 +1,5 @@
-import { el, replaceContent } from "../dom.js?v=90";
-import { renderLayout } from "../layout.js?v=90";
+import { el, replaceContent } from "../dom.js?v=91";
+import { renderLayout } from "../layout.js?v=91";
 import {
   createAvatar,
   createBadge,
@@ -11,13 +11,13 @@ import {
   createSkeletonRows,
   createTable,
   createTabs,
-} from "../components.js?v=90";
-import { gamemodes, getLeaderboard, getMyStanding, leaderboardCategories } from "../mockData.js?v=90";
-import { modeIconStyle, modeThemes } from "../modeTheme.js?v=90";
-import { createRankDistributionCard } from "./rankStats.js?v=90";
-import { attachPlayerPreview } from "../playerPreview.js?v=90";
-import { getRankedTier, getTierScore, memberRankColors, rankedBoardSize } from "../ranks.js?v=90";
-import { formatNumber } from "../format.js?v=90";
+} from "../components.js?v=91";
+import { gamemodes, getLeaderboard, getMyStanding, leaderboardCategories } from "../mockData.js?v=91";
+import { modeIconStyle, modeThemes } from "../modeTheme.js?v=91";
+import { createRankDistributionCard } from "./rankStats.js?v=91";
+import { attachPlayerPreview } from "../playerPreview.js?v=91";
+import { getRankedTier, getTierScore, memberRankColors, rankedBoardSize } from "../ranks.js?v=91";
+import { formatNumber } from "../format.js?v=91";
 
 const app = renderLayout("leaderboards");
 
@@ -110,7 +110,11 @@ function renderPlayerName(row, options) {
   return attachPlayerPreview(createPlayerName(row.username, options), row.username);
 }
 
-const formatScore = (row) => formatNumber(row.metric);
+const formatScore = (row) => {
+  if (!isRanked()) return formatNumber(row.metric);
+  const tier = getRankedTier(row.metric);
+  return tier.key === "mythic" ? `${formatNumber(row.metric)} pts` : getTierScore(row.metric, tier).text;
+};
 
 function renderPodium(entries) {
   const theme = isRanked() ? modeThemes[state.category] : null;
@@ -150,7 +154,7 @@ function renderTable(entries, pageEntries) {
             renderBadge(row),
           ),
       },
-      { label: isRanked() ? "Points" : category.metricLabel, align: "right", render: (row) => el("span", { className: "metricValue" }, formatScore(row)) },
+      { label: isRanked() ? "Score" : category.metricLabel, align: "right", render: (row) => el("span", { className: "metricValue" }, formatScore(row)) },
     ],
     rows: pageEntries,
   });
@@ -178,7 +182,7 @@ function renderSelfRow() {
   const tier = ranked ? getRankedTier(me.metric) : null;
   const onBoard = me.position !== null;
   const value = ranked && !onBoard ? `${tier.name} · ${getTierScore(me.metric, tier).text}` : formatScore(me);
-  const hint = ranked && !onBoard ? `Reach Mythic to enter the top ${rankedBoardSize}` : null;
+  const hint = ranked && !onBoard ? "Reach Mythic to get a leaderboard place" : null;
   return el(
     "div",
     { className: "selfRow", style: `--nameColor:${nameColor(me) ?? "var(--colorPrimary)"}` },
@@ -203,7 +207,7 @@ function renderBoardHeader(entries) {
     "div",
     { className: "boardHeader", style: theme ? `--accent:${theme.accent}` : "" },
     theme ? el("span", { className: "modeIcon small", style: modeIconStyle(state.category), "aria-hidden": "true" }) : null,
-    el("div", {}, el("h2", {}, category.label), el("p", {}, isRanked() ? `Top ${rankedBoardSize} Mythic players by points` : `Ranked by ${category.metricLabel.toLowerCase()}`)),
+    el("div", {}, el("h2", {}, category.label), el("p", {}, isRanked() ? `Top ${rankedBoardSize} players` : `Ranked by ${category.metricLabel.toLowerCase()}`)),
   );
 }
 

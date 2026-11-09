@@ -1,11 +1,11 @@
-import { el, replaceContent } from "../dom.js?v=90";
-import { initReveal } from "../effects.js?v=90";
-import { renderLayout } from "../layout.js?v=90";
-import { createButton, createRankedBadge, createSectionHeading } from "../components.js?v=90";
-import { createRankStatsSection } from "./rankStats.js?v=90";
-import { allRankTiers, rankTiers, rankedBoardSize } from "../ranks.js?v=90";
-import { gamemodes } from "../mockData.js?v=90";
-import { modeThemes } from "../modeTheme.js?v=90";
+import { el, replaceContent } from "../dom.js?v=91";
+import { initReveal } from "../effects.js?v=91";
+import { renderLayout } from "../layout.js?v=91";
+import { createButton, createRankedBadge, createSectionHeading } from "../components.js?v=91";
+import { createRankStatsSection } from "./rankStats.js?v=91";
+import { allRankTiers, rankTiers } from "../ranks.js?v=91";
+import { gamemodes } from "../mockData.js?v=91";
+import { modeThemes } from "../modeTheme.js?v=91";
 
 const app = renderLayout("ranked");
 const reveal = (delay = 0) => ({ "data-reveal": "", style: `--revealDelay:${delay}ms` });
@@ -22,7 +22,7 @@ function createDivisionCard(division) {
     isMythic
       ? el("div", { className: "divisionDemo" }, el("strong", {}, "2,431 pts"), el("span", { className: "scoreRankChip" }, "#17 on the leaderboard"))
       : el("div", { className: "divisionDemo" }, el("div", { className: "ladderTrack isWide" }, el("span", { className: "ladderFill", style: "width:64%" })), el("small", {}, "64% · at 100% you reach the next tier")),
-    isMythic ? el("p", {}, `Points instead of a bar, no cap. Top ${rankedBoardSize} are listed.`) : null,
+    isMythic ? el("p", {}, "Points instead of a bar, no cap. Every Mythic player gets a leaderboard place.") : null,
   );
 }
 
@@ -80,7 +80,7 @@ const leaderboardLink = el(
       "div",
       { className: "buttonRow" },
       gamemodes.map((mode) => {
-        const button = createButton({ label: `${mode.name} top ${rankedBoardSize}`, variant: "secondary", href: `leaderboards.html?board=${mode.id}` });
+        const button = createButton({ label: `${mode.name} leaderboard`, variant: "secondary", href: `leaderboards.html?board=${mode.id}` });
         button.classList.add("modeButton");
         button.style.setProperty("--accent", modeThemes[mode.id].accent);
         return button;
