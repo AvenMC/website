@@ -1,5 +1,5 @@
-import { el, replaceContent } from "../dom.js?v=71";
-import { renderLayout } from "../layout.js?v=71";
+import { el, replaceContent } from "../dom.js?v=72";
+import { renderLayout } from "../layout.js?v=72";
 import {
   createAvatar,
   createBadge,
@@ -9,13 +9,13 @@ import {
   createSectionHeading,
   createSkeletonRows,
   createSocialLinks,
-} from "../components.js?v=71";
-import { createCopyField, openJoinModal } from "../join.js?v=71";
-import { gamemodes, regions, getTopPlayersPreview } from "../mockData.js?v=71";
-import { formatNumber } from "../format.js?v=71";
-import { modeIconStyle, modeThemes } from "../modeTheme.js?v=71";
-import { allRankTiers, rankedBoardSize } from "../ranks.js?v=71";
-import { siteConfig } from "../siteConfig.js?v=71";
+} from "../components.js?v=72";
+import { createCopyField, openJoinModal } from "../join.js?v=72";
+import { gamemodes, regions, getTopPlayersPreview } from "../mockData.js?v=72";
+import { formatNumber } from "../format.js?v=72";
+import { modeIconStyle, modeThemes } from "../modeTheme.js?v=72";
+import { allRankTiers, rankedBoardSize } from "../ranks.js?v=72";
+import { siteConfig } from "../siteConfig.js?v=72";
 
 const app = renderLayout("home");
 const reveal = (delay = 0) => ({ "data-reveal": "", style: `--revealDelay:${delay}ms` });
@@ -232,22 +232,24 @@ getTopPlayersPreview().then((entries) => {
   );
 });
 
-// Each home section gets its own accent so the page isn't one blue tone.
+// One shared accent keeps the alternating section backgrounds consistent.
 const sectionAccents = {
-  gamemodes: "var(--colorNodebuff)",
-  features: "var(--colorMace)",
+  gamemodes: "var(--colorPrimary)",
+  features: "var(--colorPrimary)",
   ranking: "var(--colorCrystal)",
-  regions: "var(--colorSuccess)",
+  regions: "var(--colorPrimary)",
   community: "var(--colorCrystal)",
 };
-[
-  [gamemodesSection, sectionAccents.gamemodes, "glow"],
-  [featuresSection, sectionAccents.features, "grid"],
-  [rankingSection, sectionAccents.ranking, "beams"],
-  [regionsSection, sectionAccents.regions, "dots"],
-  [communitySection, sectionAccents.community, "aurora"],
-].forEach(([section, accent, bg]) => {
+[gamemodesSection, featuresSection, rankingSection, regionsSection, communitySection].forEach((section, index) => {
   section.classList.add("tintedSection");
-  section.dataset.bg = bg;
-  section.style.setProperty("--sectionAccent", accent);
+  // Every second section gets a filled tone so the page alternates between dark and lighter bands.
+  section.classList.toggle("isTinted", index % 2 === 1);
+  section.dataset.side = index % 2 === 0 ? "right" : "left";
 });
+[
+  [gamemodesSection, sectionAccents.gamemodes],
+  [featuresSection, sectionAccents.features],
+  [rankingSection, sectionAccents.ranking],
+  [regionsSection, sectionAccents.regions],
+  [communitySection, sectionAccents.community],
+].forEach(([section, accent]) => section.style.setProperty("--sectionAccent", accent));

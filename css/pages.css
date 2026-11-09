@@ -46,62 +46,65 @@
   }
 }
 
-/* Home sections: each has its own pattern, all fade out vertically so they blend into each other */
+/* Home sections: alternating background tones with wavy edges, a large soft circle and a thin ring on the side */
 .tintedSection {
   position: relative;
   isolation: isolate;
+  overflow: clip;
+  padding-block: calc(var(--space8) + 14px);
 }
 
-.tintedSection::before {
+.tintedSection.compact {
+  padding-block: calc(var(--space7) + 14px);
+}
+
+.tintedSection::before,
+.tintedSection::after {
   content: "";
   position: absolute;
-  inset: -80px 0;
   z-index: -1;
   pointer-events: none;
-  -webkit-mask-image: linear-gradient(transparent, #000 30%, #000 70%, transparent);
-  mask-image: linear-gradient(transparent, #000 30%, #000 70%, transparent);
 }
 
-.tintedSection[data-bg="glow"]::before {
-  background:
-    radial-gradient(50% 55% at 20% 50%, color-mix(in srgb, var(--sectionAccent) 22%, transparent), transparent),
-    radial-gradient(40% 45% at 85% 70%, color-mix(in srgb, var(--colorPrimary) 12%, transparent), transparent);
+.tintedSection::after {
+  top: 50%;
+  width: clamp(280px, 38vw, 520px);
+  aspect-ratio: 1;
+  border: 1px solid color-mix(in srgb, var(--sectionAccent) 28%, transparent);
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, color-mix(in srgb, var(--sectionAccent) 20%, transparent), color-mix(in srgb, var(--sectionAccent) 4%, transparent) 70%);
+  box-shadow: 0 0 0 36px color-mix(in srgb, var(--sectionAccent) 4%, transparent);
+  transform: translateY(-50%);
+  animation: sectionFloat 18s ease-in-out infinite alternate;
 }
 
-.tintedSection[data-bg="grid"]::before {
-  background:
-    linear-gradient(color-mix(in srgb, var(--sectionAccent) 14%, transparent) 1px, transparent 1px) 0 0 / 48px 48px,
-    linear-gradient(90deg, color-mix(in srgb, var(--sectionAccent) 14%, transparent) 1px, transparent 1px) 0 0 / 48px 48px,
-    radial-gradient(60% 60% at 50% 50%, color-mix(in srgb, var(--sectionAccent) 14%, transparent), transparent);
-  -webkit-mask-image: linear-gradient(transparent, #000 30%, #000 70%, transparent), radial-gradient(80% 70% at 50% 50%, #000, transparent);
-  -webkit-mask-composite: source-in;
-  mask-image: linear-gradient(transparent, #000 30%, #000 70%, transparent), radial-gradient(80% 70% at 50% 50%, #000, transparent);
-  mask-composite: intersect;
+.tintedSection[data-side="right"]::after {
+  right: calc(clamp(280px, 38vw, 520px) / -2.4);
 }
 
-.tintedSection[data-bg="beams"]::before {
-  background:
-    repeating-linear-gradient(115deg, transparent 0 90px, color-mix(in srgb, var(--sectionAccent) 10%, transparent) 90px 92px, transparent 92px 180px),
-    radial-gradient(70% 60% at 90% 40%, color-mix(in srgb, var(--sectionAccent) 20%, transparent), transparent);
+.tintedSection[data-side="left"]::after {
+  left: calc(clamp(280px, 38vw, 520px) / -2.4);
 }
 
-.tintedSection[data-bg="dots"]::before {
-  background:
-    radial-gradient(color-mix(in srgb, var(--sectionAccent) 35%, transparent) 1.5px, transparent 2px) 0 0 / 28px 28px,
-    radial-gradient(55% 60% at 10% 55%, color-mix(in srgb, var(--sectionAccent) 16%, transparent), transparent);
-}
-
-.tintedSection[data-bg="aurora"]::before {
-  background:
-    radial-gradient(45% 55% at 25% 60%, color-mix(in srgb, var(--colorCrystal) 22%, transparent), transparent),
-    radial-gradient(45% 55% at 75% 40%, color-mix(in srgb, var(--colorPrimary) 20%, transparent), transparent);
-  animation: auroraShift 14s ease-in-out infinite alternate;
-}
-
-@keyframes auroraShift {
+@keyframes sectionFloat {
   to {
-    transform: translateX(6%) scale(1.08);
+    transform: translateY(-44%) scale(1.05);
   }
+}
+
+/* Tinted sections get a filled layer with a wave at the top and bottom edge */
+.tintedSection.isTinted::before {
+  inset: 0;
+  background: linear-gradient(180deg, color-mix(in srgb, var(--sectionAccent) 9%, var(--colorSurface)), color-mix(in srgb, var(--sectionAccent) 4%, var(--colorSurface)));
+  --wave: 80px 14px;
+  -webkit-mask:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 80 14'%3E%3Cpath d='M0 7Q20 0 40 7T80 7V14H0Z'/%3E%3C/svg%3E") top / var(--wave) repeat-x,
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 80 14'%3E%3Cpath d='M0 7Q20 14 40 7T80 7V0H0Z'/%3E%3C/svg%3E") bottom / var(--wave) repeat-x,
+    linear-gradient(#000, #000) 0 13px / 100% calc(100% - 26px) no-repeat;
+  mask:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 80 14'%3E%3Cpath d='M0 7Q20 0 40 7T80 7V14H0Z'/%3E%3C/svg%3E") top / var(--wave) repeat-x,
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 80 14'%3E%3Cpath d='M0 7Q20 14 40 7T80 7V0H0Z'/%3E%3C/svg%3E") bottom / var(--wave) repeat-x,
+    linear-gradient(#000, #000) 0 13px / 100% calc(100% - 26px) no-repeat;
 }
 
 #app {
@@ -688,7 +691,7 @@
 @media (prefers-reduced-motion: reduce) {
   .hero::before,
   .hero::after,
-  .tintedSection::before {
+  .tintedSection::after {
     animation: none;
   }
 
