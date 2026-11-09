@@ -52,7 +52,7 @@ const hero = el(
   ),
 );
 
-const tickerItems = [...gamemodes.map((mode) => mode.name), ...regions.slice(0, 2).map((region) => `${region.code} ${region.location}`), "Ranked Duels", "FFA"];
+const tickerItems = ["Bedrock PvP", "Ranked Duels", "Unreal Top 50", "Global Leaderboards", "Cross-Region Stats", "Player Flags", "Free to Play"];
 const tickerGroup = () =>
   el("div", { className: "tickerGroup" }, tickerItems.map((item) => el("span", { className: "tickerItem" }, item)));
 const ticker = el(
