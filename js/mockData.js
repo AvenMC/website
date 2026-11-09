@@ -4,12 +4,15 @@
  * the pages only depend on the shapes returned here.
  */
 
+import { countries } from "./countries.js";
+
 export const gamemodes = [
   { id: "nodebuff", name: "Nodebuff", short: "NB", description: "Classic potion PvP." },
   { id: "crystalpvp", name: "CrystalPvP", short: "CP", description: "End crystal combat." },
   { id: "spearmace", name: "SpearMace", short: "SM", description: "Spear and mace duels." },
 ];
 
+// Accounts, stats and leaderboards are shared across all regions.
 export const regions = [
   { id: "eu", code: "EU", location: "Frankfurt", status: "Planned" },
   { id: "na", code: "NA", location: "New York", status: "Planned" },
@@ -75,6 +78,7 @@ function createPlayer(index) {
 
   return {
     username,
+    country: index % 5 === 4 ? null : countries[between(random, 0, countries.length)].code,
     skinUrl: null,
     rank: ranks[index % ranks.length],
     level,
@@ -90,7 +94,6 @@ function createPlayer(index) {
       losses: duels.losses,
       playtimeHours: between(random, 20, 900),
     },
-    regionOffset: { eu: 0, na: between(random, -120, 120) },
     recentMatches: createRecentMatches(random, index),
   };
 }
@@ -106,6 +109,7 @@ function createRecentMatches(random, index) {
       result: won ? "Win" : "Loss",
       score: won ? `${winnerScore}-${between(random, 20, 95)}` : `${between(random, 20, 95)}-${winnerScore}`,
       opponent: `SamplePlayer${String(((index + matchIndex + 1) % 12) + 1).padStart(2, "0")}`,
+      opponentCountry: null,
       playedAt: new Date(baseTime - matchIndex * 47 * 60000).toISOString(),
     };
   });
@@ -120,11 +124,29 @@ export async function getPlayerNames() {
   return players.map((player) => player.username);
 }
 
+// Mock persistence: real country selection needs a backend; until then it is kept in this browser only.
+const countryStorageKey = (username) => `avenmc.mock.country.${username}`;
+
+export function getCountry(player) {
+  try {
+    const stored = localStorage.getItem(countryStorageKey(player.username));
+    if (stored !== null) return stored === "" ? null : stored;
+  } catch {}
+  return player.country;
+}
+
+export async function setCountry(username, code) {
+  await wait();
+  try {
+    localStorage.setItem(countryStorageKey(username), code ?? "");
+  } catch {}
+}
+
 export async function getPlayer(username) {
   await wait();
   const query = (username ?? "").trim().toLowerCase();
-  if (!query) return players[0];
-  return players.find((player) => player.username.toLowerCase() === query) ?? null;
+  const found = query ? players.find((player) => player.username.toLowerCase() === query) : players[0];
+  return found ? { ...found, country: getCountry(found) } : null;
 }
 
 export const leaderboardCategories = [
@@ -134,33 +156,32 @@ export const leaderboardCategories = [
   ...gamemodes.map((mode) => ({ id: mode.id, label: mode.name, metricLabel: "Rating" })),
 ];
 
-function getMetric(player, categoryId, regionId) {
-  const offset = player.regionOffset[regionId] ?? 0;
+function getMetric(player, categoryId) {
   if (categoryId === "overall") {
     const values = Object.values(player.ratings);
-    return Math.round(values.reduce((sum, value) => sum + value, 0) / values.length) + offset;
+    return Math.round(values.reduce((sum, value) => sum + value, 0) / values.length);
   }
-  if (categoryId === "duels") return Math.max(0, player.duels.wins + offset);
-  if (categoryId === "ffa") return Math.max(0, player.ffa.kills + offset * 5);
-  return player.ratings[categoryId] + offset;
+  if (categoryId === "duels") return Math.max(0, player.duels.wins);
+  if (categoryId === "ffa") return Math.max(0, player.ffa.kills);
+  return player.ratings[categoryId];
 }
 
-export async function getLeaderboard(categoryId, regionId) {
+export async function getLeaderboard(categoryId) {
   await wait();
-  if (!(regionId in players[0].regionOffset)) return [];
 
   return players
     .map((player) => ({
       username: player.username,
+      country: getCountry(player),
       skinUrl: player.skinUrl,
       rank: player.rank,
-      metric: getMetric(player, categoryId, regionId),
+      metric: getMetric(player, categoryId),
     }))
     .sort((a, b) => b.metric - a.metric)
     .map((entry, index) => ({ ...entry, position: index + 1 }));
 }
 
 export async function getTopPlayersPreview() {
-  const entries = await getLeaderboard("overall", "eu");
+  const entries = await getLeaderboard("overall");
   return entries.slice(0, 3);
 }

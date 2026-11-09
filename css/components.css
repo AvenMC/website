@@ -840,3 +840,30 @@ a.card:hover,
     display: none;
   }
 }
+
+.playerLabel {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space2);
+  min-width: 0;
+}
+
+.flag {
+  flex: none;
+  border-radius: 3px;
+  box-shadow: 0 0 0 1px var(--colorBorder);
+  object-fit: cover;
+}
+
+.countryPicker {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space3);
+  margin-top: var(--space3);
+}
+
+.regionNote {
+  margin: calc(var(--space3) * -1) 0 var(--space5);
+  color: var(--colorTextSecondary);
+}

@@ -15,7 +15,8 @@ import {
   createTabs,
   withTooltip,
 } from "../components.js";
-import { gamemodes, getPlayer, getTier } from "../mockData.js";
+import { countries } from "../countries.js";
+import { gamemodes, getPlayer, getTier, setCountry } from "../mockData.js";
 import { formatDateTime, formatNumber, formatPercent, formatPlaytime, formatRatio } from "../format.js";
 
 const app = renderLayout("profile");
@@ -78,6 +79,19 @@ function renderSkeleton() {
   );
 }
 
+function renderCountryPicker(player) {
+  const dropdown = createDropdown({
+    label: "Country",
+    value: player.country ?? "",
+    options: [{ value: "", label: "No flag" }, ...countries.map((country) => ({ value: country.code, label: country.name }))],
+    onChange: async (code) => {
+      await setCountry(player.username, code || null);
+      loadPlayer(player.username);
+    },
+  });
+  return el("div", { className: "countryPicker" }, el("span", { className: "mutedText" }, "Country flag"), dropdown, createBadge({ label: "Saved in this browser only" }));
+}
+
 function renderHeader(player) {
   return el(
     "div",
@@ -89,7 +103,7 @@ function renderHeader(player) {
       el(
         "div",
         { className: "profileName" },
-        el("h1", {}, createPlayerName(player.username)),
+        el("h1", {}, createPlayerName(player.username, { country: player.country, flagSize: "large" })),
         createRankBadge(player.rank),
         createBadge({ label: "Placeholder data" }),
       ),
@@ -111,6 +125,7 @@ function renderHeader(player) {
         ),
         el("span", { className: "mutedText" }, `${Math.round(player.levelProgress * 100)}%`),
       ),
+      renderCountryPicker(player),
     ),
   );
 }
@@ -224,7 +239,7 @@ function renderMatches(player, container) {
               render: (row) => el("span", { className: row.result === "Win" ? "resultWin" : "resultLoss" }, row.result),
             },
             { label: "Score", key: "score" },
-            { label: "Opponent", render: (row) => createPlayerName(row.opponent) },
+            { label: "Opponent", render: (row) => createPlayerName(row.opponent, { country: row.opponentCountry }) },
             { label: "Date", align: "right", render: (row) => el("span", { className: "mutedText" }, formatDateTime(row.playedAt)) },
           ],
           rows: matches,

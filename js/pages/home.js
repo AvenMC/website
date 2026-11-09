@@ -151,7 +151,7 @@ const regionsSection = el(
   el(
     "div",
     { className: "container" },
-    el("div", reveal(), createSectionHeading({ eyebrow: "Regions", title: "Play close to home" })),
+    el("div", reveal(), createSectionHeading({ eyebrow: "Regions", title: "Play close to home" }), el("p", { className: "regionNote" }, "One account across every region. Stats and leaderboards are shared.")),
     el(
       "div",
       { className: "grid cols3" },
@@ -239,7 +239,7 @@ getTopPlayersPreview().then((entries) => {
         { className: "previewRow" },
         el("span", { className: "positionBadge" }, entry.position),
         createAvatar({ username: entry.username, skinUrl: entry.skinUrl }),
-        createPlayerName(entry.username),
+        createPlayerName(entry.username, { country: entry.country }),
         el("span", { className: "previewValue" }, formatNumber(entry.metric)),
       ),
     ),

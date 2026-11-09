@@ -3,7 +3,6 @@ import { renderLayout } from "../layout.js";
 import {
   createAvatar,
   createBadge,
-  createDropdown,
   createEmptyState,
   createPlayerName,
   createRankBadge,
@@ -12,11 +11,11 @@ import {
   createTable,
   createTabs,
 } from "../components.js";
-import { getLeaderboard, leaderboardCategories, regions } from "../mockData.js";
+import { getLeaderboard, leaderboardCategories } from "../mockData.js";
 import { formatNumber } from "../format.js";
 
 const app = renderLayout("leaderboards");
-const state = { category: "overall", region: "eu", requestId: 0 };
+const state = { category: "overall", requestId: 0 };
 const results = el("div", { "aria-live": "polite" });
 
 const tabs = createTabs({
@@ -25,16 +24,6 @@ const tabs = createTabs({
   tabs: leaderboardCategories.map((category) => ({ id: category.id, label: category.label })),
   onChange: (id) => {
     state.category = id;
-    loadLeaderboard();
-  },
-});
-
-const regionDropdown = createDropdown({
-  label: "Region",
-  value: state.region,
-  options: regions.map((region) => ({ value: region.id, label: `${region.code} — ${region.location}` })),
-  onChange: (id) => {
-    state.region = id;
     loadLeaderboard();
   },
 });
@@ -50,9 +39,9 @@ replaceContent(
       createSectionHeading({ eyebrow: "Leaderboards", title: "Top players", level: "h1" }),
       createBadge({ label: "Placeholder data", variant: "primary" }),
     ),
-    el("div", { className: "toolbar" }, tabs, el("span", { className: "spacer" }), regionDropdown),
+    el("div", { className: "toolbar" }, tabs, el("span", { className: "spacer" }), createBadge({ label: "All regions" })),
     results,
-    el("p", { className: "placeholderNote" }, "Rankings are generated sample data until real leaderboards are connected."),
+    el("p", { className: "placeholderNote" }, "Rankings combine all regions. Sample data until real leaderboards are connected."),
   ),
 );
 
@@ -71,7 +60,7 @@ function renderTable(entries) {
             "a",
             { className: "cellPlayer", href: `profile.html?player=${encodeURIComponent(row.username)}` },
             createAvatar({ username: row.username, skinUrl: row.skinUrl }),
-            createPlayerName(row.username),
+            createPlayerName(row.username, { country: row.country }),
           ),
       },
       { label: "Rank", hideOnMobile: true, render: (row) => createRankBadge(row.rank) },
@@ -89,13 +78,13 @@ async function loadLeaderboard() {
   const requestId = ++state.requestId;
   replaceContent(results, el("div", { className: "stack" }, Array.from({ length: 6 }, () => createSkeleton({ height: 52 }))));
 
-  const entries = await getLeaderboard(state.category, state.region);
+  const entries = await getLeaderboard(state.category);
   if (requestId !== state.requestId) return;
 
   replaceContent(
     results,
     entries.length === 0
-      ? createEmptyState({ title: "No data yet", text: "This region is not available yet." })
+      ? createEmptyState({ title: "No data yet", text: "Rankings appear once players have finished matches." })
       : renderTable(entries),
   );
 }

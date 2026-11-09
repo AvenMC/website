@@ -1,3 +1,4 @@
+import { countries } from "./countries.js";
 import { el } from "./dom.js";
 import { siteConfig } from "./siteConfig.js";
 
@@ -56,8 +57,22 @@ export function createAvatar({ username, skinUrl = null, size = "default" }) {
   return el("span", { className, "aria-hidden": "true" }, content);
 }
 
-export function createPlayerName(username, { tag = "span" } = {}) {
-  return el(tag, { className: "playerName" }, username);
+export function createFlag(code, { size = "medium" } = {}) {
+  const country = countries.find((item) => item.code === code);
+  if (!country) return null;
+  return el("img", {
+    className: `flag flag${size === "large" ? "Large" : "Medium"}`,
+    src: `assets/flags/${country.code}.svg`,
+    alt: country.name,
+    title: country.name,
+    width: size === "large" ? "28" : "20",
+    height: size === "large" ? "21" : "15",
+    loading: "lazy",
+  });
+}
+
+export function createPlayerName(username, { tag = "span", country = null, flagSize = "medium" } = {}) {
+  return el(tag, { className: "playerLabel" }, createFlag(country, { size: flagSize }), el("span", { className: "playerName" }, username));
 }
 
 export function createRankBadge(rank) {
