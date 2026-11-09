@@ -78,6 +78,10 @@ export function createRankBadge(rank) {
   return createBadge({ label: rank, variant: rank === "Member" ? "default" : "primary" });
 }
 
+export function createRankedBadge(tier) {
+  return el("span", { className: `tierBadge${tier.key === "unreal" ? " isUnreal" : ""}`, style: `--tierColor:${tier.color}` }, tier.name);
+}
+
 export function createStatCard({ label, value, hint, accent = false }) {
   return el(
     "div",

@@ -5,6 +5,7 @@
  */
 
 import { countries } from "./countries.js";
+import { getRankedTier, unrealCap, unrealMinRating } from "./ranks.js";
 
 export const gamemodes = [
   { id: "nodebuff", name: "Nodebuff", short: "NB", description: "Classic potion PvP." },
@@ -21,19 +22,6 @@ export const regions = [
 
 const mockDelayMs = 350;
 const ranks = ["Member", "Member", "Member", "VIP", "VIP", "Elite"];
-const tiers = [
-  { min: 1800, name: "Master" },
-  { min: 1600, name: "Diamond" },
-  { min: 1400, name: "Platinum" },
-  { min: 1200, name: "Gold" },
-  { min: 1000, name: "Silver" },
-  { min: 0, name: "Bronze" },
-];
-
-export function getTier(rating) {
-  return tiers.find((tier) => rating >= tier.min).name;
-}
-
 function createRandom(seed) {
   let state = seed;
   return () => {
@@ -51,7 +39,7 @@ function createPlayer(index) {
   const random = createRandom(index * 9973 + 17);
   const username = `SamplePlayer${String(index + 1).padStart(2, "0")}`;
   const ratings = Object.fromEntries(
-    gamemodes.map((mode) => [mode.id, between(random, 900, 1950)]),
+    gamemodes.map((mode) => [mode.id, between(random, 700, 2650)]),
   );
   const perMode = Object.fromEntries(
     gamemodes.map((mode) => [
@@ -108,14 +96,33 @@ function createRecentMatches(random, index) {
       gamemode: mode.id,
       result: won ? "Win" : "Loss",
       score: won ? `${winnerScore}-${between(random, 20, 95)}` : `${between(random, 20, 95)}-${winnerScore}`,
-      opponent: `SamplePlayer${String(((index + matchIndex + 1) % 12) + 1).padStart(2, "0")}`,
+      opponent: `SamplePlayer${String(((index + matchIndex + 1) % playerCount) + 1).padStart(2, "0")}`,
       opponentCountry: null,
       playedAt: new Date(baseTime - matchIndex * 47 * 60000).toISOString(),
     };
   });
 }
 
-const players = Array.from({ length: 12 }, (_, index) => createPlayer(index));
+const playerCount = 90;
+const players = Array.from({ length: playerCount }, (_, index) => createPlayer(index));
+
+// Unreal is limited to the top unrealCap players per gamemode.
+const unrealHolders = Object.fromEntries(
+  gamemodes.map((mode) => [
+    mode.id,
+    new Set(
+      players
+        .filter((player) => player.ratings[mode.id] >= unrealMinRating)
+        .sort((a, b) => b.ratings[mode.id] - a.ratings[mode.id])
+        .slice(0, unrealCap)
+        .map((player) => player.username),
+    ),
+  ]),
+);
+
+export function getPlayerTier(player, modeId) {
+  return getRankedTier(player.ratings[modeId], { isUnreal: unrealHolders[modeId].has(player.username) });
+}
 
 const wait = () => new Promise((resolve) => setTimeout(resolve, mockDelayMs));
 
@@ -168,8 +175,11 @@ function getMetric(player, categoryId) {
 
 export async function getLeaderboard(categoryId) {
   await wait();
+  const isRankedMode = gamemodes.some((mode) => mode.id === categoryId);
+  // Ranked gamemode boards only list Unreal players.
+  const source = isRankedMode ? players.filter((player) => unrealHolders[categoryId].has(player.username)) : players;
 
-  return players
+  return source
     .map((player) => ({
       username: player.username,
       country: getCountry(player),

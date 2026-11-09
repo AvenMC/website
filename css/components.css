@@ -867,3 +867,29 @@ a.card:hover,
   margin: calc(var(--space3) * -1) 0 var(--space5);
   color: var(--colorTextSecondary);
 }
+
+.tierBadge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px var(--space3);
+  border: 1px solid color-mix(in srgb, var(--tierColor) 55%, transparent);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--tierColor) 14%, transparent);
+  color: var(--tierColor);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.tierBadge.isUnreal {
+  box-shadow: 0 0 14px color-mix(in srgb, var(--tierColor) 35%, transparent);
+}
+
+.rankLadder {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space2);
+  margin-bottom: var(--space4);
+}

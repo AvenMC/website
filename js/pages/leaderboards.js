@@ -5,6 +5,7 @@ import {
   createBadge,
   createEmptyState,
   createPlayerName,
+  createRankedBadge,
   createRankBadge,
   createSectionHeading,
   createSkeleton,
@@ -12,6 +13,8 @@ import {
   createTabs,
 } from "../components.js";
 import { getLeaderboard, leaderboardCategories } from "../mockData.js";
+import { gamemodes } from "../mockData.js";
+import { getRankedTier, rankTiers, unrealCap } from "../ranks.js";
 import { formatNumber } from "../format.js";
 
 const app = renderLayout("leaderboards");
@@ -41,12 +44,23 @@ replaceContent(
     ),
     el("div", { className: "toolbar" }, tabs, el("span", { className: "spacer" }), createBadge({ label: "All regions" })),
     results,
-    el("p", { className: "placeholderNote" }, "Rankings combine all regions. Sample data until real leaderboards are connected."),
+    el("p", { className: "placeholderNote" }, "Rankings combine all regions. Ranked gamemode boards list Unreal players only (top 50). Sample data until real leaderboards are connected."),
   ),
 );
 
+const isRankedCategory = () => gamemodes.some((mode) => mode.id === state.category);
+
+function renderLadder() {
+  return el(
+    "div",
+    { className: "rankLadder", "aria-label": "Ranked ladder" },
+    rankTiers.map((tier) => createRankedBadge({ ...tier, name: tier.key === "unreal" ? `Unreal · Top ${unrealCap}` : tier.label })),
+  );
+}
+
 function renderTable(entries) {
   const category = leaderboardCategories.find((item) => item.id === state.category);
+  const ranked = isRankedCategory();
 
   return createTable({
     caption: `${category.label} leaderboard`,
@@ -63,7 +77,9 @@ function renderTable(entries) {
             createPlayerName(row.username, { country: row.country }),
           ),
       },
-      { label: "Rank", hideOnMobile: true, render: (row) => createRankBadge(row.rank) },
+      ranked
+        ? { label: "Tier", hideOnMobile: true, render: (row) => createRankedBadge(getRankedTier(row.metric, { isUnreal: true })) }
+        : { label: "Rank", hideOnMobile: true, render: (row) => createRankBadge(row.rank) },
       {
         label: category.metricLabel,
         align: "right",
@@ -84,8 +100,8 @@ async function loadLeaderboard() {
   replaceContent(
     results,
     entries.length === 0
-      ? createEmptyState({ title: "No data yet", text: "Rankings appear once players have finished matches." })
-      : renderTable(entries),
+      ? createEmptyState({ title: "No data yet", text: "No Unreal players yet." })
+      : [isRankedCategory() ? renderLadder() : null, renderTable(entries)],
   );
 }
 

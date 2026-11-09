@@ -12,11 +12,12 @@ import {
   createSkeleton,
   createStatCard,
   createTable,
+  createRankedBadge,
   createTabs,
   withTooltip,
 } from "../components.js";
 import { countries } from "../countries.js";
-import { gamemodes, getPlayer, getTier, setCountry } from "../mockData.js";
+import { gamemodes, getPlayer, getPlayerTier, setCountry } from "../mockData.js";
 import { formatDateTime, formatNumber, formatPercent, formatPlaytime, formatRatio } from "../format.js";
 
 const app = renderLayout("profile");
@@ -156,12 +157,12 @@ function renderRatingsTable(player) {
         align: "right",
         render: (row) => withTooltip(el("span", { className: "metricValue" }, formatNumber(row.rating)), "Placeholder rating"),
       },
-      { label: "Tier", align: "right", render: (row) => createBadge({ label: row.tier, variant: "primary" }) },
+      { label: "Tier", align: "right", render: (row) => createRankedBadge(row.tier) },
     ],
     rows: gamemodes.map((mode) => ({
       name: mode.name,
       rating: player.ratings[mode.id],
-      tier: getTier(player.ratings[mode.id]),
+      tier: getPlayerTier(player, mode.id),
     })),
   });
 }
@@ -200,7 +201,7 @@ function renderGamemodes(player) {
         "div",
         { className: "card stack" },
         el("h3", {}, mode.name),
-        createBadge({ label: getTier(player.ratings[mode.id]), variant: "primary" }),
+        createRankedBadge(getPlayerTier(player, mode.id)),
         el(
           "div",
           { className: "grid cols2 statGrid" },
