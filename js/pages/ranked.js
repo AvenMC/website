@@ -1,16 +1,16 @@
-import { el, replaceContent } from "../dom.js?v=50";
-import { renderLayout } from "../layout.js?v=50";
-import { createButton, createSectionHeading } from "../components.js?v=50";
-import { createRankStatsSection } from "./rankStats.js?v=50";
-import { rankTiers, rankedBoardSize } from "../ranks.js?v=50";
-import { gamemodes } from "../mockData.js?v=50";
-import { modeThemes } from "../modeTheme.js?v=50";
+import { el, replaceContent } from "../dom.js?v=51";
+import { renderLayout } from "../layout.js?v=51";
+import { createButton, createSectionHeading } from "../components.js?v=51";
+import { createRankStatsSection } from "./rankStats.js?v=51";
+import { rankTiers, rankedBoardSize } from "../ranks.js?v=51";
+import { gamemodes } from "../mockData.js?v=51";
+import { modeThemes } from "../modeTheme.js?v=51";
 
 const app = renderLayout("ranked");
 const reveal = (delay = 0) => ({ "data-reveal": "", style: `--revealDelay:${delay}ms` });
 
 const rankSteps = [
-  ["Play ranked duels", "Win duels to gain rating in each gamemode. Losses cost rating."],
+  ["Play ranked duels", "Win duels to gain percent or points in each gamemode. Losses cost some of it."],
   ["Climb the divisions", "Bronze, Silver and Gold each have three tiers (I–III). Above them waits Mythic."],
   ["Reach Mythic", `Mythic has no player limit. The top ${rankedBoardSize} Mythic players per gamemode make the leaderboard.`],
 ];
@@ -82,6 +82,36 @@ const scoreSection = el(
   ),
 );
 
+const gainFactors = [
+  ["Speed", "Faster wins", "The quicker you close out a duel, the more you earn.", "var(--colorNodebuff)"],
+  ["Health", "HP lost", "Winning with more health left is worth more than a close fight.", "var(--colorDanger)"],
+  ["Opponent", "Division gap", "Beating someone in a higher division earns more. If you are the higher division, you get less.", "var(--colorMace)"],
+];
+
+const gainSection = el(
+  "section",
+  { className: "section compact" },
+  el(
+    "div",
+    { className: "container" },
+    el("div", reveal(), createSectionHeading({ eyebrow: "Gains", title: "What decides your percent and points" })),
+    el(
+      "div",
+      { className: "grid cols3" },
+      gainFactors.map(([label, value, text, accent], index) =>
+        el(
+          "div",
+          { className: "card scoreCard", ...reveal(index * 90), style: `--accent:${accent};--revealDelay:${index * 90}ms` },
+          el("span", { className: "scoreCardLabel" }, label),
+          el("strong", { className: "scoreCardValue" }, value),
+          el("p", { className: "cardText" }, text),
+        ),
+      ),
+    ),
+    el("p", { className: "rankNote" }, "This applies to both percent in Bronze, Silver and Gold and points in Mythic. Exact values are tuned before launch."),
+  ),
+);
+
 const leaderboardLink = el(
   "section",
   { className: "section compact" },
@@ -102,4 +132,4 @@ const leaderboardLink = el(
   ),
 );
 
-replaceContent(app, ladderSection, scoreSection, createRankStatsSection(), leaderboardLink);
+replaceContent(app, ladderSection, scoreSection, gainSection, createRankStatsSection(), leaderboardLink);
