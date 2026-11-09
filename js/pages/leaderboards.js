@@ -1,5 +1,5 @@
-import { el, replaceContent } from "../dom.js?v=48";
-import { renderLayout } from "../layout.js?v=48";
+import { el, replaceContent } from "../dom.js?v=49";
+import { renderLayout } from "../layout.js?v=49";
 import {
   createAvatar,
   createBadge,
@@ -12,12 +12,12 @@ import {
   createSkeletonRows,
   createTable,
   createTabs,
-} from "../components.js?v=48";
-import { gamemodes, getLeaderboard, leaderboardCategories } from "../mockData.js?v=48";
-import { modeIconStyle, modeThemes } from "../modeTheme.js?v=48";
-import { createRankDistributionCard } from "./rankStats.js?v=48";
-import { getRankedTier, getTierProgress, rankTiers, rankedBoardSize } from "../ranks.js?v=48";
-import { formatNumber } from "../format.js?v=48";
+} from "../components.js?v=49";
+import { gamemodes, getLeaderboard, leaderboardCategories } from "../mockData.js?v=49";
+import { modeIconStyle, modeThemes } from "../modeTheme.js?v=49";
+import { createRankDistributionCard } from "./rankStats.js?v=49";
+import { getRankedTier, rankedBoardSize } from "../ranks.js?v=49";
+import { formatNumber } from "../format.js?v=49";
 
 const app = renderLayout("leaderboards");
 
@@ -96,14 +96,10 @@ replaceContent(
 );
 
 function renderTierCell(row) {
-  return isRanked() ? createRankedBadge(getRankedTier(row.metric, { isMythic: row.isMythic })) : createRankBadge(row.rank);
+  return isRanked() ? createRankedBadge(getRankedTier(row.metric)) : createRankBadge(row.rank);
 }
 
-// Mythic shows an open-ended rating, every other division shows progress in percent.
-function formatScore(row) {
-  if (!isRanked()) return formatNumber(row.metric);
-  return row.isMythic ? formatNumber(row.metric) : `${getTierProgress(row.metric)}%`;
-}
+const formatScore = (row) => formatNumber(row.metric);
 
 function renderPodium(entries) {
   const theme = isRanked() ? modeThemes[state.category] : null;
@@ -143,7 +139,7 @@ function renderTable(entries, pageEntries) {
           ),
       },
       { label: isRanked() ? "Division" : "Rank", hideOnMobile: true, render: renderTierCell },
-      { label: isRanked() ? "Points / Progress" : category.metricLabel, align: "right", render: (row) => el("span", { className: "metricValue" }, formatScore(row)) },
+      { label: isRanked() ? "Points" : category.metricLabel, align: "right", render: (row) => el("span", { className: "metricValue" }, formatScore(row)) },
     ],
     rows: pageEntries,
   });
@@ -172,7 +168,7 @@ function renderBoardHeader(entries) {
     "div",
     { className: "boardHeader", style: theme ? `--accent:${theme.accent}` : "" },
     theme ? el("span", { className: "modeIcon small", style: modeIconStyle(state.category), "aria-hidden": "true" }) : null,
-    el("div", {}, el("h2", {}, category.label), el("p", {}, isRanked() ? `Top ${rankedBoardSize} · Mythic shows points, other divisions show tier progress` : `Ranked by ${category.metricLabel.toLowerCase()}`)),
+    el("div", {}, el("h2", {}, category.label), el("p", {}, isRanked() ? `Top ${rankedBoardSize} Mythic players by points` : `Ranked by ${category.metricLabel.toLowerCase()}`)),
   );
 }
 

@@ -1,10 +1,10 @@
-import { el, replaceContent } from "../dom.js?v=48";
-import { renderLayout } from "../layout.js?v=48";
-import { createButton, createSectionHeading } from "../components.js?v=48";
-import { createRankStatsSection } from "./rankStats.js?v=48";
-import { rankTiers, mythicCap, rankedBoardSize } from "../ranks.js?v=48";
-import { gamemodes } from "../mockData.js?v=48";
-import { modeThemes } from "../modeTheme.js?v=48";
+import { el, replaceContent } from "../dom.js?v=49";
+import { renderLayout } from "../layout.js?v=49";
+import { createButton, createSectionHeading } from "../components.js?v=49";
+import { createRankStatsSection } from "./rankStats.js?v=49";
+import { rankTiers, rankedBoardSize } from "../ranks.js?v=49";
+import { gamemodes } from "../mockData.js?v=49";
+import { modeThemes } from "../modeTheme.js?v=49";
 
 const app = renderLayout("ranked");
 const reveal = (delay = 0) => ({ "data-reveal": "", style: `--revealDelay:${delay}ms` });
@@ -12,7 +12,7 @@ const reveal = (delay = 0) => ({ "data-reveal": "", style: `--revealDelay:${dela
 const rankSteps = [
   ["Play ranked duels", "Win duels to gain rating in each gamemode. Losses cost rating."],
   ["Climb the divisions", "Bronze, Silver and Gold each have three tiers (I–III). Above them waits Mythic."],
-  ["Reach Mythic", `The top division is capped at ${mythicCap} players per gamemode. Hold your spot.`],
+  ["Reach Mythic", `Mythic has no player limit. The top ${rankedBoardSize} Mythic players per gamemode make the leaderboard.`],
 ];
 
 const ladderSection = el(
@@ -31,7 +31,7 @@ const ladderSection = el(
           { className: `rankStep${tier.key === "mythic" ? " isMythic" : ""}`, style: `--tierColor:${tier.color};--stepIndex:${index}` },
           el("span", { className: "rankStepBar" }, tier.tiers > 1 ? el("span", { className: "rankStepDivisions" }, "I · II · III") : null),
           el("span", { className: "rankStepName" }, tier.label),
-          tier.key === "mythic" ? el("span", { className: "rankStepNote" }, `Top ${mythicCap}`) : null,
+          tier.key === "mythic" ? el("span", { className: "rankStepNote" }, `Top ${rankedBoardSize} on the board`) : null,
         ),
       ),
     ),
@@ -54,9 +54,9 @@ const ladderSection = el(
 );
 
 const scoreCards = [
-  ["Bronze, Silver, Gold", "Progress in %", "Your progress through the current tier, from 0% to 99%. Reach 100% to move up to the next tier or division.", "var(--colorPrimary)"],
-  ["Mythic", "Points", `Mythic has no tiers and no percent. You get an open-ended point total that keeps going up with every win. Only ${mythicCap} players hold Mythic per gamemode.`, rankTiers[3].color],
-  ["Leaderboards", `Top ${rankedBoardSize}`, "Every ranked leaderboard shows the top 100 players of that gamemode. Mythic players show points, everyone else shows progress in %.", "var(--colorSuccess)"],
+  ["Bronze, Silver, Gold", "Progress in %", "Your progress through the current tier, from 0% to 99%. Reach 100% to move up. These divisions have no leaderboard spot.", "var(--colorPrimary)"],
+  ["Mythic", "Points", "Mythic has no tiers, no percent and no player limit. You get an open-ended point total that keeps going up with every win.", rankTiers[3].color],
+  ["Leaderboards", `Top ${rankedBoardSize}`, `Only Mythic players are ranked. The top ${rankedBoardSize} by points per gamemode appear on the leaderboard.`, "var(--colorSuccess)"],
 ];
 
 const scoreSection = el(

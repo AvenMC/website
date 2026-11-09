@@ -1,5 +1,5 @@
-import { el, replaceContent } from "../dom.js?v=48";
-import { renderLayout } from "../layout.js?v=48";
+import { el, replaceContent } from "../dom.js?v=49";
+import { renderLayout } from "../layout.js?v=49";
 import {
   createAvatar,
   createBadge,
@@ -8,13 +8,13 @@ import {
   createSectionHeading,
   createSkeletonRows,
   createSocialLinks,
-} from "../components.js?v=48";
-import { createCopyField, openJoinModal } from "../join.js?v=48";
-import { gamemodes, regions, getTopPlayersPreview } from "../mockData.js?v=48";
-import { formatNumber } from "../format.js?v=48";
-import { modeIcons, modeThemes } from "../modeTheme.js?v=48";
-import { rankTiers, mythicCap } from "../ranks.js?v=48";
-import { siteConfig } from "../siteConfig.js?v=48";
+} from "../components.js?v=49";
+import { createCopyField, openJoinModal } from "../join.js?v=49";
+import { gamemodes, regions, getTopPlayersPreview } from "../mockData.js?v=49";
+import { formatNumber } from "../format.js?v=49";
+import { modeIcons, modeThemes } from "../modeTheme.js?v=49";
+import { rankTiers, rankedBoardSize } from "../ranks.js?v=49";
+import { siteConfig } from "../siteConfig.js?v=49";
 
 const app = renderLayout("home");
 const reveal = (delay = 0) => ({ "data-reveal": "", style: `--revealDelay:${delay}ms` });
@@ -30,7 +30,7 @@ const hero = el(
       { className: "heroContent" },
       createBadge({ label: "Bedrock Practice Network", variant: "primary" }),
       el("h1", {}, "Duel. ", el("span", { className: "accent" }, "Rank."), " Rise."),
-      el("p", { className: "heroDescription" }, "Only 30 players per mode reach Mythic. One account, one ranking, every region."),
+      el("p", { className: "heroDescription" }, "Reach Mythic and climb the top 50. One account, one ranking, every region."),
       el(
         "div",
         { className: "ipPanel" },
@@ -103,8 +103,8 @@ const rankedTeaser = el(
         "div",
         { className: "rankedTeaserText" },
         createBadge({ label: "Ranked", variant: "primary" }),
-        el("h2", {}, `Only ${mythicCap} reach Mythic`),
-        el("p", { className: "cardText" }, "Climb the divisions from Bronze to Mythic. A new season only drops you back a few tiers, no full reset."),
+        el("h2", {}, `Climb to the top ${rankedBoardSize}`),
+        el("p", { className: "cardText" }, "Climb from Bronze to Mythic and fight for a spot on the leaderboard. A new season only drops you back a few tiers, no full reset."),
         createButton({ label: "Explore Ranked", href: "ranked.html" }),
       ),
       el(

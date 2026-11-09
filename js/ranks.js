@@ -1,7 +1,7 @@
-// AVENMC divisions. The three lower divisions have tiers I-III. Mythic is capped: only the top mythicCap players above the rating threshold hold it.
-export const mythicCap = 30;
+// AVENMC divisions. The three lower divisions have tiers I-III. Mythic has no player limit,
+// but only the top rankedBoardSize Mythic players appear on the leaderboard.
 export const mythicMinRating = 2200;
-export const rankedBoardSize = 100;
+export const rankedBoardSize = 50;
 
 const tierStep = 240;
 const romanNumerals = ["I", "II", "III"];
@@ -27,8 +27,8 @@ export function getTierScore(rating, tier) {
     : { label: "Progress", text: `${getTierProgress(rating)}%` };
 }
 
-export function getRankedTier(rating, { isMythic = false } = {}) {
-  if (isMythic && rating >= mythicMinRating) return { ...rankTiers[3], tier: null, name: "Mythic" };
+export function getRankedTier(rating) {
+  if (rating >= mythicMinRating) return { ...rankTiers[3], tier: null, name: "Mythic" };
   const step = Math.min(8, Math.floor(Math.max(0, rating) / tierStep));
   const division = rankTiers[Math.min(2, Math.floor(step / 3))];
   const tier = romanNumerals[Math.min(2, step % 3)];
