@@ -52,8 +52,20 @@
 /* Brand */
 .brand {
   display: inline-flex;
-  flex-direction: column;
+  align-items: center;
+  gap: var(--space3);
   line-height: 1;
+}
+
+.brandLogo {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+}
+
+.brandText {
+  display: flex;
+  flex-direction: column;
 }
 
 .brandName {

@@ -1,11 +1,9 @@
 /* Hero */
 .hero {
   padding-block: var(--space8) var(--space7);
-  background: radial-gradient(
-    ellipse 60% 70% at 85% 0%,
-    color-mix(in srgb, var(--colorSecondary) 22%, transparent),
-    transparent 70%
-  );
+  background:
+    linear-gradient(180deg, color-mix(in srgb, var(--colorBackground) 55%, transparent), var(--colorBackground)),
+    url("../assets/heroBackground.webp") center / cover no-repeat;
 }
 
 .heroGrid {

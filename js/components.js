@@ -4,8 +4,13 @@ export function createBrand({ showSubtitle = true } = {}) {
   return el(
     "a",
     { className: "brand", href: "index.html", "aria-label": "AVENMC Practice Network" },
-    el("span", { className: "brandName" }, "AVEN", el("span", { className: "brandAccent" }, "MC")),
-    showSubtitle && el("span", { className: "brandSubtitle" }, "PRACTICE NETWORK"),
+    el("img", { className: "brandLogo", src: "assets/logoMark.png", alt: "", width: "40", height: "40" }),
+    el(
+      "span",
+      { className: "brandText" },
+      el("span", { className: "brandName" }, "AVEN", el("span", { className: "brandAccent" }, "MC")),
+      showSubtitle && el("span", { className: "brandSubtitle" }, "PRACTICE NETWORK"),
+    ),
   );
 }
 
