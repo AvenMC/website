@@ -1,5 +1,5 @@
-import { el, replaceContent } from "../dom.js?v=111";
-import { renderLayout } from "../layout.js?v=111";
+import { el, replaceContent } from "../dom.js?v=112";
+import { renderLayout } from "../layout.js?v=112";
 import {
   createAvatar,
   createBadge,
@@ -14,11 +14,11 @@ import {
   createTable,
   createRankedBadge,
   createTabs,
-} from "../components.js?v=111";
-import { countries } from "../countries.js?v=111";
-import { getTierScore, rankTiers, tierStep, getRankedTier } from "../ranks.js?v=111";
-import { createSeasonHistory, gamemodes, getMythicPosition, getPlayer, getPlayerTier, setCountry } from "../mockData.js?v=111";
-import { formatDateTime, formatNumber, formatPercent, formatPlaytime, formatRatio } from "../format.js?v=111";
+} from "../components.js?v=112";
+import { countries } from "../countries.js?v=112";
+import { getTierScore, rankTiers, tierStep, getRankedTier } from "../ranks.js?v=112";
+import { createSeasonHistory, gamemodes, getMythicPosition, getPlayer, getPlayerTier, setCountry } from "../mockData.js?v=112";
+import { formatDateTime, formatNumber, formatPercent, formatPlaytime, formatRatio } from "../format.js?v=112";
 
 const app = renderLayout("profile");
 const modeName = (id) => gamemodes.find((mode) => mode.id === id).name;
@@ -362,20 +362,8 @@ function renderModeStatistics(player, type) {
       type === "duels" ? el("section", { className: "stack" }, el("h2", {}, "Recent matches"), matches) : null,
     );
   };
-  const selector = createTabs({
-    label: type === "duels" ? "Duel gamemode" : "FFA gamemode",
-    active: state[stateKey],
-    tabs: gamemodes.map((mode) => ({ id: mode.id, label: mode.name })),
-    onChange: (value) => {
-      state[stateKey] = value;
-      paint();
-    },
-  });
   paint();
-  return el("div", { className: "stack" },
-    selector,
-    panel,
-  );
+  return panel;
 }
 
 const tabRenderers = {
@@ -432,25 +420,55 @@ function renderSeasonHistory(player) {
 }
 
 function renderProfile(player) {
-  const tabPanel = el("div", { role: "tabpanel" });
+  const tabPanel = el("div", { id: "profileStatsPanel", role: "region", "aria-label": "Player statistics" });
 
   const paintTab = () => replaceContent(tabPanel, tabRenderers[state.activeTab](player));
-
-  const tabs = createTabs({
-    label: "Statistics",
-    active: state.activeTab,
-    tabs: [
-      { id: "overview", label: "Overview" },
-      { id: "duels", label: "Duels" },
-      { id: "ffa", label: "FFA" },
-    ],
-    onChange: (id) => {
-      state.activeTab = id;
-      paintTab();
-    },
+  const tabs = el("div", { className: "tabs profileStatsNav", role: "group", "aria-label": "Statistics" });
+  const categories = [
+    { id: "overview", label: "Overview" },
+    { id: "duels", label: "Duels" },
+    { id: "ffa", label: "FFA" },
+  ];
+  const modeLists = {};
+  const buttons = {};
+  const selectCategory = (id) => {
+    state.activeTab = id;
+    categories.forEach((category) => {
+      const active = category.id === id;
+      buttons[category.id].setAttribute("aria-pressed", String(active));
+      if (category.id !== "overview") {
+        buttons[category.id].setAttribute("aria-expanded", String(active));
+        modeLists[category.id].hidden = !active;
+      }
+    });
+    paintTab();
+  };
+  categories.forEach(({ id, label }) => {
+    buttons[id] = el("button", {
+      className: "tab",
+      type: "button",
+      "aria-controls": id === "overview" ? "profileStatsPanel" : `${id}ModeTabs`,
+      onClick: () => selectCategory(id),
+    }, label);
+    tabs.append(buttons[id]);
+    if (id === "overview") return;
+    const stateKey = id === "duels" ? "duelMode" : "ffaMode";
+    const modeList = createTabs({
+      label: id === "duels" ? "Duel gamemode" : "FFA gamemode",
+      active: state[stateKey],
+      tabs: gamemodes.map((mode) => ({ id: mode.id, label: mode.name })),
+      onChange: (modeId) => {
+        state[stateKey] = modeId;
+        paintTab();
+      },
+    });
+    modeList.id = `${id}ModeTabs`;
+    modeList.classList.add("profileModeTabs");
+    modeLists[id] = modeList;
+    tabs.append(modeList);
   });
 
-  paintTab();
+  selectCategory(state.activeTab);
 
   replaceContent(
     content,

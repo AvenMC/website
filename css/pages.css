@@ -266,6 +266,28 @@
   gap: var(--space2);
 }
 
+.profileStatsNav {
+  align-items: center;
+}
+
+.profileStatsNav > .tab[aria-pressed="true"] {
+  background: var(--colorElevated);
+  color: var(--colorPrimary);
+}
+
+.profileStatsNav .profileModeTabs {
+  flex: none;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  border-inline: 1px solid var(--colorBorder);
+  padding-inline: var(--space2);
+}
+
+.profileModeTabs[hidden] {
+  display: none;
+}
+
 .ratingProgression {
   display: flex;
   flex-direction: column;

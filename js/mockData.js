@@ -4,8 +4,8 @@
  * the pages only depend on the shapes returned here.
  */
 
-import { countries } from "./countries.js?v=111";
-import { getRankedTier, mythicMinRating, rankedBoardSize } from "./ranks.js?v=111";
+import { countries } from "./countries.js?v=112";
+import { getRankedTier, mythicMinRating, rankedBoardSize } from "./ranks.js?v=112";
 
 export const gamemodes = [
   { id: "nodebuff", name: "Nodebuff", short: "NB", description: "Classic potion PvP." },
