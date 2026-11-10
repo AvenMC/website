@@ -1,8 +1,8 @@
-import { el, replaceContent } from "../dom.js?v=116";
-import { createBadge, createSectionHeading, createSkeleton, createTabs } from "../components.js?v=116";
-import { currentSeason, gamemodes, getRankDistribution } from "../mockData.js?v=116";
-import { rankTiers } from "../ranks.js?v=116";
-import { formatNumber } from "../format.js?v=116";
+import { el, replaceContent } from "../dom.js?v=117";
+import { createBadge, createSectionHeading, createSkeleton, createTabs } from "../components.js?v=117";
+import { currentSeason, gamemodes, getRankDistribution } from "../mockData.js?v=117";
+import { rankTiers } from "../ranks.js?v=117";
+import { formatNumber } from "../format.js?v=117";
 
 function animateNumber(node, target, duration = 900) {
   const start = performance.now();
@@ -16,7 +16,7 @@ function animateNumber(node, target, duration = 900) {
 
 function renderDistribution(data) {
   const totalNode = el("strong", {}, "0");
-  const tiers = rankTiers.slice().reverse();
+  const tiers = rankTiers;
   const percent = (tier) => ((data.counts[tier.key] / data.total) * 100).toFixed(1);
 
   // Tiny divisions still get a visible sliver.
