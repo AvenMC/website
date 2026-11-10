@@ -277,11 +277,10 @@
 
 .profileStatsNav .profileModeTabs {
   flex: none;
-  padding: 0;
-  border: 0;
-  border-radius: 0;
-  border-inline: 1px solid var(--colorBorder);
-  padding-inline: var(--space2);
+  padding: var(--space1);
+  border: 1px solid var(--colorBorder);
+  border-radius: var(--radiusSmall);
+  background: var(--colorCard);
 }
 
 .profileModeTabs[hidden] {
