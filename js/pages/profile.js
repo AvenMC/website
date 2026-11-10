@@ -1,5 +1,5 @@
-import { el, replaceContent } from "../dom.js?v=108";
-import { renderLayout } from "../layout.js?v=108";
+import { el, replaceContent } from "../dom.js?v=109";
+import { renderLayout } from "../layout.js?v=109";
 import {
   createAvatar,
   createBadge,
@@ -15,11 +15,11 @@ import {
   createRankedBadge,
   createTabs,
   withTooltip,
-} from "../components.js?v=108";
-import { countries } from "../countries.js?v=108";
-import { getTierScore, rankTiers, tierStep, getRankedTier } from "../ranks.js?v=108";
-import { createSeasonHistory, gamemodes, getMythicPosition, getPlayer, getPlayerTier, setCountry } from "../mockData.js?v=108";
-import { formatDateTime, formatNumber, formatPercent, formatPlaytime, formatRatio } from "../format.js?v=108";
+} from "../components.js?v=109";
+import { countries } from "../countries.js?v=109";
+import { getTierScore, rankTiers, tierStep, getRankedTier } from "../ranks.js?v=109";
+import { createSeasonHistory, gamemodes, getMythicPosition, getPlayer, getPlayerTier, setCountry } from "../mockData.js?v=109";
+import { formatDateTime, formatNumber, formatPercent, formatPlaytime, formatRatio } from "../format.js?v=109";
 
 const app = renderLayout("profile");
 const modeName = (id) => gamemodes.find((mode) => mode.id === id).name;
@@ -181,8 +181,8 @@ function createRatingChart(player, modeId, values) {
   const plotWidth = width - plot.left - plot.right;
   const plotHeight = height - plot.top - plot.bottom;
   const rating = player.ratings[modeId];
-  const minRating = Math.max(0, Math.floor((rating - 500) / tierStep) * tierStep);
-  const maxRating = Math.max(minRating + tierStep * 3, Math.ceil((rating + 350) / tierStep) * tierStep);
+  const minRating = Math.max(0, Math.floor((Math.min(rating - 500, ...values) - 50) / tierStep) * tierStep);
+  const maxRating = Math.max(minRating + tierStep * 3, Math.ceil((Math.max(rating + 350, ...values) + 50) / tierStep) * tierStep);
   const y = (value) => plot.top + ((maxRating - value) / (maxRating - minRating)) * plotHeight;
   const svg = createSvgElement("svg", {
     class: "ratingChart",
@@ -267,62 +267,83 @@ function createRatingChart(player, modeId, values) {
 }
 
 function renderRatingProgression(player) {
-  const modeId = state.ratingMode;
-  const rating = player.ratings[modeId];
-  const tier = getPlayerTier(player, modeId);
-  const history = createRatingHistory(player, modeId);
-  const divisionChanges = history.slice(1).reduce(
-    (changes, value, index) => {
-      const previousDivision = rankTiers.findIndex((division) => division.key === getRankedTier(history[index]).key);
-      const currentDivision = rankTiers.findIndex((division) => division.key === getRankedTier(value).key);
-      if (currentDivision > previousDivision) changes.up += 1;
-      if (currentDivision < previousDivision) changes.down += 1;
-      return changes;
-    },
-    { up: 0, down: 0 },
-  );
+  const summary = el("div", { className: "ratingProgressionSummary", "aria-live": "polite" });
+  const chart = el("div", { className: "ratingChartWrap", tabindex: "0", role: "region", "aria-label": "Rating history chart" });
+  const paint = () => {
+    const modeId = state.ratingMode;
+    const rating = player.ratings[modeId];
+    const tier = getPlayerTier(player, modeId);
+    const history = createRatingHistory(player, modeId);
+    const divisionChanges = history.slice(1).reduce(
+      (changes, value, index) => {
+        const previousDivision = rankTiers.findIndex((division) => division.key === getRankedTier(history[index]).key);
+        const currentDivision = rankTiers.findIndex((division) => division.key === getRankedTier(value).key);
+        if (currentDivision > previousDivision) changes.up += 1;
+        if (currentDivision < previousDivision) changes.down += 1;
+        return changes;
+      },
+      { up: 0, down: 0 },
+    );
+    replaceContent(
+      summary,
+      el("div", {}, el("span", { className: "mutedText" }, "Division"), el("strong", { style: `--tierColor:${tier.color}` }, tier.name)),
+      el("div", {}, el("span", { className: "mutedText" }, "Rating"), el("strong", {}, formatNumber(rating))),
+      el("div", {}, el("span", { className: "mutedText" }, "Division up"), el("strong", { className: "ratingChangeUp" }, `↑ ${divisionChanges.up}`)),
+      el("div", {}, el("span", { className: "mutedText" }, "Division down"), el("strong", { className: "ratingChangeDown" }, `↓ ${divisionChanges.down}`)),
+      el("div", {}, el("span", { className: "mutedText" }, "Matches"), el("strong", {}, formatNumber(player.perMode[modeId].wins + player.perMode[modeId].losses))),
+    );
+    replaceContent(chart, createRatingChart(player, modeId, history));
+  };
   const modeSelect = createDropdown({
-    label: "Playlist",
-    value: modeId,
+    label: "Progression gamemode",
+    value: state.ratingMode,
     options: gamemodes.map((mode) => ({ value: mode.id, label: mode.name })),
     onChange: (value) => {
       state.ratingMode = value;
-      replaceContent(section, renderRatingProgression(player));
+      paint();
     },
   });
-  const section = el(
+  paint();
+  return el(
     "section",
     { className: "card ratingProgression", "aria-labelledby": "ratingProgressionTitle" },
     el("div", { className: "ratingProgressionHeader" },
       el("h2", { id: "ratingProgressionTitle" }, "Rating progression"),
       modeSelect,
-      el("div", { className: "ratingProgressionSummary" },
-        el("div", {}, el("span", { className: "mutedText" }, "Division"), el("strong", { style: `--tierColor:${tier.color}` }, tier.name)),
-        el("div", {}, el("span", { className: "mutedText" }, "Rating"), el("strong", {}, formatNumber(rating))),
-        el("div", {}, el("span", { className: "mutedText" }, "Div Up"), el("strong", { className: "ratingChangeUp" }, `↑ ${divisionChanges.up}`)),
-        el("div", {}, el("span", { className: "mutedText" }, "Div Down"), el("strong", { className: "ratingChangeDown" }, `↓ ${divisionChanges.down}`)),
-        el("div", {}, el("span", { className: "mutedText" }, "Matches"), el("strong", {}, formatNumber(player.perMode[modeId].wins + player.perMode[modeId].losses))),
-      ),
     ),
-    el("div", { className: "ratingChartWrap" }, createRatingChart(player, modeId, history)),
+    summary,
+    chart,
   );
-  return section;
 }
 
 function statGrid(stats) {
   return el("div", { className: "grid cols4 statGrid" }, stats.map((stat) => createStatCard(stat)));
 }
 
-function renderOverview({ overall }) {
-  return statGrid([
-    { label: "Kills", icon: "sword", value: formatNumber(overall.kills) },
-    { label: "Deaths", icon: "skull", value: formatNumber(overall.deaths) },
-    { label: "K/D Ratio", icon: "crosshair", value: formatRatio(overall.kills, overall.deaths), accent: true },
-    { label: "Win Rate", icon: "percent", value: formatPercent(overall.wins, overall.wins + overall.losses), accent: true },
-    { label: "Wins", icon: "trophy", value: formatNumber(overall.wins) },
-    { label: "Losses", icon: "close", value: formatNumber(overall.losses) },
-    { label: "Playtime", icon: "clock", value: formatPlaytime(overall.playtimeHours) },
-  ]);
+function renderOverview(player) {
+  const { overall } = player;
+  return el("div", { className: "stack" },
+    el("section", { className: "stack" },
+      el("h2", {}, "Match statistics"),
+      statGrid([
+        { label: "Wins", icon: "trophy", value: formatNumber(overall.wins) },
+        { label: "Losses", icon: "close", value: formatNumber(overall.losses) },
+        { label: "Win Rate", icon: "percent", value: formatPercent(overall.wins, overall.wins + overall.losses), accent: true },
+        { label: "Matches", icon: "crosshair", value: formatNumber(overall.wins + overall.losses) },
+      ]),
+    ),
+    el("section", { className: "stack" },
+      el("h2", {}, "Combat and activity"),
+      statGrid([
+        { label: "Kills", icon: "sword", value: formatNumber(overall.kills) },
+        { label: "Deaths", icon: "skull", value: formatNumber(overall.deaths) },
+        { label: "K/D Ratio", icon: "crosshair", value: formatRatio(overall.kills, overall.deaths), accent: true },
+        { label: "Playtime", icon: "clock", value: formatPlaytime(overall.playtimeHours) },
+      ]),
+    ),
+    renderRatingProgression(player),
+    renderSeasonHistory(player),
+  );
 }
 
 function renderRatingsTable(player) {
@@ -351,23 +372,26 @@ function renderDuels(player) {
   return el(
     "div",
     { className: "stack" },
+    el("h2", {}, "Duel statistics"),
     statGrid([
       { label: "Duel Wins", icon: "trophy", value: formatNumber(duels.wins) },
       { label: "Duel Losses", icon: "close", value: formatNumber(duels.losses) },
       { label: "Win Rate", icon: "percent", value: formatPercent(duels.wins, duels.wins + duels.losses), accent: true },
       { label: "Best Win Streak", icon: "flame", value: duels.bestWinStreak },
     ]),
-    renderRatingsTable(player),
+    renderRatingProgression(player),
+    el("section", { className: "stack" }, el("h2", {}, "Ranked progress by gamemode"), renderRatingsTable(player)),
+    renderSeasonHistory(player),
   );
 }
 
 function renderFfa({ ffa }) {
-  return statGrid([
+  return el("section", { className: "stack" }, el("h2", {}, "FFA statistics"), statGrid([
     { label: "Kills", icon: "sword", value: formatNumber(ffa.kills) },
     { label: "Deaths", icon: "skull", value: formatNumber(ffa.deaths) },
     { label: "K/D Ratio", icon: "crosshair", value: formatRatio(ffa.kills, ffa.deaths), accent: true },
     { label: "Best Kill Streak", icon: "flame", value: ffa.bestKillStreak },
-  ]);
+  ]));
 }
 
 function renderGamemodes(player) {
@@ -389,9 +413,9 @@ function renderGamemodes(player) {
           { className: "grid cols2 statGrid" },
           createStatCard({ label: score.label, icon: "bolt", value: score.text, accent: true }),
           position ? createStatCard({ label: "Position", icon: "trophy", value: `#${position}` }) : null,
-          createStatCard({ label: "K/D", icon: "crosshair", icon: "crosshair", value: formatRatio(stats.kills, stats.deaths) }),
-          createStatCard({ label: "Wins", icon: "trophy", icon: "trophy", value: formatNumber(stats.wins) }),
-          createStatCard({ label: "Losses", icon: "close", icon: "close", value: formatNumber(stats.losses) }),
+          createStatCard({ label: "K/D", icon: "crosshair", value: formatRatio(stats.kills, stats.deaths) }),
+          createStatCard({ label: "Wins", icon: "trophy", value: formatNumber(stats.wins) }),
+          createStatCard({ label: "Losses", icon: "close", value: formatNumber(stats.losses) }),
         ),
       );
     }),
@@ -489,12 +513,12 @@ function renderProfile(player) {
   replaceContent(
     content,
     renderHeader(player),
-    renderRatingProgression(player),
     tabs,
     tabPanel,
-    renderSeasonHistory(player),
-    el("div", { className: "toolbar" }, el("h2", {}, "Recent matches"), el("span", { className: "spacer" }), filter),
-    matchesPanel,
+    el("section", { className: "profileMatches" },
+      el("div", { className: "toolbar" }, el("h2", {}, "Recent matches"), el("span", { className: "spacer" }), filter),
+      matchesPanel,
+    ),
   );
 }
 
