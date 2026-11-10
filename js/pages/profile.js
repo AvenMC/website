@@ -1,5 +1,5 @@
-import { el, replaceContent } from "../dom.js?v=110";
-import { renderLayout } from "../layout.js?v=110";
+import { el, replaceContent } from "../dom.js?v=111";
+import { renderLayout } from "../layout.js?v=111";
 import {
   createAvatar,
   createBadge,
@@ -14,11 +14,11 @@ import {
   createTable,
   createRankedBadge,
   createTabs,
-} from "../components.js?v=110";
-import { countries } from "../countries.js?v=110";
-import { getTierScore, rankTiers, tierStep, getRankedTier } from "../ranks.js?v=110";
-import { createSeasonHistory, gamemodes, getMythicPosition, getPlayer, getPlayerTier, setCountry } from "../mockData.js?v=110";
-import { formatDateTime, formatNumber, formatPercent, formatPlaytime, formatRatio } from "../format.js?v=110";
+} from "../components.js?v=111";
+import { countries } from "../countries.js?v=111";
+import { getTierScore, rankTiers, tierStep, getRankedTier } from "../ranks.js?v=111";
+import { createSeasonHistory, gamemodes, getMythicPosition, getPlayer, getPlayerTier, setCountry } from "../mockData.js?v=111";
+import { formatDateTime, formatNumber, formatPercent, formatPlaytime, formatRatio } from "../format.js?v=111";
 
 const app = renderLayout("profile");
 const modeName = (id) => gamemodes.find((mode) => mode.id === id).name;
@@ -362,10 +362,10 @@ function renderModeStatistics(player, type) {
       type === "duels" ? el("section", { className: "stack" }, el("h2", {}, "Recent matches"), matches) : null,
     );
   };
-  const selector = createDropdown({
+  const selector = createTabs({
     label: type === "duels" ? "Duel gamemode" : "FFA gamemode",
-    value: state[stateKey],
-    options: gamemodes.map((mode) => ({ value: mode.id, label: mode.name })),
+    active: state[stateKey],
+    tabs: gamemodes.map((mode) => ({ id: mode.id, label: mode.name })),
     onChange: (value) => {
       state[stateKey] = value;
       paint();
@@ -373,7 +373,7 @@ function renderModeStatistics(player, type) {
   });
   paint();
   return el("div", { className: "stack" },
-    el("div", { className: "toolbar" }, el("span", { className: "mutedText" }, "Gamemode"), selector),
+    selector,
     panel,
   );
 }
