@@ -268,6 +268,7 @@
 
 .profileStatsNav {
   align-items: center;
+  border-radius: calc(var(--radiusLarge) + var(--space1) + 1px);
 }
 
 .profileStatsNav .tab[aria-pressed="true"] {
@@ -282,7 +283,7 @@
   gap: var(--space1);
   padding: var(--space1);
   border: 1px solid var(--colorBorder);
-  border-radius: var(--radiusSmall);
+  border-radius: var(--radiusLarge);
   background: var(--colorElevated);
 }
 
@@ -295,7 +296,7 @@
   max-width: none;
   padding: var(--space1);
   border: 0;
-  border-radius: var(--radiusSmall);
+  border-radius: var(--radiusMedium);
   background: var(--colorSurface);
 }
 
