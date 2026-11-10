@@ -4,8 +4,8 @@
  * the pages only depend on the shapes returned here.
  */
 
-import { countries } from "./countries.js?v=107";
-import { getRankedTier, mythicMinRating, rankedBoardSize } from "./ranks.js?v=107";
+import { countries } from "./countries.js?v=108";
+import { getRankedTier, mythicMinRating, rankedBoardSize } from "./ranks.js?v=108";
 
 export const gamemodes = [
   { id: "nodebuff", name: "Nodebuff", short: "NB", description: "Classic potion PvP." },
@@ -39,7 +39,7 @@ function createPlayer(index) {
   const random = createRandom(index * 9973 + 17);
   const username = `SamplePlayer${String(index + 1).padStart(2, "0")}`;
   const ratings = Object.fromEntries(
-    gamemodes.map((mode) => [mode.id, between(random, 700, 2650)]),
+    gamemodes.map((mode) => [mode.id, between(random, 290, 1085)]),
   );
   const perMode = Object.fromEntries(
     gamemodes.map((mode) => [
