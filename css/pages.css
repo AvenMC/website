@@ -283,15 +283,20 @@
   padding: var(--space1);
   border: 1px solid var(--colorBorder);
   border-radius: var(--radiusSmall);
-  background: var(--colorCard);
+  background: var(--colorElevated);
+}
+
+.profileCategoryPanel > .tab {
+  color: var(--colorText);
 }
 
 .profileStatsNav .profileModeTabs {
   flex: none;
   max-width: none;
-  padding: 0;
+  padding: var(--space1);
   border: 0;
-  background: transparent;
+  border-radius: var(--radiusSmall);
+  background: var(--colorSurface);
 }
 
 .profileModeTabs[hidden] {
