@@ -4,8 +4,8 @@
  * the pages only depend on the shapes returned here.
  */
 
-import { countries } from "./countries.js?v=109";
-import { getRankedTier, mythicMinRating, rankedBoardSize } from "./ranks.js?v=109";
+import { countries } from "./countries.js?v=110";
+import { getRankedTier, mythicMinRating, rankedBoardSize } from "./ranks.js?v=110";
 
 export const gamemodes = [
   { id: "nodebuff", name: "Nodebuff", short: "NB", description: "Classic potion PvP." },
@@ -62,6 +62,24 @@ function createPlayer(index) {
     deaths: between(random, 400, 8000),
     bestKillStreak: between(random, 6, 45),
   };
+  const ffaRandom = createRandom(index * 7919 + 43);
+  const ffaWeights = gamemodes.map(() => 1 + ffaRandom());
+  const weightSum = ffaWeights.reduce((sum, weight) => sum + weight, 0);
+  const perFfaMode = {};
+  let remainingKills = ffa.kills;
+  let remainingDeaths = ffa.deaths;
+  gamemodes.forEach((mode, modeIndex) => {
+    const last = modeIndex === gamemodes.length - 1;
+    const kills = last ? remainingKills : Math.floor(ffa.kills * ffaWeights[modeIndex] / weightSum);
+    const deaths = last ? remainingDeaths : Math.floor(ffa.deaths * ffaWeights[modeIndex] / weightSum);
+    perFfaMode[mode.id] = {
+      kills,
+      deaths,
+      bestKillStreak: modeIndex === 0 ? ffa.bestKillStreak : between(ffaRandom, 1, ffa.bestKillStreak + 1),
+    };
+    remainingKills -= kills;
+    remainingDeaths -= deaths;
+  });
   const level = between(random, 5, 90);
 
   return {
@@ -76,6 +94,7 @@ function createPlayer(index) {
     perMode,
     duels,
     ffa,
+    perFfaMode,
     overall: {
       kills: ffa.kills + Object.values(perMode).reduce((sum, mode) => sum + mode.kills, 0),
       deaths: ffa.deaths + Object.values(perMode).reduce((sum, mode) => sum + mode.deaths, 0),

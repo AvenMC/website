@@ -1,5 +1,5 @@
-import { el, replaceContent } from "../dom.js?v=109";
-import { renderLayout } from "../layout.js?v=109";
+import { el, replaceContent } from "../dom.js?v=110";
+import { renderLayout } from "../layout.js?v=110";
 import {
   createAvatar,
   createBadge,
@@ -14,12 +14,11 @@ import {
   createTable,
   createRankedBadge,
   createTabs,
-  withTooltip,
-} from "../components.js?v=109";
-import { countries } from "../countries.js?v=109";
-import { getTierScore, rankTiers, tierStep, getRankedTier } from "../ranks.js?v=109";
-import { createSeasonHistory, gamemodes, getMythicPosition, getPlayer, getPlayerTier, setCountry } from "../mockData.js?v=109";
-import { formatDateTime, formatNumber, formatPercent, formatPlaytime, formatRatio } from "../format.js?v=109";
+} from "../components.js?v=110";
+import { countries } from "../countries.js?v=110";
+import { getTierScore, rankTiers, tierStep, getRankedTier } from "../ranks.js?v=110";
+import { createSeasonHistory, gamemodes, getMythicPosition, getPlayer, getPlayerTier, setCountry } from "../mockData.js?v=110";
+import { formatDateTime, formatNumber, formatPercent, formatPlaytime, formatRatio } from "../format.js?v=110";
 
 const app = renderLayout("profile");
 const modeName = (id) => gamemodes.find((mode) => mode.id === id).name;
@@ -27,8 +26,8 @@ const modeName = (id) => gamemodes.find((mode) => mode.id === id).name;
 const state = {
   player: null,
   activeTab: "overview",
-  matchFilter: "all",
-  ratingMode: "nodebuff",
+  duelMode: "nodebuff",
+  ffaMode: "nodebuff",
 };
 
 const searchInput = el("input", {
@@ -266,11 +265,10 @@ function createRatingChart(player, modeId, values) {
   return svg;
 }
 
-function renderRatingProgression(player) {
+function renderRatingProgression(player, modeId) {
   const summary = el("div", { className: "ratingProgressionSummary", "aria-live": "polite" });
   const chart = el("div", { className: "ratingChartWrap", tabindex: "0", role: "region", "aria-label": "Rating history chart" });
   const paint = () => {
-    const modeId = state.ratingMode;
     const rating = player.ratings[modeId];
     const tier = getPlayerTier(player, modeId);
     const history = createRatingHistory(player, modeId);
@@ -294,22 +292,13 @@ function renderRatingProgression(player) {
     );
     replaceContent(chart, createRatingChart(player, modeId, history));
   };
-  const modeSelect = createDropdown({
-    label: "Progression gamemode",
-    value: state.ratingMode,
-    options: gamemodes.map((mode) => ({ value: mode.id, label: mode.name })),
-    onChange: (value) => {
-      state.ratingMode = value;
-      paint();
-    },
-  });
   paint();
   return el(
     "section",
     { className: "card ratingProgression", "aria-labelledby": "ratingProgressionTitle" },
     el("div", { className: "ratingProgressionHeader" },
       el("h2", { id: "ratingProgressionTitle" }, "Rating progression"),
-      modeSelect,
+      createRankedBadge(getPlayerTier(player, modeId)),
     ),
     summary,
     chart,
@@ -341,97 +330,63 @@ function renderOverview(player) {
         { label: "Playtime", icon: "clock", value: formatPlaytime(overall.playtimeHours) },
       ]),
     ),
-    renderRatingProgression(player),
     renderSeasonHistory(player),
   );
 }
 
-function renderRatingsTable(player) {
-  return createTable({
-    caption: "Ranked progress per gamemode",
-    columns: [
-      { label: "Gamemode", render: (row) => row.name },
-      {
-        label: "Points / Progress",
-        align: "right",
-        render: (row) => withTooltip(el("span", { className: "metricValue" }, getTierScore(row.rating, row.tier).text + (row.position ? ` · #${row.position}` : "")), "Placeholder data"),
-      },
-      { label: "Division", align: "right", render: (row) => createRankedBadge(row.tier) },
-    ],
-    rows: gamemodes.map((mode) => ({
-      name: mode.name,
-      rating: player.ratings[mode.id],
-      tier: getPlayerTier(player, mode.id),
-      position: getMythicPosition(player.username, mode.id),
-    })),
+function renderModeStatistics(player, type) {
+  const panel = el("div", { className: "stack" });
+  const stateKey = type === "duels" ? "duelMode" : "ffaMode";
+  const paint = () => {
+    const modeId = state[stateKey];
+    const stats = type === "duels" ? player.perMode[modeId] : player.perFfaMode[modeId];
+    const matches = el("div");
+    if (type === "duels") renderMatches(player, matches, modeId);
+    replaceContent(panel,
+      el("h2", {}, `${modeName(modeId)} ${type === "duels" ? "duels" : "FFA"}`),
+      type === "duels"
+        ? statGrid([
+            { label: "Wins", icon: "trophy", value: formatNumber(stats.wins) },
+            { label: "Losses", icon: "close", value: formatNumber(stats.losses) },
+            { label: "Win Rate", icon: "percent", value: formatPercent(stats.wins, stats.wins + stats.losses), accent: true },
+            { label: "Matches", icon: "crosshair", value: formatNumber(stats.wins + stats.losses) },
+          ])
+        : null,
+      statGrid([
+        { label: "Kills", icon: "sword", value: formatNumber(stats.kills) },
+        { label: "Deaths", icon: "skull", value: formatNumber(stats.deaths) },
+        { label: "K/D Ratio", icon: "crosshair", value: formatRatio(stats.kills, stats.deaths), accent: true },
+        ...(type === "ffa" ? [{ label: "Best Kill Streak", icon: "flame", value: stats.bestKillStreak }] : []),
+      ]),
+      type === "duels" ? renderRatingProgression(player, modeId) : null,
+      type === "duels" ? el("section", { className: "stack" }, el("h2", {}, "Recent matches"), matches) : null,
+    );
+  };
+  const selector = createDropdown({
+    label: type === "duels" ? "Duel gamemode" : "FFA gamemode",
+    value: state[stateKey],
+    options: gamemodes.map((mode) => ({ value: mode.id, label: mode.name })),
+    onChange: (value) => {
+      state[stateKey] = value;
+      paint();
+    },
   });
-}
-
-function renderDuels(player) {
-  const { duels } = player;
-  return el(
-    "div",
-    { className: "stack" },
-    el("h2", {}, "Duel statistics"),
-    statGrid([
-      { label: "Duel Wins", icon: "trophy", value: formatNumber(duels.wins) },
-      { label: "Duel Losses", icon: "close", value: formatNumber(duels.losses) },
-      { label: "Win Rate", icon: "percent", value: formatPercent(duels.wins, duels.wins + duels.losses), accent: true },
-      { label: "Best Win Streak", icon: "flame", value: duels.bestWinStreak },
-    ]),
-    renderRatingProgression(player),
-    el("section", { className: "stack" }, el("h2", {}, "Ranked progress by gamemode"), renderRatingsTable(player)),
-    renderSeasonHistory(player),
-  );
-}
-
-function renderFfa({ ffa }) {
-  return el("section", { className: "stack" }, el("h2", {}, "FFA statistics"), statGrid([
-    { label: "Kills", icon: "sword", value: formatNumber(ffa.kills) },
-    { label: "Deaths", icon: "skull", value: formatNumber(ffa.deaths) },
-    { label: "K/D Ratio", icon: "crosshair", value: formatRatio(ffa.kills, ffa.deaths), accent: true },
-    { label: "Best Kill Streak", icon: "flame", value: ffa.bestKillStreak },
-  ]));
-}
-
-function renderGamemodes(player) {
-  return el(
-    "div",
-    { className: "grid cols3" },
-    gamemodes.map((mode) => {
-      const stats = player.perMode[mode.id];
-      const tier = getPlayerTier(player, mode.id);
-      const score = getTierScore(player.ratings[mode.id], tier);
-      const position = getMythicPosition(player.username, mode.id);
-      return el(
-        "div",
-        { className: "card stack" },
-        el("h3", {}, mode.name),
-        createRankedBadge(tier),
-        el(
-          "div",
-          { className: "grid cols2 statGrid" },
-          createStatCard({ label: score.label, icon: "bolt", value: score.text, accent: true }),
-          position ? createStatCard({ label: "Position", icon: "trophy", value: `#${position}` }) : null,
-          createStatCard({ label: "K/D", icon: "crosshair", value: formatRatio(stats.kills, stats.deaths) }),
-          createStatCard({ label: "Wins", icon: "trophy", value: formatNumber(stats.wins) }),
-          createStatCard({ label: "Losses", icon: "close", value: formatNumber(stats.losses) }),
-        ),
-      );
-    }),
+  paint();
+  return el("div", { className: "stack" },
+    el("div", { className: "toolbar" }, el("span", { className: "mutedText" }, "Gamemode"), selector),
+    panel,
   );
 }
 
 const tabRenderers = {
   overview: renderOverview,
-  duels: renderDuels,
-  ffa: renderFfa,
-  gamemodes: renderGamemodes,
+  duels: (player) => renderModeStatistics(player, "duels"),
+  ffa: (player) => renderModeStatistics(player, "ffa"),
 };
 
-function renderMatches(player, container) {
+function renderMatches(player, container, modeId) {
   const matches = player.recentMatches.filter(
-    (match) => state.matchFilter === "all" || match.gamemode === state.matchFilter,
+    (match) => match.gamemode === modeId,
   );
 
   replaceContent(
@@ -478,7 +433,6 @@ function renderSeasonHistory(player) {
 
 function renderProfile(player) {
   const tabPanel = el("div", { role: "tabpanel" });
-  const matchesPanel = el("div");
 
   const paintTab = () => replaceContent(tabPanel, tabRenderers[state.activeTab](player));
 
@@ -489,7 +443,6 @@ function renderProfile(player) {
       { id: "overview", label: "Overview" },
       { id: "duels", label: "Duels" },
       { id: "ffa", label: "FFA" },
-      { id: "gamemodes", label: "Gamemodes" },
     ],
     onChange: (id) => {
       state.activeTab = id;
@@ -497,28 +450,13 @@ function renderProfile(player) {
     },
   });
 
-  const filter = createDropdown({
-    label: "Filter matches by gamemode",
-    value: state.matchFilter,
-    options: [{ value: "all", label: "All gamemodes" }, ...gamemodes.map((mode) => ({ value: mode.id, label: mode.name }))],
-    onChange: (value) => {
-      state.matchFilter = value;
-      renderMatches(player, matchesPanel);
-    },
-  });
-
   paintTab();
-  renderMatches(player, matchesPanel);
 
   replaceContent(
     content,
     renderHeader(player),
     tabs,
     tabPanel,
-    el("section", { className: "profileMatches" },
-      el("div", { className: "toolbar" }, el("h2", {}, "Recent matches"), el("span", { className: "spacer" }), filter),
-      matchesPanel,
-    ),
   );
 }
 
