@@ -1,9 +1,9 @@
 // AVENMC divisions. The three lower divisions have tiers I-III. Mythic has no player limit,
 // but only the top rankedBoardSize Mythic players appear on the leaderboard.
-export const mythicMinRating = 2200;
+export const mythicMinRating = 900;
 export const rankedBoardSize = 50;
 
-// Nine tiers fill exactly up to mythicMinRating, so 100% in Gold III means Mythic.
+// Nine tiers of 100 points fill exactly up to mythicMinRating, matching the backend (100 points = 100% of a tier).
 export const tierStep = mythicMinRating / 9;
 const romanNumerals = ["I", "II", "III"];
 
