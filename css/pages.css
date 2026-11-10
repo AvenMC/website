@@ -498,9 +498,6 @@
   width: 56px;
   height: 56px;
   flex: none;
-  background: var(--accent);
-  mask: var(--iconUrl) center / contain no-repeat;
-  -webkit-mask: var(--iconUrl) center / contain no-repeat;
 }
 
 .regionCard {
