@@ -1,5 +1,5 @@
-import { el, replaceContent } from "../dom.js?v=113";
-import { renderLayout } from "../layout.js?v=113";
+import { el, replaceContent } from "../dom.js?v=114";
+import { renderLayout } from "../layout.js?v=114";
 import {
   createAvatar,
   createBadge,
@@ -14,11 +14,11 @@ import {
   createTable,
   createRankedBadge,
   createTabs,
-} from "../components.js?v=113";
-import { countries } from "../countries.js?v=113";
-import { getTierScore, rankTiers, tierStep, getRankedTier } from "../ranks.js?v=113";
-import { createSeasonHistory, gamemodes, getMythicPosition, getPlayer, getPlayerTier, setCountry } from "../mockData.js?v=113";
-import { formatDateTime, formatNumber, formatPercent, formatPlaytime, formatRatio } from "../format.js?v=113";
+} from "../components.js?v=114";
+import { countries } from "../countries.js?v=114";
+import { getTierScore, rankTiers, tierStep, getRankedTier } from "../ranks.js?v=114";
+import { createSeasonHistory, gamemodes, getMythicPosition, getPlayer, getPlayerTier, setCountry } from "../mockData.js?v=114";
+import { formatDateTime, formatNumber, formatPercent, formatPlaytime, formatRatio } from "../format.js?v=114";
 
 const app = renderLayout("profile");
 const modeName = (id) => gamemodes.find((mode) => mode.id === id).name;
@@ -450,8 +450,10 @@ function renderProfile(player) {
       "aria-controls": id === "overview" ? "profileStatsPanel" : `${id}ModeTabs`,
       onClick: () => selectCategory(id),
     }, label);
-    tabs.append(buttons[id]);
-    if (id === "overview") return;
+    if (id === "overview") {
+      tabs.append(buttons[id]);
+      return;
+    }
     const stateKey = id === "duels" ? "duelMode" : "ffaMode";
     const modeList = createTabs({
       label: id === "duels" ? "Duel gamemode" : "FFA gamemode",
@@ -465,7 +467,7 @@ function renderProfile(player) {
     modeList.id = `${id}ModeTabs`;
     modeList.classList.add("profileModeTabs");
     modeLists[id] = modeList;
-    tabs.append(modeList);
+    tabs.append(el("div", { className: "profileCategoryPanel" }, buttons[id], modeList));
   });
 
   selectCategory(state.activeTab);

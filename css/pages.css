@@ -270,17 +270,28 @@
   align-items: center;
 }
 
-.profileStatsNav > .tab[aria-pressed="true"] {
+.profileStatsNav .tab[aria-pressed="true"] {
   background: var(--colorElevated);
   color: var(--colorPrimary);
 }
 
-.profileStatsNav .profileModeTabs {
+.profileCategoryPanel {
+  display: flex;
+  align-items: center;
   flex: none;
+  gap: var(--space1);
   padding: var(--space1);
   border: 1px solid var(--colorBorder);
   border-radius: var(--radiusSmall);
   background: var(--colorCard);
+}
+
+.profileStatsNav .profileModeTabs {
+  flex: none;
+  max-width: none;
+  padding: 0;
+  border: 0;
+  background: transparent;
 }
 
 .profileModeTabs[hidden] {
