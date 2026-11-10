@@ -1,5 +1,5 @@
-import { el, replaceContent } from "../dom.js?v=107";
-import { renderLayout } from "../layout.js?v=107";
+import { el, replaceContent } from "../dom.js?v=108";
+import { renderLayout } from "../layout.js?v=108";
 import {
   createAvatar,
   createBadge,
@@ -15,11 +15,11 @@ import {
   createRankedBadge,
   createTabs,
   withTooltip,
-} from "../components.js?v=107";
-import { countries } from "../countries.js?v=107";
-import { getTierScore } from "../ranks.js?v=107";
-import { createSeasonHistory, gamemodes, getMythicPosition, getPlayer, getPlayerTier, setCountry } from "../mockData.js?v=107";
-import { formatDateTime, formatNumber, formatPercent, formatPlaytime, formatRatio } from "../format.js?v=107";
+} from "../components.js?v=108";
+import { countries } from "../countries.js?v=108";
+import { getTierScore, rankTiers, tierStep, getRankedTier } from "../ranks.js?v=108";
+import { createSeasonHistory, gamemodes, getMythicPosition, getPlayer, getPlayerTier, setCountry } from "../mockData.js?v=108";
+import { formatDateTime, formatNumber, formatPercent, formatPlaytime, formatRatio } from "../format.js?v=108";
 
 const app = renderLayout("profile");
 const modeName = (id) => gamemodes.find((mode) => mode.id === id).name;
@@ -28,6 +28,7 @@ const state = {
   player: null,
   activeTab: "overview",
   matchFilter: "all",
+  ratingMode: "nodebuff",
 };
 
 const searchInput = el("input", {
@@ -148,6 +149,164 @@ function renderHeader(player) {
     ),
     renderElo(player),
   );
+}
+
+function createSvgElement(tag, attributes = {}) {
+  const node = document.createElementNS("http://www.w3.org/2000/svg", tag);
+  Object.entries(attributes).forEach(([key, value]) => node.setAttribute(key, value));
+  return node;
+}
+
+function createRatingHistory(player, modeId, count = 40) {
+  let seed = [...`${player.username}:${modeId}`].reduce((value, char) => value * 31 + char.charCodeAt(0), 7) >>> 0;
+  const random = () => {
+    seed = (seed * 1664525 + 1013904223) >>> 0;
+    return seed / 4294967296;
+  };
+  const current = player.ratings[modeId];
+  const values = [Math.max(0, current - (random() * 620 - 300))];
+  for (let index = 1; index < count - 1; index += 1) {
+    const previous = values[index - 1];
+    const pullToCurrent = (current - previous) * 0.12;
+    values.push(Math.max(0, previous + pullToCurrent + (random() - 0.5) * 320));
+  }
+  values.push(current);
+  return values;
+}
+
+function createRatingChart(player, modeId, values) {
+  const width = 900;
+  const height = 270;
+  const plot = { left: 52, right: 12, top: 12, bottom: 34 };
+  const plotWidth = width - plot.left - plot.right;
+  const plotHeight = height - plot.top - plot.bottom;
+  const rating = player.ratings[modeId];
+  const minRating = Math.max(0, Math.floor((rating - 500) / tierStep) * tierStep);
+  const maxRating = Math.max(minRating + tierStep * 3, Math.ceil((rating + 350) / tierStep) * tierStep);
+  const y = (value) => plot.top + ((maxRating - value) / (maxRating - minRating)) * plotHeight;
+  const svg = createSvgElement("svg", {
+    class: "ratingChart",
+    viewBox: `0 0 ${width} ${height}`,
+    role: "img",
+    "aria-label": `Rating progression for ${modeName(modeId)}: current rating ${formatNumber(rating)}`,
+    preserveAspectRatio: "none",
+  });
+  const bands = [
+    ...rankTiers.slice(0, 3).flatMap((division, divisionIndex) =>
+      Array.from({ length: 3 }, (_, tierIndex) => ({
+        low: (divisionIndex * 3 + tierIndex) * tierStep,
+        high: (divisionIndex * 3 + tierIndex + 1) * tierStep,
+        color: division.color,
+      })),
+    ),
+    { low: 9 * tierStep, high: maxRating, color: rankTiers[3].color },
+  ];
+
+  bands.forEach(({ low, high, color }) => {
+    const from = Math.max(low, minRating);
+    const to = Math.min(high, maxRating);
+    if (to <= from) return;
+    svg.append(createSvgElement("rect", {
+      x: plot.left,
+      y: y(to),
+      width: plotWidth,
+      height: y(from) - y(to),
+      fill: color,
+      opacity: "0.12",
+    }));
+    svg.append(createSvgElement("line", {
+      x1: plot.left,
+      x2: width - plot.right,
+      y1: y(to),
+      y2: y(to),
+      class: "ratingChartGrid",
+    }));
+    if (from === low && low >= minRating) {
+      const tier = getRankedTier(low);
+      const label = createSvgElement("text", { x: plot.left + 8, y: y(to) + 15, class: "ratingChartTier" });
+      label.textContent = tier.name;
+      svg.append(label);
+    }
+  });
+
+  Array.from({ length: 5 }, (_, index) => {
+    const value = maxRating - ((maxRating - minRating) / 4) * index;
+    const label = createSvgElement("text", {
+      x: plot.left - 8,
+      y: y(value) + 4,
+      class: "ratingChartScale",
+      "text-anchor": "end",
+    });
+    label.textContent = formatNumber(Math.round(value));
+    svg.append(label);
+  });
+
+  const points = values.map((value, index) => `${plot.left + (index / (values.length - 1)) * plotWidth},${y(value)}`).join(" ");
+  svg.append(createSvgElement("polyline", { points, class: "ratingChartLine" }));
+  svg.append(createSvgElement("circle", {
+    cx: width - plot.right,
+    cy: y(rating),
+    r: "4",
+    class: "ratingChartPoint",
+  }));
+
+  const now = new Date();
+  Array.from({ length: 7 }, (_, index) => {
+    const date = new Date(now.getFullYear(), now.getMonth() - (6 - index), 1);
+    const text = createSvgElement("text", {
+      x: plot.left + (index / 6) * plotWidth,
+      y: height - 8,
+      class: "ratingChartDate",
+      "text-anchor": index === 0 ? "start" : index === 6 ? "end" : "middle",
+    });
+    text.textContent = date.toLocaleDateString("en-US", { month: "short", year: "2-digit" });
+    svg.append(text);
+  });
+
+  return svg;
+}
+
+function renderRatingProgression(player) {
+  const modeId = state.ratingMode;
+  const rating = player.ratings[modeId];
+  const tier = getPlayerTier(player, modeId);
+  const history = createRatingHistory(player, modeId);
+  const divisionChanges = history.slice(1).reduce(
+    (changes, value, index) => {
+      const previousDivision = rankTiers.findIndex((division) => division.key === getRankedTier(history[index]).key);
+      const currentDivision = rankTiers.findIndex((division) => division.key === getRankedTier(value).key);
+      if (currentDivision > previousDivision) changes.up += 1;
+      if (currentDivision < previousDivision) changes.down += 1;
+      return changes;
+    },
+    { up: 0, down: 0 },
+  );
+  const modeSelect = createDropdown({
+    label: "Playlist",
+    value: modeId,
+    options: gamemodes.map((mode) => ({ value: mode.id, label: mode.name })),
+    onChange: (value) => {
+      state.ratingMode = value;
+      replaceContent(section, renderRatingProgression(player));
+    },
+  });
+  const section = el(
+    "section",
+    { className: "card ratingProgression", "aria-labelledby": "ratingProgressionTitle" },
+    el("div", { className: "ratingProgressionHeader" },
+      el("h2", { id: "ratingProgressionTitle" }, "Rating progression"),
+      modeSelect,
+      el("div", { className: "ratingProgressionSummary" },
+        el("div", {}, el("span", { className: "mutedText" }, "Division"), el("strong", { style: `--tierColor:${tier.color}` }, tier.name)),
+        el("div", {}, el("span", { className: "mutedText" }, "Rating"), el("strong", {}, formatNumber(rating))),
+        el("div", {}, el("span", { className: "mutedText" }, "Div Up"), el("strong", { className: "ratingChangeUp" }, `↑ ${divisionChanges.up}`)),
+        el("div", {}, el("span", { className: "mutedText" }, "Div Down"), el("strong", { className: "ratingChangeDown" }, `↓ ${divisionChanges.down}`)),
+        el("div", {}, el("span", { className: "mutedText" }, "Matches"), el("strong", {}, formatNumber(player.perMode[modeId].wins + player.perMode[modeId].losses))),
+      ),
+    ),
+    el("div", { className: "ratingChartWrap" }, createRatingChart(player, modeId, history)),
+  );
+  return section;
 }
 
 function statGrid(stats) {
@@ -330,6 +489,7 @@ function renderProfile(player) {
   replaceContent(
     content,
     renderHeader(player),
+    renderRatingProgression(player),
     tabs,
     tabPanel,
     renderSeasonHistory(player),

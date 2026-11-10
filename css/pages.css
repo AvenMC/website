@@ -266,6 +266,93 @@
   gap: var(--space2);
 }
 
+.ratingProgression {
+  gap: var(--space4);
+  overflow: hidden;
+}
+
+.ratingProgressionHeader {
+  display: grid;
+  grid-template-columns: minmax(160px, 1fr) minmax(180px, 0.8fr) minmax(300px, 1.4fr);
+  align-items: center;
+  gap: var(--space4);
+}
+
+.ratingProgressionHeader h2 {
+  margin: 0;
+  font-size: 22px;
+}
+
+.ratingProgressionSummary {
+  display: flex;
+  justify-content: flex-end;
+  gap: clamp(var(--space4), 4vw, var(--space7));
+}
+
+.ratingProgressionSummary > div {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space1);
+}
+
+.ratingProgressionSummary strong {
+  color: var(--tierColor, var(--colorText));
+  font-family: var(--fontHeading);
+  font-size: 16px;
+}
+
+.ratingProgressionSummary .ratingChangeUp {
+  color: var(--colorSuccess);
+}
+
+.ratingProgressionSummary .ratingChangeDown {
+  color: var(--colorDanger);
+}
+
+.ratingChartWrap {
+  min-width: 0;
+  overflow: hidden;
+  border: 1px solid var(--colorBorder);
+  border-radius: var(--radiusSmall);
+  background: color-mix(in srgb, var(--colorBackground) 55%, transparent);
+}
+
+.ratingChart {
+  display: block;
+  width: 100%;
+  height: clamp(200px, 30vw, 300px);
+  overflow: visible;
+}
+
+.ratingChartGrid {
+  stroke: color-mix(in srgb, var(--colorTextSecondary) 28%, transparent);
+  stroke-width: 1;
+}
+
+.ratingChartTier,
+.ratingChartScale,
+.ratingChartDate {
+  fill: var(--colorTextSecondary);
+  font-family: var(--fontBody);
+  font-size: 11px;
+}
+
+.ratingChartLine {
+  fill: none;
+  stroke: var(--colorMace);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 3;
+  vector-effect: non-scaling-stroke;
+}
+
+.ratingChartPoint {
+  fill: var(--colorMace);
+  stroke: var(--colorBackground);
+  stroke-width: 2;
+  vector-effect: non-scaling-stroke;
+}
+
 .panelTitle {
   margin-bottom: var(--space4);
 }
@@ -861,6 +948,8 @@
   .profileSearch { flex: 1 1 100%; width: auto; min-width: 0; }
   .profileSearch .input { flex: 1; min-width: 0; }
   .profileHeader { gap: var(--space4); padding: var(--space4); }
+  .ratingProgressionHeader { grid-template-columns: 1fr 1fr; }
+  .ratingProgressionSummary { grid-column: 1 / -1; justify-content: space-between; }
   .profileInfo { width: 100%; }
   .profileName h1 { font-size: 22px; }
   .levelRow { flex-wrap: wrap; }
