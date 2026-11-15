@@ -73,7 +73,8 @@ body {
   display: grid;
   flex: 1;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  align-items: start;
+  align-items: stretch;
+  align-content: start;
   gap: 20px;
 }
 
@@ -182,6 +183,7 @@ body {
 @media (max-width: 800px) {
   .showcaseSections {
     grid-template-columns: 1fr;
+    grid-auto-rows: 1fr;
   }
 }
 
