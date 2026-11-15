@@ -1,5 +1,5 @@
-import { el, replaceContent } from "../dom.js?v=135";
-import { renderLayout } from "../layout.js?v=135";
+import { el, replaceContent } from "../dom.js?v=136";
+import { renderLayout } from "../layout.js?v=136";
 import {
   createAvatar,
   createBadge,
@@ -14,11 +14,11 @@ import {
   createTable,
   createRankedBadge,
   createTabs,
-} from "../components.js?v=135";
-import { countries } from "../countries.js?v=135";
-import { getTierScore, rankTiers, tierStep, getRankedTier } from "../ranks.js?v=135";
-import { createSeasonHistory, gamemodes, ffaModes, getMythicPosition, getPlayer, getPlayerTier, setCountry } from "../mockData.js?v=135";
-import { formatDateTime, formatNumber, formatPercent, formatPlaytime, formatRatio } from "../format.js?v=135";
+} from "../components.js?v=136";
+import { countries } from "../countries.js?v=136";
+import { getTierScore, rankTiers, tierStep, getRankedTier } from "../ranks.js?v=136";
+import { createSeasonHistory, gamemodes, ffaModes, getMythicPosition, getPlayer, getPlayerTier, setCountry } from "../mockData.js?v=136";
+import { formatDateTime, formatNumber, formatPercent, formatPlaytime, formatRatio } from "../format.js?v=136";
 
 const app = renderLayout("profile");
 const modeName = (id) => gamemodes.find((mode) => mode.id === id).name;
@@ -163,11 +163,11 @@ function createRatingHistory(player, modeId, count = 40) {
     return seed / 4294967296;
   };
   const current = player.ratings[modeId];
-  const values = [Math.max(0, current - (random() * 620 - 300))];
+  const values = [Math.max(0, Math.round(current - (random() * 620 - 300)))];
   for (let index = 1; index < count - 1; index += 1) {
     const previous = values[index - 1];
     const pullToCurrent = (current - previous) * 0.12;
-    values.push(Math.max(0, previous + pullToCurrent + (random() - 0.5) * 320));
+    values.push(Math.max(0, Math.round(previous + pullToCurrent + (random() - 0.5) * 320)));
   }
   values.push(current);
   return values;
@@ -180,14 +180,18 @@ function createRatingChart(player, modeId, values) {
   const plotWidth = width - plot.left - plot.right;
   const plotHeight = height - plot.top - plot.bottom;
   const rating = player.ratings[modeId];
-  const minRating = Math.max(0, Math.floor((Math.min(rating - 500, ...values) - 50) / tierStep) * tierStep);
-  const maxRating = Math.max(minRating + tierStep * 3, Math.ceil((Math.max(rating + 350, ...values) + 50) / tierStep) * tierStep);
+  const lower = Math.max(0, Math.min(...values) - 100);
+  const upper = Math.max(...values) + 100;
+  const tickStep = upper - lower > 1000 ? 500 : 100;
+  const minRating = Math.floor(lower / tickStep) * tickStep;
+  const maxRating = Math.ceil(upper / tickStep) * tickStep;
   const y = (value) => plot.top + ((maxRating - value) / (maxRating - minRating)) * plotHeight;
   const svg = createSvgElement("svg", {
     class: "ratingChart",
     viewBox: `0 0 ${width} ${height}`,
     role: "img",
-    "aria-label": `Rating progression for ${modeName(modeId)}: current rating ${formatNumber(rating)}`,
+    tabindex: "0",
+    "aria-label": `Rating progression for ${modeName(modeId)}: current rating ${formatNumber(rating)}. Use left and right arrow keys to inspect history.`,
     preserveAspectRatio: "none",
   });
   const bands = [
@@ -228,17 +232,20 @@ function createRatingChart(player, modeId, values) {
     }
   });
 
-  Array.from({ length: 5 }, (_, index) => {
-    const value = maxRating - ((maxRating - minRating) / 4) * index;
+  for (let value = minRating; value <= maxRating; value += tickStep) {
+    svg.append(createSvgElement("line", {
+      x1: plot.left, x2: width - plot.right,
+      y1: y(value), y2: y(value), class: "ratingChartGrid",
+    }));
     const label = createSvgElement("text", {
       x: plot.left - 8,
       y: y(value) + 4,
       class: "ratingChartScale",
       "text-anchor": "end",
     });
-    label.textContent = formatNumber(Math.round(value));
+    label.textContent = formatNumber(value);
     svg.append(label);
-  });
+  }
 
   const points = values.map((value, index) => `${plot.left + (index / (values.length - 1)) * plotWidth},${y(value)}`).join(" ");
   svg.append(createSvgElement("polyline", { points, class: "ratingChartLine" }));
@@ -250,6 +257,9 @@ function createRatingChart(player, modeId, values) {
   }));
 
   const now = new Date();
+  const start = new Date(now.getFullYear(), now.getMonth() - 6, 1).getTime();
+  const end = new Date(now.getFullYear(), now.getMonth(), 1).getTime();
+  const dateAt = (index) => new Date(start + (index / (values.length - 1)) * (end - start));
   Array.from({ length: 7 }, (_, index) => {
     const date = new Date(now.getFullYear(), now.getMonth() - (6 - index), 1);
     const text = createSvgElement("text", {
@@ -262,6 +272,52 @@ function createRatingChart(player, modeId, values) {
     svg.append(text);
   });
 
+  const inspection = createSvgElement("g", { class: "ratingChartInspection", visibility: "hidden", "pointer-events": "none" });
+  const guide = createSvgElement("line", {
+    y1: plot.top, y2: height - plot.bottom, class: "ratingChartGuide",
+  });
+  const marker = createSvgElement("circle", { r: "5", class: "ratingChartPoint" });
+  const tooltip = createSvgElement("g", { class: "ratingChartTooltip" });
+  tooltip.append(createSvgElement("rect", { width: "194", height: "76", rx: "8" }));
+  const lines = [18, 39, 60].map((lineY) => createSvgElement("text", { x: "12", y: lineY }));
+  tooltip.append(...lines);
+  inspection.append(guide, marker, tooltip);
+  svg.append(inspection);
+  let selected = values.length - 1;
+  const inspect = (index) => {
+    selected = Math.max(0, Math.min(values.length - 1, index));
+    const value = values[selected];
+    const pointX = plot.left + (selected / (values.length - 1)) * plotWidth;
+    const pointY = y(value);
+    guide.setAttribute("x1", pointX);
+    guide.setAttribute("x2", pointX);
+    marker.setAttribute("cx", pointX);
+    marker.setAttribute("cy", pointY);
+    tooltip.setAttribute("transform", `translate(${Math.max(plot.left, Math.min(width - plot.right - 194, pointX + 12))},${pointY > plot.top + 88 ? pointY - 88 : pointY + 12})`);
+    const date = dateAt(selected).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
+    const tier = getRankedTier(value);
+    lines[0].textContent = date;
+    lines[1].textContent = `Rating: ${formatNumber(value)}`;
+    lines[2].textContent = tier.name;
+    inspection.setAttribute("visibility", "visible");
+    svg.setAttribute("aria-label", `${modeName(modeId)}: ${date}, rating ${formatNumber(value)}, ${tier.name}. Use left and right arrow keys to inspect history.`);
+  };
+  const inspectPointer = (event) => {
+    const rect = svg.getBoundingClientRect();
+    const position = ((event.clientX - rect.left) / rect.width) * width;
+    inspect(Math.round(((position - plot.left) / plotWidth) * (values.length - 1)));
+  };
+  svg.addEventListener("pointermove", inspectPointer);
+  svg.addEventListener("pointerdown", inspectPointer);
+  svg.addEventListener("pointerleave", () => inspection.setAttribute("visibility", "hidden"));
+  svg.addEventListener("focus", () => inspect(selected));
+  svg.addEventListener("blur", () => inspection.setAttribute("visibility", "hidden"));
+  svg.addEventListener("keydown", (event) => {
+    if (!["ArrowLeft", "ArrowRight", "Home", "End", "Escape"].includes(event.key)) return;
+    event.preventDefault();
+    if (event.key === "Escape") inspection.setAttribute("visibility", "hidden");
+    else inspect(event.key === "Home" ? 0 : event.key === "End" ? values.length - 1 : selected + (event.key === "ArrowRight" ? 1 : -1));
+  });
   return svg;
 }
 

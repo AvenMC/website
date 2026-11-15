@@ -418,6 +418,23 @@
   stroke-width: 1;
 }
 
+.ratingChartGuide {
+  stroke: var(--colorTextSecondary);
+  stroke-dasharray: 4 4;
+  vector-effect: non-scaling-stroke;
+}
+
+.ratingChartTooltip rect {
+  fill: var(--colorSurface);
+  stroke: var(--colorPrimaryLine);
+}
+
+.ratingChartTooltip text {
+  fill: var(--colorText);
+  font-family: var(--fontBody);
+  font-size: 12px;
+}
+
 .ratingChartTier,
 .ratingChartScale,
 .ratingChartDate {
