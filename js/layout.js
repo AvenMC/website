@@ -1,8 +1,7 @@
-import { el } from "./dom.js?v=121";
-import { createBrand, createButton, createSocialLinks } from "./components.js?v=121";
-import { openJoinModal } from "./join.js?v=121";
-import { initReveal, initSpotlight, initTilt } from "./effects.js?v=121";
-import { initRouter } from "./router.js?v=121";
+import { el } from "./dom.js?v=122";
+import { createBrand, createButton, createSocialLinks } from "./components.js?v=122";
+import { openJoinModal } from "./join.js?v=122";
+import { initReveal, initSpotlight, initTilt } from "./effects.js?v=122";
 
 const navItems = [
   { id: "home", label: "Home", href: "index.html", icon: "home" },
@@ -59,12 +58,11 @@ function createChrome() {
   document.body.append(footer);
   initSpotlight();
   initTilt();
-  initRouter();
   requestAnimationFrame(initReveal);
   return { links, toggle };
 }
 
-// Builds the header and footer once. Later calls (client-side navigation) only update the active link.
+// Reuse the same chrome if a page renders its layout more than once.
 export function renderLayout(activePage) {
   document.querySelector(".pageBackdrop")?.remove();
   const chrome = document[chromeKey] ??= createChrome();

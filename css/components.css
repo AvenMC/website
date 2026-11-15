@@ -846,7 +846,8 @@ a.card:hover,
 [data-reveal] {
   opacity: 0;
   transform: translateY(24px);
-  transition: opacity 600ms ease var(--revealDelay, 0ms), transform 600ms ease var(--revealDelay, 0ms);
+  transition: opacity 600ms ease var(--revealDelay, 0ms), transform 600ms ease var(--revealDelay, 0ms),
+    border-color var(--transitionFast), box-shadow var(--transitionFast), background-color var(--transitionFast);
 }
 
 [data-reveal].isVisible {
@@ -1109,9 +1110,11 @@ a.card:hover,
     box-shadow: 0 4px 18px var(--colorPrimarySoft);
   }
 
-  .card:hover,
   .statCard:hover,
-  .card:focus-within {
+  .card.isInteractive:hover,
+  a.card:hover,
+  .card.isInteractive:focus-within,
+  a.card:focus-visible {
     border-color: var(--accent, var(--colorPrimaryLine));
     box-shadow: 0 8px 24px color-mix(in srgb, var(--accent, var(--colorPrimary)) 8%, transparent);
   }

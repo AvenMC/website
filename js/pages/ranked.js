@@ -1,11 +1,11 @@
-import { el, replaceContent } from "../dom.js?v=121";
-import { initReveal } from "../effects.js?v=121";
-import { renderLayout } from "../layout.js?v=121";
-import { createButton, createRankedBadge, createSectionHeading } from "../components.js?v=121";
-import { createRankStatsSection } from "./rankStats.js?v=121";
-import { allRankTiers, rankTiers } from "../ranks.js?v=121";
-import { gamemodes } from "../mockData.js?v=121";
-import { modeThemes } from "../modeTheme.js?v=121";
+import { el, replaceContent } from "../dom.js?v=122";
+import { initReveal } from "../effects.js?v=122";
+import { renderLayout } from "../layout.js?v=122";
+import { createButton, createRankedBadge, createSectionHeading } from "../components.js?v=122";
+import { createRankStatsSection } from "./rankStats.js?v=122";
+import { allRankTiers, rankTiers } from "../ranks.js?v=122";
+import { gamemodes } from "../mockData.js?v=122";
+import { modeIconStyle, modeThemes } from "../modeTheme.js?v=122";
 
 const app = renderLayout("ranked");
 const reveal = (delay = 0) => ({ "data-reveal": "", style: `--revealDelay:${delay}ms` });
@@ -90,9 +90,10 @@ const leaderboardLink = el(
     el("div", reveal(), createSectionHeading({ eyebrow: "Leaderboards", title: "Ranked leaderboards" })),
     el(
       "div",
-      { className: "buttonRow" },
+      { className: "rankedModeGrid" },
       gamemodes.map((mode) => {
-        const button = createButton({ label: `${mode.name} leaderboard`, variant: "secondary", href: `leaderboards.html?board=${mode.id}` });
+        const button = createButton({ label: mode.name, variant: "secondary", href: `leaderboards.html?board=${mode.id}` });
+        button.prepend(el("span", { className: "modeIcon", style: modeIconStyle(mode.id), "aria-hidden": "true" }));
         button.classList.add("modeButton");
         button.style.setProperty("--accent", modeThemes[mode.id].accent);
         return button;

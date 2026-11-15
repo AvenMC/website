@@ -22,12 +22,11 @@
 .divisionCard,
 .seasonEntry,
 .featureItem {
-  transition: background var(--transitionFast), box-shadow var(--transitionFast);
+  transition: background-color var(--transitionFast), border-color var(--transitionFast), box-shadow var(--transitionFast);
 }
 
 @media (hover: hover) and (pointer: fine) {
   .divisionCard:hover {
-    background: color-mix(in srgb, var(--tierColor) 8%, var(--colorCard));
     box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--tierColor) 35%, transparent);
   }
 
@@ -726,7 +725,7 @@
   padding: var(--space3);
   border: 1px solid color-mix(in srgb, var(--tierColor) 30%, var(--colorBorder));
   border-radius: var(--radiusSmall);
-  transition: opacity 0.2s ease;
+  transition: opacity 200ms ease, border-color 200ms ease, box-shadow 200ms ease;
 }
 
 .rankLegendName { display: flex; align-items: center; gap: var(--space2); color: var(--tierColor); font-family: var(--fontHeading); font-size: 14px; font-weight: 600; }
@@ -870,6 +869,38 @@
 }
 
 .modeButton:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+.rankedModeGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space3);
+}
+
+.rankedModeGrid .modeButton {
+  justify-content: flex-start;
+  min-height: 64px;
+  height: auto;
+  padding: var(--space4);
+  white-space: normal;
+}
+
+.rankedModeGrid .modeIcon {
+  width: 28px;
+  height: 28px;
+  flex: none;
+}
+
+@media (max-width: 720px) {
+  .rankedModeGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 420px) {
+  .rankedModeGrid {
+    grid-template-columns: 1fr;
+  }
+}
 
 .rankedTeaser .sectionHeading { margin-bottom: 0; }
 
