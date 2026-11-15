@@ -4,6 +4,20 @@ import test from "node:test";
 import { runInNewContext } from "node:vm";
 
 const source = readFileSync(new URL("../js/layout.js", import.meta.url), "utf8");
+const script = source
+  .replace(/^import .*;\n/gm, "")
+  .replaceAll("export function", "function")
+  .replaceAll("import.meta.url", JSON.stringify("https://avenmc.github.io/website/js/layout.js"));
+
+test("navigation icons resolve inside the GitHub Pages repository path", () => {
+  const navIcon = runInNewContext(`${script}\nnavIcon;`, {
+    Symbol, URL,
+    el: (tag, props) => props,
+  });
+  for (const icon of ["home", "player", "sword", "trophy", "gamepad"]) {
+    assert.equal(navIcon(icon).style, `--iconUrl:url("https://avenmc.github.io/website/assets/icons/${icon}.svg")`);
+  }
+});
 
 test("page links use native navigation without intercepting clicks or mixing modules", () => {
   assert.doesNotMatch(source, /initRouter|preventDefault|import\(/);
@@ -35,7 +49,6 @@ test("repeated layout modules reuse header, footer and drawer controls", () => {
     querySelector: () => null,
     getElementById: () => app,
   };
-  const script = source.replace(/^import .*;\n/gm, "").replaceAll("export function", "function");
   for (let index = 0; index < 3; index += 1) {
     const renderLayout = runInNewContext(`${script}\nrenderLayout;`, { document, Symbol });
     assert.equal(renderLayout("ranked"), app);

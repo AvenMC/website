@@ -1,7 +1,7 @@
-import { el } from "./dom.js?v=122";
-import { createBrand, createButton, createSocialLinks } from "./components.js?v=122";
-import { openJoinModal } from "./join.js?v=122";
-import { initReveal, initSpotlight, initTilt } from "./effects.js?v=122";
+import { el } from "./dom.js?v=123";
+import { createBrand, createButton, createSocialLinks } from "./components.js?v=123";
+import { openJoinModal } from "./join.js?v=123";
+import { initReveal, initSpotlight, initTilt } from "./effects.js?v=123";
 
 const navItems = [
   { id: "home", label: "Home", href: "index.html", icon: "home" },
@@ -15,7 +15,7 @@ const chromeKey = Symbol.for("avenmc.chrome");
 const navIcon = (icon) => el("span", {
   className: "navIcon",
   "aria-hidden": "true",
-  style: `--iconUrl:url(../assets/icons/${icon}.svg)`,
+  style: `--iconUrl:url("${new URL(`../assets/icons/${icon}.svg`, import.meta.url).href}")`,
 });
 
 function createChrome() {
