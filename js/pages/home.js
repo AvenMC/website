@@ -1,5 +1,5 @@
-import { el, replaceContent } from "../dom.js?v=124";
-import { renderLayout } from "../layout.js?v=124";
+import { el, replaceContent } from "../dom.js?v=125";
+import { renderLayout } from "../layout.js?v=125";
 import {
   createAvatar,
   createBadge,
@@ -9,14 +9,14 @@ import {
   createSectionHeading,
   createSkeletonRows,
   createSocialLinks,
-} from "../components.js?v=124";
-import { createCopyField, openJoinModal } from "../join.js?v=124";
-import { ffaModes, regions, getTopPlayersPreview } from "../mockData.js?v=124";
-import { initSectionTone } from "../effects.js?v=124";
-import { formatNumber } from "../format.js?v=124";
-import { modeIconStyle, modeThemes } from "../modeTheme.js?v=124";
-import { allRankTiers } from "../ranks.js?v=124";
-import { siteConfig } from "../siteConfig.js?v=124";
+} from "../components.js?v=125";
+import { createCopyField, openJoinModal } from "../join.js?v=125";
+import { gamemodes, ffaModes, regions, getTopPlayersPreview } from "../mockData.js?v=125";
+import { initSectionTone } from "../effects.js?v=125";
+import { formatNumber } from "../format.js?v=125";
+import { modeIconStyle, modeThemes } from "../modeTheme.js?v=125";
+import { allRankTiers } from "../ranks.js?v=125";
+import { siteConfig } from "../siteConfig.js?v=125";
 
 const app = renderLayout("home");
 const reveal = (delay = 0) => ({ "data-reveal": "", style: `--revealDelay:${delay}ms` });
@@ -92,18 +92,22 @@ const gamemodesSection = el(
   el(
     "div",
     { className: "container" },
-    el("div", reveal(), createSectionHeading({ eyebrow: "FFA Gamemodes", title: "Choose your fight" })),
+    el("div", reveal(), createSectionHeading({ eyebrow: "Gamemodes", title: "Available gamemodes" })),
     el(
       "div",
       { className: "grid cols3" },
-      ffaModes.map((mode, index) =>
+      gamemodes.map((mode, index) =>
         el(
           "div",
           { className: "card hasSpotlight hasTilt gamemodeCard", ...reveal(index * 90), style: `--accent:${modeThemes[mode.id].accent};--panel:${modeThemes[mode.id].panel};--edge:${modeThemes[mode.id].edge};--revealDelay:${index * 90}ms` },
           el("span", { className: "modeIcon", style: modeIconStyle(mode.id), "aria-hidden": "true" }),
           el("h3", {}, mode.name),
           el("p", { className: "cardText" }, mode.description),
-          createBadge({ label: "At release" }),
+          el("div", { className: "gamemodeAvailability", "aria-label": "Available in" },
+            ffaModes.some((ffaMode) => ffaMode.id === mode.id) ? createBadge({ label: "FFA" }) : null,
+            createBadge({ label: "Duels" }),
+            createBadge({ label: "Ranked" }),
+          ),
         ),
       ),
     ),

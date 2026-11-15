@@ -17,4 +17,4 @@ export const modeThemes = {
 };
 
 export const modeIconStyle = (modeId) =>
-  `--iconUrl:url(${modeIconUrls[modeId].startsWith("assets/") ? `../${modeIconUrls[modeId]}` : modeIconUrls[modeId]});--iconFlip:${modeId === "mace" ? "-1" : "1"}`;
+  `--iconUrl:url("${modeIconUrls[modeId].startsWith("assets/") ? new URL(`../${modeIconUrls[modeId]}`, import.meta.url).href : modeIconUrls[modeId]}");--iconFlip:${modeId === "mace" ? "-1" : "1"}`;

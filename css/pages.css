@@ -73,6 +73,7 @@
 
 .heroContent h1 {
   font-size: clamp(40px, 7vw, 76px);
+  transition: text-shadow 240ms ease, transform 240ms ease;
 }
 
 .ipPanel {
@@ -95,7 +96,8 @@
   position: relative;
   width: min(100%, 240px);
   height: auto;
-  animation: logoIn 900ms ease-out both;
+  animation: logoIn 900ms ease-out backwards;
+  transition: transform 240ms ease, filter 240ms ease;
 }
 
 @keyframes logoIn {
@@ -192,6 +194,13 @@
   flex-direction: column;
   align-items: flex-start;
   gap: var(--space3);
+}
+
+.gamemodeAvailability {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space2);
+  margin-top: auto;
 }
 
 .gamemodeIcon {
@@ -1084,6 +1093,34 @@
   color: var(--colorSuccess);
   font-size: 14px;
   font-weight: 600;
+  transition: background-color 240ms ease, border-color 240ms ease, box-shadow 240ms ease, transform 240ms ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .onlineStatus:hover {
+    background-color: color-mix(in srgb, var(--colorSuccess) 17%, transparent);
+    border-color: var(--colorSuccess);
+    box-shadow: 0 0 24px color-mix(in srgb, var(--colorSuccess) 16%, transparent);
+  }
+
+  .heroContent h1:hover {
+    text-shadow: 0 0 28px color-mix(in srgb, var(--colorPrimary) 35%, transparent);
+  }
+
+  .heroLogo:hover {
+    filter: drop-shadow(0 0 22px color-mix(in srgb, var(--colorPrimary) 40%, transparent));
+  }
+}
+
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .onlineStatus:hover,
+  .heroContent h1:hover {
+    transform: translateY(-2px);
+  }
+
+  .heroLogo:hover {
+    transform: translateY(-4px) scale(1.04);
+  }
 }
 
 .onlineDot {
