@@ -1,5 +1,5 @@
-import { el, replaceContent } from "../dom.js?v=134";
-import { renderLayout } from "../layout.js?v=134";
+import { el, replaceContent } from "../dom.js?v=135";
+import { renderLayout } from "../layout.js?v=135";
 import {
   createAvatar,
   createBadge,
@@ -9,14 +9,14 @@ import {
   createSectionHeading,
   createSkeletonRows,
   createSocialLinks,
-} from "../components.js?v=134";
-import { createCopyField, openJoinModal } from "../join.js?v=134";
-import { gamemodes, ffaModes, regions, getTopPlayersPreview } from "../mockData.js?v=134";
-import { initSectionTone } from "../effects.js?v=134";
-import { formatNumber } from "../format.js?v=134";
-import { modeIconStyle, modeThemes } from "../modeTheme.js?v=134";
-import { allRankTiers } from "../ranks.js?v=134";
-import { siteConfig } from "../siteConfig.js?v=134";
+} from "../components.js?v=135";
+import { createCopyField, openJoinModal } from "../join.js?v=135";
+import { gamemodes, ffaModes, regions, getTopPlayersPreview } from "../mockData.js?v=135";
+import { initSectionTone } from "../effects.js?v=135";
+import { formatNumber } from "../format.js?v=135";
+import { modeIconStyle, modeThemes } from "../modeTheme.js?v=135";
+import { allRankTiers } from "../ranks.js?v=135";
+import { siteConfig } from "../siteConfig.js?v=135";
 
 const app = renderLayout("home");
 const reveal = (delay = 0) => ({ "data-reveal": "", style: `--revealDelay:${delay}ms` });
@@ -211,7 +211,7 @@ const communitySection = el(
 );
 
 const features = [
-  ["Ranked duels", "Duels with the same modes plus more. Rating and a division to climb.", "var(--colorPrimary)"],
+  ["Duels", "Play every duel mode unranked or compete in ranked to climb the divisions.", "var(--colorPrimary)"],
   ["Free for all", "Drop in, fight, and build your kill streak.", "var(--colorDanger)"],
   ["Detailed stats", "K/D, win rate, streaks and recent matches at a glance.", "var(--colorSuccess)"],
   ["Bedrock native", "Join from mobile, console or PC.", "var(--colorMace)"],
