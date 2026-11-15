@@ -8,8 +8,11 @@ User-provided transparent PNG originals:
 | `crystal.png` | CrystalPvP gamemode |
 | `globe.png` | Regions and global navigation |
 | `mace.png` | Mace gamemode |
+| `apple.png` | UHC gamemode |
+| `fireball.png` | Fireball gamemode |
+| `tnt.png` | TNT Cart gamemode |
 
-Sword, CrystalPvP and Globe are 452 x 452 pixels; Mace is 32 x 32 pixels.
+All originals are 452 x 452 pixels except Mace, which is 32 x 32 pixels.
 
 The canonical cross-project copies are in
 `AvenMC/avenmc-network`, under `resource-pack/shared/icons/`.

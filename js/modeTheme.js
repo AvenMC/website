@@ -2,9 +2,9 @@ const modeIconUrls = {
   sword: "assets/icons/sword.png",
   crystalpvp: "assets/icons/crystal.png",
   mace: "assets/icons/mace.png",
-  fireball: "assets/icons/flame.svg",
-  tntcart: "assets/icons/tntcart.svg",
-  uhc: "assets/icons/uhc.svg",
+  fireball: "assets/icons/fireball.png",
+  tntcart: "assets/icons/tnt.png",
+  uhc: "assets/icons/apple.png",
 };
 
 export const modeThemes = {

@@ -1,5 +1,5 @@
-import { el, replaceContent } from "../dom.js?v=128";
-import { renderLayout } from "../layout.js?v=128";
+import { el, replaceContent } from "../dom.js?v=129";
+import { renderLayout } from "../layout.js?v=129";
 import {
   createAvatar,
   createBadge,
@@ -9,14 +9,14 @@ import {
   createSectionHeading,
   createSkeletonRows,
   createSocialLinks,
-} from "../components.js?v=128";
-import { createCopyField, openJoinModal } from "../join.js?v=128";
-import { gamemodes, ffaModes, regions, getTopPlayersPreview } from "../mockData.js?v=128";
-import { initSectionTone } from "../effects.js?v=128";
-import { formatNumber } from "../format.js?v=128";
-import { modeIconStyle, modeThemes } from "../modeTheme.js?v=128";
-import { allRankTiers } from "../ranks.js?v=128";
-import { siteConfig } from "../siteConfig.js?v=128";
+} from "../components.js?v=129";
+import { createCopyField, openJoinModal } from "../join.js?v=129";
+import { gamemodes, ffaModes, regions, getTopPlayersPreview } from "../mockData.js?v=129";
+import { initSectionTone } from "../effects.js?v=129";
+import { formatNumber } from "../format.js?v=129";
+import { modeIconStyle, modeThemes } from "../modeTheme.js?v=129";
+import { allRankTiers } from "../ranks.js?v=129";
+import { siteConfig } from "../siteConfig.js?v=129";
 
 const app = renderLayout("home");
 const reveal = (delay = 0) => ({ "data-reveal": "", style: `--revealDelay:${delay}ms` });
