@@ -1,6 +1,6 @@
 const modeIconUrls = {
-  sword: "assets/icons/sword.svg",
-  crystalpvp: "https://img.icons8.com/fluency-systems-regular/96/diamond.png",
+  sword: "assets/icons/sword.png",
+  crystalpvp: "assets/icons/crystal.png",
   mace: "https://img.icons8.com/material-outlined/96/hammer.png",
   fireball: "assets/icons/flame.svg",
   tntcart: "assets/icons/tntcart.svg",

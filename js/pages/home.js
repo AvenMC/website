@@ -1,5 +1,5 @@
-import { el, replaceContent } from "../dom.js?v=125";
-import { renderLayout } from "../layout.js?v=125";
+import { el, replaceContent } from "../dom.js?v=126";
+import { renderLayout } from "../layout.js?v=126";
 import {
   createAvatar,
   createBadge,
@@ -9,14 +9,14 @@ import {
   createSectionHeading,
   createSkeletonRows,
   createSocialLinks,
-} from "../components.js?v=125";
-import { createCopyField, openJoinModal } from "../join.js?v=125";
-import { gamemodes, ffaModes, regions, getTopPlayersPreview } from "../mockData.js?v=125";
-import { initSectionTone } from "../effects.js?v=125";
-import { formatNumber } from "../format.js?v=125";
-import { modeIconStyle, modeThemes } from "../modeTheme.js?v=125";
-import { allRankTiers } from "../ranks.js?v=125";
-import { siteConfig } from "../siteConfig.js?v=125";
+} from "../components.js?v=126";
+import { createCopyField, openJoinModal } from "../join.js?v=126";
+import { gamemodes, ffaModes, regions, getTopPlayersPreview } from "../mockData.js?v=126";
+import { initSectionTone } from "../effects.js?v=126";
+import { formatNumber } from "../format.js?v=126";
+import { modeIconStyle, modeThemes } from "../modeTheme.js?v=126";
+import { allRankTiers } from "../ranks.js?v=126";
+import { siteConfig } from "../siteConfig.js?v=126";
 
 const app = renderLayout("home");
 const reveal = (delay = 0) => ({ "data-reveal": "", style: `--revealDelay:${delay}ms` });
@@ -83,8 +83,8 @@ const marquee = el(
   el("ul", { className: "srOnly" }, marqueeItems.map((text) => el("li", {}, text))),
 );
 
-const regionIcons = { eu: "europe", na: "northAmerica", as: "asia" };
 const regionAccents = { eu: "var(--colorPrimary)", na: "var(--colorSuccess)", as: "var(--colorAsia)" };
+const globeIconUrl = new URL("../../assets/icons/globe.png", import.meta.url).href;
 
 const gamemodesSection = el(
   "section",
@@ -178,7 +178,7 @@ const regionsSection = el(
         el(
           "div",
           { className: `card regionCard${region.id === "as" ? " isMuted" : ""}`, ...reveal(index * 90), style: `--accent:${regionAccents[region.id]};--revealDelay:${index * 90}ms` },
-          el("img", { className: "regionIcon", src: `assets/regions/${regionIcons[region.id]}.svg`, alt: "", width: "56", height: "56", loading: "lazy" }),
+          el("span", { className: "regionIcon", style: `--iconUrl:url("${globeIconUrl}")`, "aria-hidden": "true" }),
           el("div", { className: "regionText" }, el("div", { className: "regionCode" }, region.code), el("div", { className: "regionLocation" }, region.location)),
           createBadge({ label: region.status }),
         ),

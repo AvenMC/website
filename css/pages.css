@@ -671,9 +671,13 @@
 }
 
 .regionIcon {
+  display: block;
   width: 56px;
   height: 56px;
   flex: none;
+  background: var(--accent);
+  -webkit-mask: var(--iconUrl) center / contain no-repeat;
+  mask: var(--iconUrl) center / contain no-repeat;
 }
 
 .regionCard {
