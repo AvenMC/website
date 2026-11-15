@@ -702,6 +702,34 @@
   overflow-wrap: anywhere;
 }
 
+.regionCard .copyField {
+  border-color: color-mix(in srgb, var(--accent) 35%, var(--colorBorder));
+  background: color-mix(in srgb, var(--accent) 6%, var(--colorBackground));
+}
+
+.regionCard .copyField .statLabel {
+  color: color-mix(in srgb, var(--accent) 55%, var(--colorTextSecondary));
+}
+
+.regionCard .copyField .button {
+  border-color: color-mix(in srgb, var(--accent) 35%, var(--colorBorder));
+  background: color-mix(in srgb, var(--accent) 10%, var(--colorSurface));
+  color: var(--accent);
+}
+
+.regionCard .copyField .button:focus-visible {
+  outline-color: var(--accent);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 14%, transparent);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .regionCard .copyField .button:hover {
+    border-color: var(--accent);
+    background: color-mix(in srgb, var(--accent) 18%, var(--colorSurface));
+    box-shadow: 0 4px 18px color-mix(in srgb, var(--accent) 14%, transparent);
+  }
+}
+
 .regionCard .regionCode {
   color: var(--accent);
 }

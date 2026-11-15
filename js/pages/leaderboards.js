@@ -1,5 +1,5 @@
-import { el, replaceContent } from "../dom.js?v=132";
-import { renderLayout } from "../layout.js?v=132";
+import { el, replaceContent } from "../dom.js?v=133";
+import { renderLayout } from "../layout.js?v=133";
 import {
   createAvatar,
   createBadge,
@@ -11,13 +11,13 @@ import {
   createSkeletonRows,
   createTable,
   createTabs,
-} from "../components.js?v=132";
-import { gamemodes, ffaModes, getLeaderboard, getMyStanding, leaderboardCategories } from "../mockData.js?v=132";
-import { modeIconStyle, modeThemes } from "../modeTheme.js?v=132";
-import { createRankDistributionCard } from "./rankStats.js?v=132";
-import { attachPlayerPreview } from "../playerPreview.js?v=132";
-import { getRankedTier, getTierScore, memberRankColors, rankedBoardSize } from "../ranks.js?v=132";
-import { formatNumber } from "../format.js?v=132";
+} from "../components.js?v=133";
+import { gamemodes, ffaModes, getLeaderboard, getMyStanding, leaderboardCategories } from "../mockData.js?v=133";
+import { modeIconStyle, modeThemes } from "../modeTheme.js?v=133";
+import { createRankDistributionCard } from "./rankStats.js?v=133";
+import { attachPlayerPreview } from "../playerPreview.js?v=133";
+import { getRankedTier, getTierScore, memberRankColors, rankedBoardSize } from "../ranks.js?v=133";
+import { formatNumber } from "../format.js?v=133";
 
 const app = renderLayout("leaderboards");
 
