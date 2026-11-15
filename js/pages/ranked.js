@@ -1,11 +1,11 @@
-import { el, replaceContent } from "../dom.js?v=118";
-import { initReveal } from "../effects.js?v=118";
-import { renderLayout } from "../layout.js?v=118";
-import { createButton, createRankedBadge, createSectionHeading } from "../components.js?v=118";
-import { createRankStatsSection } from "./rankStats.js?v=118";
-import { allRankTiers, rankTiers } from "../ranks.js?v=118";
-import { gamemodes } from "../mockData.js?v=118";
-import { modeThemes } from "../modeTheme.js?v=118";
+import { el, replaceContent } from "../dom.js?v=119";
+import { initReveal } from "../effects.js?v=119";
+import { renderLayout } from "../layout.js?v=119";
+import { createButton, createRankedBadge, createSectionHeading } from "../components.js?v=119";
+import { createRankStatsSection } from "./rankStats.js?v=119";
+import { allRankTiers, rankTiers } from "../ranks.js?v=119";
+import { gamemodes } from "../mockData.js?v=119";
+import { modeThemes } from "../modeTheme.js?v=119";
 
 const app = renderLayout("ranked");
 const reveal = (delay = 0) => ({ "data-reveal": "", style: `--revealDelay:${delay}ms` });
@@ -40,7 +40,7 @@ function createDivisionCard(division) {
 
 const introSection = el(
   "section",
-  { className: "section compact" },
+  { className: "section compact gridBackdrop" },
   el(
     "div",
     { className: "container" },
