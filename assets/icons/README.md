@@ -1,12 +1,15 @@
 # Shared network icons
 
-User-provided originals, preserved as 452 x 452 transparent PNGs:
+User-provided transparent PNG originals:
 
 | File | Use |
 | --- | --- |
 | `sword.png` | Sword gamemode |
 | `crystal.png` | CrystalPvP gamemode |
 | `globe.png` | Regions and global navigation |
+| `mace.png` | Mace gamemode |
+
+Sword, CrystalPvP and Globe are 452 x 452 pixels; Mace is 32 x 32 pixels.
 
 The canonical cross-project copies are in
 `AvenMC/avenmc-network`, under `resource-pack/shared/icons/`.

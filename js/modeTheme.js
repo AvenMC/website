@@ -1,7 +1,7 @@
 const modeIconUrls = {
   sword: "assets/icons/sword.png",
   crystalpvp: "assets/icons/crystal.png",
-  mace: "https://img.icons8.com/material-outlined/96/hammer.png",
+  mace: "assets/icons/mace.png",
   fireball: "assets/icons/flame.svg",
   tntcart: "assets/icons/tntcart.svg",
   uhc: "assets/icons/uhc.svg",
@@ -17,4 +17,4 @@ export const modeThemes = {
 };
 
 export const modeIconStyle = (modeId) =>
-  `--iconUrl:url("${modeIconUrls[modeId].startsWith("assets/") ? new URL(`../${modeIconUrls[modeId]}`, import.meta.url).href : modeIconUrls[modeId]}");--iconFlip:${modeId === "mace" ? "-1" : "1"}`;
+  `--iconUrl:url("${new URL(`../${modeIconUrls[modeId]}`, import.meta.url).href}");--iconFlip:1`;

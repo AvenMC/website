@@ -97,7 +97,7 @@
   width: min(100%, 240px);
   height: auto;
   animation: logoIn 900ms ease-out backwards;
-  transition: transform 240ms ease, filter 240ms ease;
+  transition: transform 240ms ease;
 }
 
 @keyframes logoIn {
@@ -1135,9 +1135,6 @@
     text-shadow: 0 0 28px color-mix(in srgb, var(--colorPrimary) 35%, transparent);
   }
 
-  .heroLogo:hover {
-    filter: drop-shadow(0 0 22px color-mix(in srgb, var(--colorPrimary) 40%, transparent));
-  }
 }
 
 @media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
