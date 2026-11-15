@@ -1,8 +1,10 @@
-import { initReveal } from "./effects.js?v=120";
+import { initReveal } from "./effects.js?v=121";
 
 // Client-side navigation: swaps the page content and keeps header and footer in place.
 // Every page is its own module that renders into #app when it runs, so a fresh import re-renders it.
 const leaveMs = 140;
+const buildVersion = new URL(import.meta.url).searchParams.get("v");
+const routerKey = Symbol.for("avenmc.router");
 let navigationId = 0;
 const pageCache = new Map();
 
@@ -42,6 +44,11 @@ async function navigate(url, { push }) {
   try {
     const [page] = await Promise.all([loadPage(url), new Promise((resolve) => setTimeout(resolve, leaveMs))]);
     if (id !== navigationId) return;
+    // Keep an open tab from mixing shared modules across deployments.
+    if (new URL(page.module).searchParams.get("v") !== buildVersion) {
+      location.assign(url.href);
+      return;
+    }
     if (push) history.pushState(null, "", url);
     document.title = page.title;
     if (page.description) document.querySelector('meta[name="description"]')?.setAttribute("content", page.description);
@@ -52,12 +59,15 @@ async function navigate(url, { push }) {
     main.classList.remove("isLeaving");
     main.classList.add("isEntering");
     initReveal();
-  } catch {
-    location.href = url.href;
+  } catch (error) {
+    console.error("Page navigation failed; reloading the destination.", error);
+    location.assign(url.href);
   }
 }
 
 export function initRouter() {
+  if (document[routerKey]) return;
+  document[routerKey] = true;
   document.addEventListener("click", (event) => {
     const anchor = event.target.closest?.("a[href]");
     if (!isInternalPageLink(anchor, event)) return;

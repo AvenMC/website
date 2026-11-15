@@ -1,8 +1,8 @@
-import { el } from "./dom.js?v=120";
-import { createBrand, createButton, createSocialLinks } from "./components.js?v=120";
-import { openJoinModal } from "./join.js?v=120";
-import { initReveal, initSpotlight, initTilt } from "./effects.js?v=120";
-import { initRouter } from "./router.js?v=120";
+import { el } from "./dom.js?v=121";
+import { createBrand, createButton, createSocialLinks } from "./components.js?v=121";
+import { openJoinModal } from "./join.js?v=121";
+import { initReveal, initSpotlight, initTilt } from "./effects.js?v=121";
+import { initRouter } from "./router.js?v=121";
 
 const navItems = [
   { id: "home", label: "Home", href: "index.html", icon: "home" },
@@ -11,7 +11,7 @@ const navItems = [
   { id: "leaderboards", label: "Leaderboards", href: "leaderboards.html", icon: "trophy" },
 ];
 
-let chrome = null;
+const chromeKey = Symbol.for("avenmc.chrome");
 
 const navIcon = (icon) => el("span", {
   className: "navIcon",
@@ -67,7 +67,7 @@ function createChrome() {
 // Builds the header and footer once. Later calls (client-side navigation) only update the active link.
 export function renderLayout(activePage) {
   document.querySelector(".pageBackdrop")?.remove();
-  chrome ??= createChrome();
+  const chrome = document[chromeKey] ??= createChrome();
   chrome.links.querySelectorAll(".navLink").forEach((link) => {
     const isActive = link.dataset.page === activePage;
     link.classList.toggle("isActive", isActive);
