@@ -4,8 +4,8 @@
  * the pages only depend on the shapes returned here.
  */
 
-import { countries } from "./countries.js?v=123";
-import { getRankedTier, mythicMinRating, rankedBoardSize } from "./ranks.js?v=123";
+import { countries } from "./countries.js?v=124";
+import { getRankedTier, mythicMinRating, rankedBoardSize } from "./ranks.js?v=124";
 
 export const gamemodes = [
   { id: "sword", name: "Sword", short: "SW", description: "Sword combat." },

@@ -41,9 +41,21 @@
   --colorCrystal: #b89efa;
   --colorCrystalPanel: #1a1b30;
   --colorCrystalEdge: #2e2f56;
-  --colorMace: #ffa147;
-  --colorMacePanel: #241a18;
-  --colorMaceEdge: #4a342a;
+  --colorSword: #3b82f6;
+  --colorSwordPanel: #111e35;
+  --colorSwordEdge: #253e64;
+  --colorMace: #4dd4c4;
+  --colorMacePanel: #102927;
+  --colorMaceEdge: #23504b;
+  --colorFireball: #ffa147;
+  --colorFireballPanel: #241a18;
+  --colorFireballEdge: #4a342a;
+  --colorTntCart: #f07878;
+  --colorTntCartPanel: #2b1b25;
+  --colorTntCartEdge: #59313f;
+  --colorUhc: #f2c94c;
+  --colorUhcPanel: #292619;
+  --colorUhcEdge: #514829;
   --colorAsia: #8b7cff;
 
   --colorPrimarySoft: color-mix(in srgb, var(--colorPrimary) 14%, transparent);

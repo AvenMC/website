@@ -8,12 +8,12 @@ const modeIconUrls = {
 };
 
 export const modeThemes = {
-  sword: { accent: "var(--colorNodebuff)", panel: "var(--colorNodebuffPanel)", edge: "var(--colorNodebuffEdge)" },
+  sword: { accent: "var(--colorSword)", panel: "var(--colorSwordPanel)", edge: "var(--colorSwordEdge)" },
   crystalpvp: { accent: "var(--colorCrystal)", panel: "var(--colorCrystalPanel)", edge: "var(--colorCrystalEdge)" },
   mace: { accent: "var(--colorMace)", panel: "var(--colorMacePanel)", edge: "var(--colorMaceEdge)" },
-  fireball: { accent: "var(--colorMace)", panel: "var(--colorMacePanel)", edge: "var(--colorMaceEdge)" },
-  tntcart: { accent: "var(--colorDanger)", panel: "var(--colorCard)", edge: "var(--colorBorder)" },
-  uhc: { accent: "var(--colorSuccess)", panel: "var(--colorNodebuffPanel)", edge: "var(--colorNodebuffEdge)" },
+  fireball: { accent: "var(--colorFireball)", panel: "var(--colorFireballPanel)", edge: "var(--colorFireballEdge)" },
+  tntcart: { accent: "var(--colorTntCart)", panel: "var(--colorTntCartPanel)", edge: "var(--colorTntCartEdge)" },
+  uhc: { accent: "var(--colorUhc)", panel: "var(--colorUhcPanel)", edge: "var(--colorUhcEdge)" },
 };
 
 export const modeIconStyle = (modeId) =>
