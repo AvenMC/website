@@ -1,5 +1,5 @@
-import { el, replaceContent } from "../dom.js?v=130";
-import { renderLayout } from "../layout.js?v=130";
+import { el, replaceContent } from "../dom.js?v=131";
+import { renderLayout } from "../layout.js?v=131";
 import {
   createAvatar,
   createBadge,
@@ -9,14 +9,14 @@ import {
   createSectionHeading,
   createSkeletonRows,
   createSocialLinks,
-} from "../components.js?v=130";
-import { createCopyField, openJoinModal } from "../join.js?v=130";
-import { gamemodes, ffaModes, regions, getTopPlayersPreview } from "../mockData.js?v=130";
-import { initSectionTone } from "../effects.js?v=130";
-import { formatNumber } from "../format.js?v=130";
-import { modeIconStyle, modeThemes } from "../modeTheme.js?v=130";
-import { allRankTiers } from "../ranks.js?v=130";
-import { siteConfig } from "../siteConfig.js?v=130";
+} from "../components.js?v=131";
+import { createCopyField, openJoinModal } from "../join.js?v=131";
+import { gamemodes, ffaModes, regions, getTopPlayersPreview } from "../mockData.js?v=131";
+import { initSectionTone } from "../effects.js?v=131";
+import { formatNumber } from "../format.js?v=131";
+import { modeIconStyle, modeThemes } from "../modeTheme.js?v=131";
+import { allRankTiers } from "../ranks.js?v=131";
+import { siteConfig } from "../siteConfig.js?v=131";
 
 const app = renderLayout("home");
 const reveal = (delay = 0) => ({ "data-reveal": "", style: `--revealDelay:${delay}ms` });
@@ -170,7 +170,13 @@ const regionsSection = el(
   el(
     "div",
     { className: "container" },
-    el("div", reveal(), createSectionHeading({ eyebrow: "Regions", title: "Play close to home" }), el("p", { className: "regionNote" }, "One account across every region. Stats and leaderboards are shared.")),
+    el("div", reveal(),
+      el("div", { className: "regionsHeading" },
+        el("span", { className: "regionIcon", style: `--iconUrl:url("${globeIconUrl}")`, "aria-hidden": "true" }),
+        createSectionHeading({ eyebrow: "Regions", title: "Play close to home" }),
+      ),
+      el("p", { className: "regionNote" }, "One account across every region. Stats and leaderboards are shared."),
+    ),
     el(
       "div",
       { className: "grid cols3" },
@@ -178,9 +184,11 @@ const regionsSection = el(
         el(
           "div",
           { className: `card regionCard${region.id === "as" ? " isMuted" : ""}`, ...reveal(index * 90), style: `--accent:${regionAccents[region.id]};--revealDelay:${index * 90}ms` },
-          el("span", { className: "regionIcon", style: `--iconUrl:url("${globeIconUrl}")`, "aria-hidden": "true" }),
-          el("div", { className: "regionText" }, el("div", { className: "regionCode" }, region.code), el("div", { className: "regionLocation" }, region.location)),
-          createBadge({ label: region.status }),
+          el("div", { className: "regionCardHeader" },
+            el("div", { className: "regionText" }, el("div", { className: "regionCode" }, region.code), el("div", { className: "regionLocation" }, region.location)),
+            createBadge({ label: region.status }),
+          ),
+          createCopyField({ label: `${region.code} server address`, value: region.address }),
         ),
       ),
     ),

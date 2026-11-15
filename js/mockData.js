@@ -4,8 +4,8 @@
  * the pages only depend on the shapes returned here.
  */
 
-import { countries } from "./countries.js?v=130";
-import { getRankedTier, mythicMinRating, rankedBoardSize } from "./ranks.js?v=130";
+import { countries } from "./countries.js?v=131";
+import { getRankedTier, mythicMinRating, rankedBoardSize } from "./ranks.js?v=131";
 
 export const gamemodes = [
   { id: "sword", name: "Sword", short: "SW", description: "Classic vanilla-style sword combat." },
@@ -20,9 +20,9 @@ export const ffaModes = gamemodes.filter((mode) => ["sword", "crystalpvp", "mace
 
 // Accounts, stats and leaderboards are shared across all regions.
 export const regions = [
-  { id: "eu", code: "EU", location: "Frankfurt", status: "At release" },
-  { id: "na", code: "NA", location: "New York", status: "At release" },
-  { id: "as", code: "AS", location: "To be announced", status: "Potential" },
+  { id: "eu", code: "EU", location: "Frankfurt", status: "At release", address: "eu.avenmc.net" },
+  { id: "na", code: "NA", location: "New York", status: "At release", address: "na.avenmc.net" },
+  { id: "as", code: "AS", location: "To be announced", status: "Potential", address: "as.avenmc.net" },
 ];
 
 const mockDelayMs = 350;
