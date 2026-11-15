@@ -25,6 +25,7 @@
 .navLink {
   display: inline-flex;
   align-items: center;
+  gap: var(--space2);
   height: 36px;
   padding-inline: var(--space4);
   border-radius: var(--radiusSmall);
@@ -33,6 +34,16 @@
   font-size: 14px;
   transition: color var(--transitionFast), background var(--transitionFast);
   font-weight: 600;
+}
+
+.navIcon {
+  display: inline-block;
+  flex: none;
+  width: 18px;
+  height: 18px;
+  background: currentColor;
+  -webkit-mask: var(--iconUrl) center / contain no-repeat;
+  mask: var(--iconUrl) center / contain no-repeat;
 }
 
 .navLink:hover {
@@ -163,7 +174,7 @@
   border: 1px solid var(--colorBorder);
   border-radius: var(--radiusLarge);
   background: var(--colorCard);
-  transition: border-color var(--transitionFast), transform var(--transitionFast);
+  transition: border-color var(--transitionFast), box-shadow var(--transitionFast), transform var(--transitionFast);
 }
 
 a.card:hover,
@@ -692,7 +703,7 @@ a.card:hover,
   }
 }
 
-@media (max-width: 760px) {
+@media (max-width: 960px) {
   .button.navToggle {
     display: inline-flex;
   }
@@ -1075,4 +1086,44 @@ a.card:hover,
 
 @media (max-width: 640px) {
   .profileElo { align-items: flex-start; width: 100%; padding: var(--space4) 0 0; border-top: 1px solid var(--colorBorder); border-left: 0; text-align: left; }
+}
+
+.statCard {
+  transition: border-color var(--transitionFast), box-shadow var(--transitionFast);
+}
+
+.button:focus-visible,
+.tab:focus-visible,
+.pageButton:focus-visible {
+  box-shadow: 0 0 0 4px var(--colorPrimarySoft);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .navLink:hover,
+  .tab:hover {
+    background: var(--colorPrimarySoft);
+    color: var(--colorPrimary);
+  }
+
+  .button:hover:not(:disabled):not([aria-disabled="true"]) {
+    box-shadow: 0 4px 18px var(--colorPrimarySoft);
+  }
+
+  .card:hover,
+  .statCard:hover,
+  .card:focus-within {
+    border-color: var(--accent, var(--colorPrimaryLine));
+    box-shadow: 0 8px 24px color-mix(in srgb, var(--accent, var(--colorPrimary)) 8%, transparent);
+  }
+
+  .pageButton:hover:not(:disabled) {
+    background: var(--colorElevated);
+    color: var(--colorPrimary);
+  }
+}
+
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .button:hover:not(:active):not(:disabled):not([aria-disabled="true"]) {
+    transform: translateY(-2px);
+  }
 }

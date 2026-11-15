@@ -19,6 +19,24 @@
   mask-image: linear-gradient(#000, transparent 90%);
 }
 
+.divisionCard,
+.seasonEntry,
+.featureItem {
+  transition: background var(--transitionFast), box-shadow var(--transitionFast);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .divisionCard:hover {
+    background: color-mix(in srgb, var(--tierColor) 8%, var(--colorCard));
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--tierColor) 35%, transparent);
+  }
+
+  .seasonEntry:hover,
+  .featureItem:hover {
+    background: var(--colorElevated);
+  }
+}
+
 /* Hero */
 .hero {
   position: relative;
