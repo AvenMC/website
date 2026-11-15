@@ -1,7 +1,7 @@
 const modeIconUrls = {
   sword: "assets/icons/sword.png",
   crystalpvp: "assets/icons/crystal.png",
-  mace: "assets/icons/mace.png",
+  mace: "assets/icons/mace.png?v=2",
   fireball: "assets/icons/fireball.png",
   tntcart: "assets/icons/tnt.png",
   uhc: "assets/icons/apple.png",
