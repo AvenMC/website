@@ -1,11 +1,11 @@
-import { el, replaceContent } from "../dom.js?v=131";
-import { initReveal } from "../effects.js?v=131";
-import { renderLayout } from "../layout.js?v=131";
-import { createButton, createRankedBadge, createSectionHeading } from "../components.js?v=131";
-import { createRankStatsSection } from "./rankStats.js?v=131";
-import { allRankTiers, rankTiers } from "../ranks.js?v=131";
-import { gamemodes } from "../mockData.js?v=131";
-import { modeIconStyle, modeThemes } from "../modeTheme.js?v=131";
+import { el, replaceContent } from "../dom.js?v=132";
+import { initReveal } from "../effects.js?v=132";
+import { renderLayout } from "../layout.js?v=132";
+import { createButton, createRankedBadge, createSectionHeading } from "../components.js?v=132";
+import { createRankStatsSection } from "./rankStats.js?v=132";
+import { allRankTiers, rankTiers } from "../ranks.js?v=132";
+import { gamemodes } from "../mockData.js?v=132";
+import { modeIconStyle, modeThemes } from "../modeTheme.js?v=132";
 
 const app = renderLayout("ranked");
 const reveal = (delay = 0) => ({ "data-reveal": "", style: `--revealDelay:${delay}ms` });

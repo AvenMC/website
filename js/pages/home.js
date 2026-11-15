@@ -1,5 +1,5 @@
-import { el, replaceContent } from "../dom.js?v=131";
-import { renderLayout } from "../layout.js?v=131";
+import { el, replaceContent } from "../dom.js?v=132";
+import { renderLayout } from "../layout.js?v=132";
 import {
   createAvatar,
   createBadge,
@@ -9,14 +9,14 @@ import {
   createSectionHeading,
   createSkeletonRows,
   createSocialLinks,
-} from "../components.js?v=131";
-import { createCopyField, openJoinModal } from "../join.js?v=131";
-import { gamemodes, ffaModes, regions, getTopPlayersPreview } from "../mockData.js?v=131";
-import { initSectionTone } from "../effects.js?v=131";
-import { formatNumber } from "../format.js?v=131";
-import { modeIconStyle, modeThemes } from "../modeTheme.js?v=131";
-import { allRankTiers } from "../ranks.js?v=131";
-import { siteConfig } from "../siteConfig.js?v=131";
+} from "../components.js?v=132";
+import { createCopyField, openJoinModal } from "../join.js?v=132";
+import { gamemodes, ffaModes, regions, getTopPlayersPreview } from "../mockData.js?v=132";
+import { initSectionTone } from "../effects.js?v=132";
+import { formatNumber } from "../format.js?v=132";
+import { modeIconStyle, modeThemes } from "../modeTheme.js?v=132";
+import { allRankTiers } from "../ranks.js?v=132";
+import { siteConfig } from "../siteConfig.js?v=132";
 
 const app = renderLayout("home");
 const reveal = (delay = 0) => ({ "data-reveal": "", style: `--revealDelay:${delay}ms` });
@@ -84,7 +84,6 @@ const marquee = el(
 );
 
 const regionAccents = { eu: "var(--colorPrimary)", na: "var(--colorSuccess)", as: "var(--colorAsia)" };
-const globeIconUrl = new URL("../../assets/icons/globe.png", import.meta.url).href;
 
 const gamemodesSection = el(
   "section",
@@ -171,10 +170,7 @@ const regionsSection = el(
     "div",
     { className: "container" },
     el("div", reveal(),
-      el("div", { className: "regionsHeading" },
-        el("span", { className: "regionIcon", style: `--iconUrl:url("${globeIconUrl}")`, "aria-hidden": "true" }),
-        createSectionHeading({ eyebrow: "Regions", title: "Play close to home" }),
-      ),
+      createSectionHeading({ eyebrow: "Regions", title: "Play close to home" }),
       el("p", { className: "regionNote" }, "One account across every region. Stats and leaderboards are shared."),
     ),
     el(
