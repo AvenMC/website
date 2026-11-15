@@ -1,5 +1,5 @@
-import { el, replaceContent } from "../dom.js?v=117";
-import { renderLayout } from "../layout.js?v=117";
+import { el, replaceContent } from "../dom.js?v=118";
+import { renderLayout } from "../layout.js?v=118";
 import {
   createAvatar,
   createBadge,
@@ -14,11 +14,11 @@ import {
   createTable,
   createRankedBadge,
   createTabs,
-} from "../components.js?v=117";
-import { countries } from "../countries.js?v=117";
-import { getTierScore, rankTiers, tierStep, getRankedTier } from "../ranks.js?v=117";
-import { createSeasonHistory, gamemodes, getMythicPosition, getPlayer, getPlayerTier, setCountry } from "../mockData.js?v=117";
-import { formatDateTime, formatNumber, formatPercent, formatPlaytime, formatRatio } from "../format.js?v=117";
+} from "../components.js?v=118";
+import { countries } from "../countries.js?v=118";
+import { getTierScore, rankTiers, tierStep, getRankedTier } from "../ranks.js?v=118";
+import { createSeasonHistory, gamemodes, ffaModes, getMythicPosition, getPlayer, getPlayerTier, setCountry } from "../mockData.js?v=118";
+import { formatDateTime, formatNumber, formatPercent, formatPlaytime, formatRatio } from "../format.js?v=118";
 
 const app = renderLayout("profile");
 const modeName = (id) => gamemodes.find((mode) => mode.id === id).name;
@@ -26,8 +26,8 @@ const modeName = (id) => gamemodes.find((mode) => mode.id === id).name;
 const state = {
   player: null,
   activeTab: "overview",
-  duelMode: "nodebuff",
-  ffaMode: "nodebuff",
+  duelMode: "sword",
+  ffaMode: "sword",
 };
 
 const searchInput = el("input", {
@@ -344,6 +344,9 @@ function renderModeStatistics(player, type) {
     if (type === "duels") renderMatches(player, matches, modeId);
     replaceContent(panel,
       el("h2", {}, `${modeName(modeId)} ${type === "duels" ? "duels" : "FFA"}`),
+      gamemodes.find((mode) => mode.id === modeId).variants
+        ? el("p", { className: "mutedText" }, `Variants: ${gamemodes.find((mode) => mode.id === modeId).variants.join(", ")}`)
+        : null,
       type === "duels"
         ? statGrid([
             { label: "Wins", icon: "trophy", value: formatNumber(stats.wins) },
@@ -458,7 +461,7 @@ function renderProfile(player) {
     const modeList = createTabs({
       label: id === "duels" ? "Duel gamemode" : "FFA gamemode",
       active: state[stateKey],
-      tabs: gamemodes.map((mode) => ({ id: mode.id, label: mode.name })),
+      tabs: (id === "ffa" ? ffaModes : gamemodes).map((mode) => ({ id: mode.id, label: mode.name })),
       onChange: (modeId) => {
         state[stateKey] = modeId;
         paintTab();

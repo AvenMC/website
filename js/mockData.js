@@ -4,14 +4,19 @@
  * the pages only depend on the shapes returned here.
  */
 
-import { countries } from "./countries.js?v=117";
-import { getRankedTier, mythicMinRating, rankedBoardSize } from "./ranks.js?v=117";
+import { countries } from "./countries.js?v=118";
+import { getRankedTier, mythicMinRating, rankedBoardSize } from "./ranks.js?v=118";
 
 export const gamemodes = [
-  { id: "nodebuff", name: "Nodebuff", short: "NB", description: "Classic potion PvP." },
+  { id: "sword", name: "Sword", short: "SW", description: "Sword combat." },
   { id: "crystalpvp", name: "CrystalPvP", short: "CP", description: "End crystal combat." },
-  { id: "spearmace", name: "SpearMace", short: "SM", description: "Spear and mace combat." },
+  { id: "mace", name: "Mace", short: "MC", description: "SpearMace, ElytraMace and Mace combat.", variants: ["SpearMace", "ElytraMace", "Mace"] },
+  { id: "fireball", name: "Fireball", short: "FB", description: "Fireball duels." },
+  { id: "tntcart", name: "TNT Cart", short: "TNT", description: "TNT minecart combat." },
+  { id: "uhc", name: "UHC", short: "UHC", description: "FinalUHC duels.", variants: ["FinalUHC"] },
 ];
+
+export const ffaModes = gamemodes.filter((mode) => ["sword", "crystalpvp", "mace"].includes(mode.id));
 
 // Accounts, stats and leaderboards are shared across all regions.
 export const regions = [
@@ -63,13 +68,13 @@ function createPlayer(index) {
     bestKillStreak: between(random, 6, 45),
   };
   const ffaRandom = createRandom(index * 7919 + 43);
-  const ffaWeights = gamemodes.map(() => 1 + ffaRandom());
+  const ffaWeights = ffaModes.map(() => 1 + ffaRandom());
   const weightSum = ffaWeights.reduce((sum, weight) => sum + weight, 0);
   const perFfaMode = {};
   let remainingKills = ffa.kills;
   let remainingDeaths = ffa.deaths;
-  gamemodes.forEach((mode, modeIndex) => {
-    const last = modeIndex === gamemodes.length - 1;
+  ffaModes.forEach((mode, modeIndex) => {
+    const last = modeIndex === ffaModes.length - 1;
     const kills = last ? remainingKills : Math.floor(ffa.kills * ffaWeights[modeIndex] / weightSum);
     const deaths = last ? remainingDeaths : Math.floor(ffa.deaths * ffaWeights[modeIndex] / weightSum);
     perFfaMode[mode.id] = {
@@ -182,6 +187,7 @@ export const leaderboardCategories = [
   { id: "overall", label: "Overall", metricLabel: "Avg. Rating" },
   { id: "duels", label: "Duels", metricLabel: "Duel Wins" },
   { id: "ffa", label: "FFA", metricLabel: "Kills" },
+  ...ffaModes.map((mode) => ({ id: `ffa_${mode.id}`, label: mode.name, metricLabel: "Kills" })),
   ...gamemodes.map((mode) => ({ id: mode.id, label: mode.name, metricLabel: "Rating" })),
 ];
 
@@ -192,6 +198,7 @@ function getMetric(player, categoryId) {
   }
   if (categoryId === "duels") return Math.max(0, player.duels.wins);
   if (categoryId === "ffa") return Math.max(0, player.ffa.kills);
+  if (categoryId.startsWith("ffa_")) return player.perFfaMode[categoryId.slice(4)].kills;
   return player.ratings[categoryId];
 }
 
@@ -275,7 +282,14 @@ export async function getTopPlayersPreview() {
 
 export const currentSeason = { name: "Season 3", isPlaceholder: true };
 
-const distributionTotals = { nodebuff: { total: 4180, mythic: 62 }, crystalpvp: { total: 2760, mythic: 41 }, spearmace: { total: 1490, mythic: 22 } };
+const distributionTotals = {
+  sword: { total: 4180, mythic: 62 },
+  crystalpvp: { total: 2760, mythic: 41 },
+  mace: { total: 1490, mythic: 22 },
+  fireball: { total: 1850, mythic: 28 },
+  tntcart: { total: 1200, mythic: 18 },
+  uhc: { total: 2300, mythic: 35 },
+};
 // Share of non-Mythic players per tier, modelled on Fortnite: the lowest tier is the most crowded, with small bumps at each new division.
 const tierWeights = { bronze: [107, 88, 71], silver: [72, 63, 58], gold: [57, 51, 39] };
 const distributionWeights = Object.fromEntries(Object.entries(tierWeights).map(([key, weights]) => [key, weights.reduce((sum, weight) => sum + weight, 0)]));

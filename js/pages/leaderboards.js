@@ -1,5 +1,5 @@
-import { el, replaceContent } from "../dom.js?v=117";
-import { renderLayout } from "../layout.js?v=117";
+import { el, replaceContent } from "../dom.js?v=118";
+import { renderLayout } from "../layout.js?v=118";
 import {
   createAvatar,
   createBadge,
@@ -11,25 +11,25 @@ import {
   createSkeletonRows,
   createTable,
   createTabs,
-} from "../components.js?v=117";
-import { gamemodes, getLeaderboard, getMyStanding, leaderboardCategories } from "../mockData.js?v=117";
-import { modeIconStyle, modeThemes } from "../modeTheme.js?v=117";
-import { createRankDistributionCard } from "./rankStats.js?v=117";
-import { attachPlayerPreview } from "../playerPreview.js?v=117";
-import { getRankedTier, getTierScore, memberRankColors, rankedBoardSize } from "../ranks.js?v=117";
-import { formatNumber } from "../format.js?v=117";
+} from "../components.js?v=118";
+import { gamemodes, ffaModes, getLeaderboard, getMyStanding, leaderboardCategories } from "../mockData.js?v=118";
+import { modeIconStyle, modeThemes } from "../modeTheme.js?v=118";
+import { createRankDistributionCard } from "./rankStats.js?v=118";
+import { attachPlayerPreview } from "../playerPreview.js?v=118";
+import { getRankedTier, getTierScore, memberRankColors, rankedBoardSize } from "../ranks.js?v=118";
+import { formatNumber } from "../format.js?v=118";
 
 const app = renderLayout("leaderboards");
 
 const groups = [
   { id: "overall", label: "Overall", categories: ["overall", "duels"] },
   { id: "ranked", label: "Ranked Duels", categories: gamemodes.map((mode) => mode.id) },
-  { id: "ffa", label: "FFA", categories: ["ffa"] },
+  { id: "ffa", label: "FFA", categories: [...ffaModes.map((mode) => `ffa_${mode.id}`), "ffa"] },
 ];
-const subLabels = { overall: "Avg. Rating", duels: "Duel Wins" };
+const subLabels = { overall: "Avg. Rating", duels: "Duel Wins", ffa: "All FFA modes" };
 
 const pageSize = 15;
-// The board is selected with ?board=<id>, e.g. leaderboards.html?board=nodebuff
+// The board is selected with ?board=<id>, e.g. leaderboards.html?board=sword
 const boardParam = new URLSearchParams(location.search).get("board");
 const initialGroup = groups.find((group) => group.categories.includes(boardParam)) ?? groups[0];
 const state = { me: null, group: initialGroup.id, category: initialGroup.categories.includes(boardParam) ? boardParam : initialGroup.categories[0], requestId: 0, page: 1, entries: [] };
