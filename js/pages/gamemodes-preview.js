@@ -10,12 +10,22 @@ const colors = {
   uhc: "#f2c94c",
 };
 
+const descriptions = {
+  sword: "Close-range combat with swords.",
+  crystalpvp: "Place and detonate end crystals.",
+  mace: "Mace combat with spear and elytra variants.",
+  fireball: "Use fireballs for combat and movement.",
+  tntcart: "Fight with explosive TNT minecarts.",
+  uhc: "FinalUHC combat with golden apple healing.",
+};
+
 function modeCard(mode) {
   return el("li", { className: "showcaseMode", style: `--modeColor:${colors[mode.id]}` },
     el("span", { className: "showcaseModeMarker", "aria-hidden": "true" }),
     el("div", {},
       el("h3", {}, mode.name),
-      mode.variants ? el("p", {}, mode.variants.join(" / ")) : null,
+      el("p", {}, descriptions[mode.id]),
+      mode.id === "mace" ? el("p", { className: "showcaseVariants" }, mode.variants.join(" / ")) : null,
     ),
   );
 }
@@ -43,7 +53,6 @@ replaceContent(document.getElementById("app"),
   el("div", { className: "showcaseSections" },
     modeSection("FFA", "Free-for-all combat", ffaModes, "01"),
     modeSection("Duels", "Head-to-head combat", gamemodes, "02"),
-    modeSection("Ranked", "Competitive duels", gamemodes, "03"),
   ),
   el("footer", { className: "showcaseFooter" },
     el("span", {}, "MINECRAFT BEDROCK"),
