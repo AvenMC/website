@@ -1111,8 +1111,7 @@ a.card:hover,
   }
 
   .statCard:hover,
-  .card.isInteractive:hover,
-  a.card:hover,
+  .card:not(:has(.card)):hover,
   .card.isInteractive:focus-within,
   a.card:focus-visible {
     border-color: var(--accent, var(--colorPrimaryLine));

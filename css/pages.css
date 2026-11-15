@@ -601,7 +601,8 @@
 
 .hasTilt {
   transform: perspective(800px) rotateX(var(--tiltX, 0deg)) rotateY(var(--tiltY, 0deg));
-  transition: transform 150ms ease, border-color 200ms ease;
+  transition: transform 150ms ease, border-color var(--transitionFast),
+    box-shadow var(--transitionFast), opacity 600ms ease var(--revealDelay, 0ms);
 }
 
 /* Features */
@@ -662,6 +663,16 @@
   color: var(--accent);
 }
 
+.gamemodeCard .cardText {
+  transition: color var(--transitionFast);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .gamemodeCard:hover .cardText {
+    color: var(--colorText);
+  }
+}
+
 .featureItem::before {
   background: var(--accent);
 }
@@ -678,6 +689,19 @@
   background: var(--accent);
   -webkit-mask: var(--iconUrl) center / contain no-repeat;
   mask: var(--iconUrl) center / contain no-repeat;
+  transition: transform 240ms ease, filter 240ms ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .regionCard:hover .regionIcon {
+    filter: drop-shadow(0 0 8px color-mix(in srgb, var(--accent) 35%, transparent));
+  }
+}
+
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .regionCard:hover .regionIcon {
+    transform: translateY(-2px) scale(1.06);
+  }
 }
 
 .regionCard {

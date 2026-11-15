@@ -4,13 +4,13 @@
  * the pages only depend on the shapes returned here.
  */
 
-import { countries } from "./countries.js?v=126";
-import { getRankedTier, mythicMinRating, rankedBoardSize } from "./ranks.js?v=126";
+import { countries } from "./countries.js?v=127";
+import { getRankedTier, mythicMinRating, rankedBoardSize } from "./ranks.js?v=127";
 
 export const gamemodes = [
-  { id: "sword", name: "Sword", short: "SW", description: "Sword combat." },
-  { id: "crystalpvp", name: "CrystalPvP", short: "CP", description: "End crystal combat." },
-  { id: "mace", name: "Mace", short: "MC", description: "SpearMace, ElytraMace and Mace combat.", variants: ["SpearMace", "ElytraMace", "Mace"] },
+  { id: "sword", name: "Sword", short: "SW", description: "Classic vanilla-style sword combat." },
+  { id: "crystalpvp", name: "CrystalPvP", short: "CP", description: "Explosive combat with end crystals and respawn anchors." },
+  { id: "mace", name: "Mace", short: "MC", description: "All mace combat styles, from spears to elytra.", variants: ["SpearMace", "ElytraMace", "Mace"] },
   { id: "fireball", name: "Fireball", short: "FB", description: "Fireball duels." },
   { id: "tntcart", name: "TNT Cart", short: "TNT", description: "TNT minecart combat." },
   { id: "uhc", name: "UHC", short: "UHC", description: "FinalUHC duels.", variants: ["FinalUHC"] },
