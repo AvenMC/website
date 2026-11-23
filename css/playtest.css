@@ -81,6 +81,7 @@ h1 span { display: block; color: var(--colorPrimary); text-shadow: 0 0 65px #28b
 .timeDash { color: var(--colorTextMuted); margin: 0 6px; }
 .timezone { font-family: var(--fontBody); font-size: 15px; letter-spacing: 1px; color: var(--colorTextSecondary); margin-left: 8px; }
 .scheduleServer strong { color: #6fd2ff; }
+.serverPort { display: block; margin-top: 12px; font-size: 13px; font-weight: 600; letter-spacing: 1.5px; color: var(--colorTextSecondary); }
 
 @media (min-width: 1500px) {
   .poster { height: 100vh; display: flex; flex-direction: column; }
